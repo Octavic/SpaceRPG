@@ -11,8 +11,10 @@ namespace Assets.Scripts.Utility
     /// </summary>
     public enum ButtonNames
     {
-        Throttle,
         Turn,
-        Dash
+        SideThrust,
+        AdjustThrottle,
+        SetThrottle,
+        Break
     }
 }

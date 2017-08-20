@@ -12,6 +12,7 @@ namespace Assets.Scripts
     using System.Text;
     using UnityEngine;
     using Utility;
+    using Settings;
 
     /// <summary>
     /// A ship that's controlled by a player
@@ -19,24 +20,9 @@ namespace Assets.Scripts
     public class PlayerShip : Ship
     {
         /// <summary>
-        /// Gets the current throttle from 0 to 1. 0 means no throttle, 1 meaning full throttle
+        /// How fast the throttle adjusts
         /// </summary>
-        public float CurrentThrottle
-        { 
-            get
-            {
-                return this._currentThrottle;
-            }
-            private set
-            {
-                this._currentThrottle = Math.Min(value, 1);     
-            }
-        }
-
-        /// <summary>
-        /// The current throttle
-        /// </summary>
-        private float _currentThrottle;
+        public float ThrottleAdjustSpeed;
 
         /// <summary>
         /// Called once per frame
@@ -44,10 +30,43 @@ namespace Assets.Scripts
         protected override void Update()
         {
             // Turn the ship
-            var rotateDirection = Input.GetAxis(ButtonNames.Turn.ToString());
-            this.Rotation += this.RotationSpeed * Time.deltaTime * rotateDirection;
+            var rotateDirection = InputHelper.GetAxis(ButtonNames.Turn);
+            this.TryTurn(rotateDirection * RotationSpeed * Time.deltaTime);
 
+            // Adjust throttle
+            var throttleAdjustInput = InputHelper.GetAxis(ButtonNames.AdjustThrottle);
+            this.CurrentThrottle = this.CurrentThrottle + throttleAdjustInput * this.ThrottleAdjustSpeed * Time.deltaTime;
 
+            // Set throttle
+            var throttleSetInput = InputHelper.GetAxis(ButtonNames.SetThrottle);
+            if (throttleSetInput > 0)
+            {
+                this._currentThrottle = 1;
+            }
+            else if (throttleSetInput < 0)
+            {
+                this._currentThrottle = 0;
+            }
+
+            // Apply side thrust
+            var sideThrust = InputHelper.GetAxis(ButtonNames.SideThrust);
+            Vector2 sideVector = new Vector2(this.ForwardVector.y, -this.ForwardVector.x);
+            if (sideThrust < 0)
+            {
+                sideVector *= -1;
+            }
+
+            if (sideThrust != 0)
+            {
+                this._rgbd.AddForce(sideVector * this.SideEngineThrust * Time.deltaTime, ForceMode2D.Force);
+            }
+
+            // Apply break
+            if (InputHelper.GetButton(ButtonNames.Break))
+            {
+                this.ApplyBreak();
+            }
+            
             base.Update();
         }
     }

@@ -18,7 +18,7 @@ namespace Assets.Scripts.Utility
         /// Gets the directional vector with the given angle in degrees
         /// </summary>
         /// <param name="angle">Target angle in degrees</param>
-        /// <returns>Direction vector</returns>
+        /// <returns>Direction unit vector</returns>
         public static Vector2 FromDegree(float angle)
         {
             return AngleToVector.FromRadiant(angle * Mathf.Deg2Rad);
@@ -28,7 +28,7 @@ namespace Assets.Scripts.Utility
         /// Gets the directional vector with the given angle in radiant
         /// </summary>
         /// <param name="angle">Target angle in radiant</param>
-        /// <returns>Direction vector</returns>
+        /// <returns>Direction unit vector</returns>
         public static Vector2 FromRadiant(float angle)
         {
             return new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
