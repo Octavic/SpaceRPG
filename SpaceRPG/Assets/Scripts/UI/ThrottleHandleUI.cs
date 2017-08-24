@@ -12,6 +12,7 @@ namespace Assets.Scripts.UI
     using System.Text;
     using UnityEngine;
     using UnityEngine.UI;
+    using Ships;
 
     /// <summary>
     /// Controls the throttle handle

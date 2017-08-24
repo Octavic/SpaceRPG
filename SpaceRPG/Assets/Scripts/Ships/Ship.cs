@@ -4,7 +4,7 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts
+namespace Assets.Scripts.Ships
 {
     using Assets.Scripts.Settings;
     using Assets.Scripts.Utility;

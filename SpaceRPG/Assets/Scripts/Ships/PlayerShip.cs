@@ -4,7 +4,7 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts
+namespace Assets.Scripts.Ships
 {
     using System;
     using System.Collections.Generic;
