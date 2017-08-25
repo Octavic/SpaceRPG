@@ -14,27 +14,27 @@ namespace Assets.Scripts.Ships.Weapons
     using Utility;
 
 	/// <summary>
-	/// Describes the cannon of a ship
+	/// Describes the weapon of a ship
 	/// </summary>
 	public class ShipWeaponSlot : MonoBehaviour
 	{
 		/// <summary>
-		/// If this cannon slot is customizable
+		/// If this weapon slot is customizable
 		/// </summary>
 		public bool Customizable;
 
 		/// <summary>
-		/// How the cannon rotates
+		/// How the weapon rotates
 		/// </summary>
 		public ShipWeaponRotateEnum RotationType;
 
 		/// <summary>
-		/// The maximum angle that the cannon can be at
+		/// The maximum angle that the weapon can be at
 		/// </summary>
 		public float MaxAngle;
 
 		/// <summary>
-		/// How many degrees the cannon slot can rotate per second
+		/// How many degrees the weapon slot can rotate per second
 		/// </summary>
 		public float RotationSpeed;
 
@@ -44,25 +44,30 @@ namespace Assets.Scripts.Ships.Weapons
 		public Ship Target;
 
 		/// <summary>
-		/// Gets a value indicating whether or not this ship cannon is lined up with the target
+		/// Gets a value indicating whether or not this ship weapon is lined up with the target
 		/// </summary>
 		public bool IsLinedUp { get; private set; }
 
 		/// <summary>
 		/// Gets the current cannon in slot
 		/// </summary>
-		public ShipWeapon CurrentCannonInSlot;
+		public ShipWeapon CurrentWeaponInSlot;
+
+		/// <summary>
+		/// The original Z rotation when the weapon is at neutral
+		/// </summary>
+		private float _originalRotation;
 
 		/// <summary>
 		/// Places a new cannon into the slot
 		/// </summary>
-		/// <param name="newCannon">The new cannon</param>
+		/// <param name="newWeapon">The new cannon</param>
 		/// <returns>The old cannon, null if the slot was empty before</returns>
-		public ShipWeapon PlaceCannon(ShipWeapon newCannon)
+		public ShipWeapon PlaceWeapon(ShipWeapon newWeapon)
 		{
-			var oldCannon = this.CurrentCannonInSlot;
-			this.CurrentCannonInSlot = newCannon;
-			return oldCannon;
+			var oldWeapon = this.CurrentWeaponInSlot;
+			this.CurrentWeaponInSlot = newWeapon;
+			return oldWeapon;
 		}
 
         /// <summary>
@@ -70,7 +75,7 @@ namespace Assets.Scripts.Ships.Weapons
         /// </summary>
         private void Start()
         {
-
+			this._originalRotation = this.transform.eulerAngles.z;
         }
 
         /// <summary>
@@ -78,25 +83,38 @@ namespace Assets.Scripts.Ships.Weapons
         /// </summary>
         private void Update()
         {
-            // If there's a target
-            if (Target != null)
+			this.IsLinedUp = true;
+
+			// If there's a target
+			if (Target != null)
             {
+				// The angle that the target is at
                 var targetAngle = ((Vector2)(Target.transform.position - this.transform.position)).ToAngleDegree();
+
                 var oldRotation = this.transform.eulerAngles.z;
                 var angleDiff = CalcAngleDiff.InDegrees(oldRotation, targetAngle);
                 var maxTurning = this.RotationSpeed * Time.deltaTime;
                 float angleToTurn = angleDiff;
+
+				// Check if the weapon is lined up. If the turning required is bigger than how much can be turned this frame, then weapon is no longer lined up
 				if (Math.Abs(angleDiff) > maxTurning)
 				{
 					this.IsLinedUp = false;
 					angleToTurn = Mathf.Sign(angleDiff) * maxTurning;
 				}
-				else
-				{
-					this.IsLinedUp = true;
-				}
 
-                this.transform.eulerAngles = new Vector3(0, 0, oldRotation + angleToTurn);
+				this.transform.eulerAngles = new Vector3(0, 0, oldRotation + angleToTurn);
+
+				// Check if the weapon is outside allowed max angle
+				if (this.RotationType == ShipWeaponRotateEnum.Limited)
+				{
+					var diffToCenter = CalcAngleDiff.InDegrees(this._originalRotation, this.transform.localEulerAngles.z);
+					if (Math.Abs(diffToCenter) > this.MaxAngle)
+					{
+						this.IsLinedUp = false;
+						this.transform.localEulerAngles = new Vector3(0, 0, this._originalRotation + Math.Sign(diffToCenter) * this.MaxAngle);
+					}
+				}
             }
         }
     }

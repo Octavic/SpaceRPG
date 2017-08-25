@@ -14,17 +14,14 @@ namespace Assets.Scripts.UI
 	using UnityEngine.UI;
 	using Ships;
 	using Ships.Weapons;
+	using System.Collections;
+	using Utility;
 
 	/// <summary>
 	/// Shows all iniformation related to a weapon system
 	/// </summary>
 	public class WeaponSystemUI : MonoBehaviour
 	{
-		/// <summary>
-		/// The current player
-		/// </summary>
-		public PlayerShip CurrentPlayer;
-
 		/// <summary>
 		/// The index for the weapon's UI
 		/// </summary>
@@ -60,13 +57,14 @@ namespace Assets.Scripts.UI
 		/// </summary>
 		private void Start()
 		{
-			if (weaponSystemIndex >= CurrentPlayer.WeaponSystems.Count)
+			var playerShip = GameObjectFinder.FindGameObjectWithTag(Tags.Player).GetComponent<PlayerShip>();
+			if (weaponSystemIndex >= playerShip.WeaponSystems.Count)
 			{
 				this.gameObject.SetActive(false);
 				return;
 			}
 
-			this._targetWeaponSystem = CurrentPlayer.WeaponSystems[this.weaponSystemIndex];
+			this._targetWeaponSystem = playerShip.WeaponSystems[this.weaponSystemIndex];
 			this._loadingWeaponBarColor = this.ReloadBar.color;
 		}
 

@@ -20,11 +20,6 @@ namespace Assets.Scripts.UI
      public class ThrottleHandleUI : MonoBehaviour
     {
         /// <summary>
-        /// The player's ship
-        /// </summary>
-        public PlayerShip PlayerShip;
-
-        /// <summary>
         /// The maximum height
         /// </summary>
         public float MaxHeight;
@@ -47,7 +42,7 @@ namespace Assets.Scripts.UI
         /// </summary>
         private void Update()
         {
-            this._rectTransform.localPosition = new Vector3(0, this.MaxHeight * PlayerShip.CurrentThrottle);
+            this._rectTransform.localPosition = new Vector3(0, this.MaxHeight * PlayerShip.CurrentInstance.CurrentThrottle);
         }
     }
 }

@@ -29,13 +29,18 @@ namespace Assets.Scripts.Ships.Weapons
 		public float CpuCapacity;
 
 		/// <summary>
+		/// The current fire mode for this system
+		/// </summary>
+		public WeaponSystemAutoFireModeEnum FireMode;
+
+		/// <summary>
 		/// Gets a list of cannons in the system
 		/// </summary>
-		public IEnumerable<ShipWeapon> WeaponsInSystem
+		public List<ShipWeapon> WeaponsInSystem
 		{
 			get
 			{
-				return this.ControlledWeaponSlots.Where(slot => slot.CurrentCannonInSlot != null).Select(slot=>slot.CurrentCannonInSlot);
+				return this.ControlledWeaponSlots.Where(slot => slot.CurrentWeaponInSlot != null).Select(slot=>slot.CurrentWeaponInSlot).ToList();
 			}
 		}
 
@@ -68,12 +73,64 @@ namespace Assets.Scripts.Ships.Weapons
 		{
 			get
 			{
+				if (this.WeaponsInSystem.Count == 0)
+				{
+					return 0;
+				}
+
 				return this.WeaponsInSystem.Average(weapon => weapon.ReloadPercentage);
 			}
 		}
 
 		/// <summary>
-		/// Try to fire all of the weapons
+		/// Gets the current system's target
+		/// </summary>
+		public Ship CurrentTarget
+		{
+			get
+			{
+				return this.ControlledWeaponSlots.Count == 0 ? null : this.ControlledWeaponSlots[0].Target;
+			}
+			set
+			{
+				foreach (var slot in this.ControlledWeaponSlots)
+				{
+					slot.Target = value;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Try to auto fire the weapon. This is called once per frame
+		/// </summary>
+		/// <returns>True if any of the weapons fired</returns>
+		public bool TryAutoFireAllWeapons()
+		{
+			switch (this.FireMode)
+			{
+				// Auto fire off, don't fire anything
+				case WeaponSystemAutoFireModeEnum.Off:
+					return false;
+
+				// Auto fire set to only when weapons are lined up and fully loaded
+				case WeaponSystemAutoFireModeEnum.Precise:
+					if (this.ReloadPercentage == 1
+					&& !this.ControlledWeaponSlots.Any(slot=>slot.CurrentWeaponInSlot !=null && !slot.IsLinedUp))
+					{
+						this.TryFireAllWeapons();
+						return true;
+					}
+
+					return false;
+				// Default case, just try to fire all and return result
+
+				default:
+					return this.TryFireAllWeapons();
+			}
+		}
+
+		/// <summary>
+		/// Try to manually fire all of the weapons
 		/// </summary>
 		/// <returns>True if any of the weapons fired</returns>
 		public bool TryFireAllWeapons()

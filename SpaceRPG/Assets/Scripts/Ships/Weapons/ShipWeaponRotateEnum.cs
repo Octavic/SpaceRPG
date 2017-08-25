@@ -12,7 +12,7 @@ namespace Assets.Scripts.Ships.Weapons
     using System.Text;
 
     /// <summary>
-    /// A list of possible rotation types for a ship's cannon
+    /// A list of possible rotation types for a ship's Weapon
     /// </summary>
     public enum ShipWeaponRotateEnum
     {

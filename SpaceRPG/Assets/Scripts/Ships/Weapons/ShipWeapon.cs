@@ -13,7 +13,7 @@ namespace Assets.Scripts.Ships.Weapons
     using UnityEngine;
 
     /// <summary>
-    /// Describse a base ship cannon
+    /// Describse a base ship weapon
     /// </summary>
     public abstract class ShipWeapon : MonoBehaviour    
     {

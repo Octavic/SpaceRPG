@@ -36,5 +36,15 @@ namespace Assets.Scripts.Utility
         {
             return Input.GetButton(buttonName.ToString());
         }
+
+		/// <summary>
+		/// Gets the state of the given button down. True if the button was just pressed
+		/// </summary>
+		/// <param name="buttonName">The name of the button</param>
+		/// <returns>True if the button is just pressed</returns>
+		public static bool GetButtonDown(ButtonNames buttonName)
+		{
+			return Input.GetButtonDown(buttonName.ToString());
+		}
     }
 }

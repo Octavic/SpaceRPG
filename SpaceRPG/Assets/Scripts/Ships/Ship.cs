@@ -205,6 +205,12 @@ namespace Assets.Scripts.Ships
                 this._rgbd.velocity.Normalize();
                 this._rgbd.velocity *= this.MaximumSpeed;
             }
+
+			// Auto fire weapon systems
+			foreach (var weaponSystem in this.WeaponSystems)
+			{
+				weaponSystem.TryAutoFireAllWeapons();
+			}
         }
     }
 }
