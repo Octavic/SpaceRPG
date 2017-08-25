@@ -50,15 +50,9 @@ namespace Assets.Scripts.Ships
 
             // Apply side thrust
             var sideThrust = InputHelper.GetAxis(ButtonNames.SideThrust);
-            Vector2 sideVector = new Vector2(this.ForwardVector.y, -this.ForwardVector.x);
-            if (sideThrust < 0)
-            {
-                sideVector *= -1;
-            }
-
             if (sideThrust != 0)
             {
-                this._rgbd.AddForce(sideVector * this.SideEngineThrust * Time.deltaTime, ForceMode2D.Force);
+				this.ApplySideThrust(sideThrust < 0);
             }
 
             // Apply break
@@ -66,8 +60,24 @@ namespace Assets.Scripts.Ships
             {
                 this.ApplyBreak();
             }
-            
-            base.Update();
+
+			// Apply fire
+			if (InputHelper.GetButton(ButtonNames.Weapon1))
+			{
+				this.WeaponSystems[0].TryFireAllWeapons();
+			}
+			
+			if (InputHelper.GetButton(ButtonNames.Weapon2))
+			{
+				this.WeaponSystems[1].TryFireAllWeapons();
+			}
+
+			if (InputHelper.GetButton(ButtonNames.Weapon3))
+			{
+				this.WeaponSystems[2].TryFireAllWeapons();
+			}
+
+			base.Update();
         }
     }
 }

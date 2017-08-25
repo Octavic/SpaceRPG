@@ -13,6 +13,7 @@ namespace Assets.Scripts.Ships
     using System.Linq;
     using System.Text;
     using UnityEngine;
+	using Weapons;
 
     /// <summary>
     /// Describes the basic functionality of a ship
@@ -48,6 +49,11 @@ namespace Assets.Scripts.Ships
         /// How long it takes to stop the vessel from full speed
         /// </summary>
         public float TimeToStopFromFullSpeed;
+
+		/// <summary>
+		/// A list of ship weapon systems
+		/// </summary>
+		public List<ShipWeaponSystem> WeaponSystems;
 
         /// <summary>
         /// The current throttle
@@ -98,7 +104,7 @@ namespace Assets.Scripts.Ships
         /// <summary>
         /// Gets the current throttle from 0 to 1. 0 means no throttle, 1 meaning full throttle
         /// </summary>
-        public float CurrentThrottle
+        public virtual float CurrentThrottle
         {
             get
             {
@@ -160,6 +166,21 @@ namespace Assets.Scripts.Ships
 
             this.Rotation += degrees;
         }
+
+		/// <summary>
+		/// Applies a side thrust
+		/// </summary>
+		/// <param name="toLeft">True if the thrust is to the left, false if it's to the right</param>
+		protected void ApplySideThrust(bool toLeft)
+		{
+			Vector2 sideVector = new Vector2(this.ForwardVector.y, -this.ForwardVector.x);
+			if (toLeft)
+			{
+				sideVector *= -1;
+			}
+
+			this._rgbd.AddForce(sideVector * this.SideEngineThrust * Time.deltaTime, ForceMode2D.Force);
+		}
 
         /// <summary>
         /// Called in the betginning

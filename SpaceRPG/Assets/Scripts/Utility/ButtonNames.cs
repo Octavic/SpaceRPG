@@ -15,6 +15,10 @@ namespace Assets.Scripts.Utility
         SideThrust,
         AdjustThrottle,
         SetThrottle,
-        Break
-    }
+        Break,
+		Weapon1,
+		Weapon2,
+		Weapon3,
+		Weapon4
+	}
 }
