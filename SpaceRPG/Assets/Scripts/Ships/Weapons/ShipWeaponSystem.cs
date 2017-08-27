@@ -40,6 +40,11 @@ namespace Assets.Scripts.Ships.Weapons
 		{
 			get
 			{
+				if (this.ControlledWeaponSlots == null || this.ControlledWeaponSlots.Count == 0)
+				{
+					return null;
+				}
+
 				return this.ControlledWeaponSlots.Where(slot => slot.CurrentWeaponInSlot != null).Select(slot=>slot.CurrentWeaponInSlot).ToList();
 			}
 		}
@@ -62,6 +67,11 @@ namespace Assets.Scripts.Ships.Weapons
 		{
 			get
 			{
+				if (this.ControlledWeaponSlots == null || this.ControlledWeaponSlots.Count == 0)
+				{
+					return false;
+				}
+
 				return !(this.ControlledWeaponSlots.Any(slot => !slot.IsLinedUp));
 			}
 		}
@@ -73,7 +83,7 @@ namespace Assets.Scripts.Ships.Weapons
 		{
 			get
 			{
-				if (this.WeaponsInSystem.Count == 0)
+				if (this.ControlledWeaponSlots == null || this.ControlledWeaponSlots.Count == 0)
 				{
 					return 0;
 				}
@@ -112,39 +122,42 @@ namespace Assets.Scripts.Ships.Weapons
 				case WeaponSystemAutoFireModeEnum.Off:
 					return false;
 
-				// Auto fire set to only when weapons are lined up and fully loaded
+				// Auto fire set to only fire weapons that's lined up
 				case WeaponSystemAutoFireModeEnum.Precise:
-					if (this.ReloadPercentage == 1
-					&& !this.ControlledWeaponSlots.Any(slot=>slot.CurrentWeaponInSlot !=null && !slot.IsLinedUp))
+
+					// Nothing to fire
+					var result = false;
+					foreach (var slot in this.ControlledWeaponSlots)
 					{
-						this.TryFireAllWeapons();
-						return true;
+						if (slot.CurrentWeaponInSlot != null && slot.IsLinedUp)
+						{
+							if (slot.CurrentWeaponInSlot.TryFire())
+							{
+								result = true;
+							}
+						}
 					}
 
-					return false;
+					return result;
+
 				// Default case, just try to fire all and return result
-
 				default:
-					return this.TryFireAllWeapons();
-			}
-		}
+					if (this.WeaponsInSystem == null)
+					{
+						return false;
+					}
 
-		/// <summary>
-		/// Try to manually fire all of the weapons
-		/// </summary>
-		/// <returns>True if any of the weapons fired</returns>
-		public bool TryFireAllWeapons()
-		{
-			var result = false;
-			foreach (var weapon in this.WeaponsInSystem)
-			{
-				if (weapon.TryFire())
-				{
-					result = true;
-				}
-			}
+					result = false;
+					foreach (var weapon in this.WeaponsInSystem)
+					{
+						if (weapon.TryFire())
+						{
+							result = true;
+						}
+					}
 
-			return result;
+					return result;
+			}
 		}
 	}
 }

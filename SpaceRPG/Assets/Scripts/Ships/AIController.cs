@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Assets.Scripts.Ships
 {
-    public class NPCShip : Ship
+    public class AIController : Ship
     {
     }
 }

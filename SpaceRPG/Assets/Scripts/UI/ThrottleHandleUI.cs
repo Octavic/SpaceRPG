@@ -42,7 +42,7 @@ namespace Assets.Scripts.UI
         /// </summary>
         private void Update()
         {
-            this._rectTransform.localPosition = new Vector3(0, this.MaxHeight * PlayerShip.CurrentInstance.CurrentThrottle);
+            this._rectTransform.localPosition = new Vector3(0, this.MaxHeight * PlayerController.CurrentInstance.CurrentThrottle);
         }
     }
 }

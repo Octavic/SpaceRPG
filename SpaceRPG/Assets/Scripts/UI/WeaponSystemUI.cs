@@ -57,7 +57,7 @@ namespace Assets.Scripts.UI
 		/// </summary>
 		private void Start()
 		{
-			var playerShip = GameObjectFinder.FindGameObjectWithTag(Tags.Player).GetComponent<PlayerShip>();
+			var playerShip = GameObjectFinder.FindGameObjectWithTag(Tags.Player).GetComponent<PlayerController>();
 			if (weaponSystemIndex >= playerShip.WeaponSystems.Count)
 			{
 				this.gameObject.SetActive(false);

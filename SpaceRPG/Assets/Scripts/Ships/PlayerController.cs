@@ -19,12 +19,12 @@ namespace Assets.Scripts.Ships
 	/// <summary>
 	/// A ship that's controlled by a player
 	/// </summary>
-	public class PlayerShip : Ship
-    {
+	public class PlayerController : MonoBehaviour
+	{
 		/// <summary>
 		/// The current instance of the player's ship
 		/// </summary>
-		public static PlayerShip CurrentInstance { get; private set; }
+		public static PlayerController CurrentInstance { get; private set; }
 
 		/// <summary>
 		/// How fast the throttle adjusts
@@ -32,9 +32,56 @@ namespace Assets.Scripts.Ships
 		public float ThrottleAdjustSpeed;
 
 		/// <summary>
+		/// If the throttle is controlled with adjustment, or just tap/release
+		/// </summary>
+		public bool AdvancedThrottleControl;
+
+		/// <summary>
 		/// The currently selected weapon system
 		/// </summary>
 		public int CurrentSelectedSystemIndex { get; private set; }
+
+		/// <summary>
+		/// Gets or sets the current throttle
+		/// </summary>
+		public float CurrentThrottle
+		{
+			get
+			{
+				return this._shipComponent.CurrentThrottle;
+			}
+			set
+			{
+				this._shipComponent.CurrentThrottle = value;
+			}
+		}
+
+		/// <summary>
+		/// Gets the ship's weapon systems
+		/// </summary>
+		public List<ShipWeaponSystem> WeaponSystems
+		{
+			get
+			{
+				if (this._shipComponent == null)
+				{
+					this._shipComponent = this.GetComponent<Ship>();
+				}
+
+				return this._shipComponent.WeaponSystems;
+			}
+		}
+
+		/// <summary>
+		/// Gets the related ship component
+		/// </summary>
+		public Ship ShipComponent
+		{
+			get
+			{
+				return this._shipComponent;
+			}
+		}
 
 		/// <summary>
 		/// The main camera
@@ -47,12 +94,17 @@ namespace Assets.Scripts.Ships
 		private IList<ButtonNames> SelectWeaponButtons;
 
 		/// <summary>
+		/// The ship component
+		/// </summary>
+		private Ship _shipComponent;
+
+		/// <summary>
 		/// Selects a weapon system
 		/// </summary>
 		/// <param name="index">Index of the weapon system</param>
 		public void SelectWeaponSystem(int index)
 		{
-			if (index >= this.WeaponSystems.Count)
+			if (index >= this._shipComponent.WeaponSystems.Count)
 			{
 				return;
 			}
@@ -69,7 +121,7 @@ namespace Assets.Scripts.Ships
 		{
 			if (this.CurrentSelectedSystemIndex != -1)
 			{
-				var currentSystem = this.WeaponSystems[this.CurrentSelectedSystemIndex];
+				var currentSystem = this._shipComponent.WeaponSystems[this.CurrentSelectedSystemIndex];
 				currentSystem.CurrentTarget = target;
 				Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
 				this.CurrentSelectedSystemIndex = -1;
@@ -79,9 +131,10 @@ namespace Assets.Scripts.Ships
 		/// <summary>
 		/// Called when a new instance of the class is created
 		/// </summary>
-		protected override void Start()
+		protected void Start()
 		{
-			PlayerShip.CurrentInstance = this;
+			this._shipComponent = this.GetComponent<Ship>();
+			PlayerController.CurrentInstance = this;
 			this.CurrentSelectedSystemIndex = -1;
 			this._mainCamera = GameObjectFinder.FindGameObjectWithTag(Tags.MainCamera).GetComponent<Camera>();
 			this.SelectWeaponButtons = new List<ButtonNames>()
@@ -91,45 +144,47 @@ namespace Assets.Scripts.Ships
 				ButtonNames.Weapon3,
 				ButtonNames.Weapon4
 			};
-
-			base.Start();
 		}
 
 		/// <summary>
 		/// Called once per frame
 		/// </summary>
-		protected override void Update()
+		protected void Update()
         {
             // Turn the ship
             var rotateDirection = InputHelper.GetAxis(ButtonNames.Turn);
-            this.TryTurn(rotateDirection * RotationSpeed * Time.deltaTime);
+            this._shipComponent.TryTurn(rotateDirection * this._shipComponent.RotationSpeed * Time.deltaTime);
 
             // Adjust throttle
             var throttleAdjustInput = InputHelper.GetAxis(ButtonNames.AdjustThrottle);
-            this.CurrentThrottle = this.CurrentThrottle + throttleAdjustInput * this.ThrottleAdjustSpeed * Time.deltaTime;
+            this._shipComponent.CurrentThrottle = this._shipComponent.CurrentThrottle + throttleAdjustInput * this.ThrottleAdjustSpeed * Time.deltaTime;
+			if (!this.AdvancedThrottleControl && throttleAdjustInput == 0)
+			{
+				this.CurrentThrottle = 0;
+			}
 
             // Set throttle
             var throttleSetInput = InputHelper.GetAxis(ButtonNames.SetThrottle);
             if (throttleSetInput > 0)
             {
-                this._currentThrottle = 1;
+                this._shipComponent.CurrentThrottle = 1;
             }
             else if (throttleSetInput < 0)
             {
-                this._currentThrottle = 0;
+                this._shipComponent.CurrentThrottle = 0;
             }
 
             // Apply side thrust
             var sideThrust = InputHelper.GetAxis(ButtonNames.SideThrust);
             if (sideThrust != 0)
             {
-				this.ApplySideThrust(sideThrust < 0);
+				this._shipComponent.ApplySideThrust(sideThrust < 0);
             }
 
             // Apply break
             if (InputHelper.GetButton(ButtonNames.Break))
             {
-                this.ApplyBreak();
+                this._shipComponent.ApplyBreak();
             }
 
 			// Apply select weapon system
@@ -148,15 +203,13 @@ namespace Assets.Scripts.Ships
 				RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
 				if (hit.collider != null && hit.collider.gameObject.tag == Tags.Ship.ToString())
 				{
-					this.SetTargetForCurrentWeaponSystem(hit.collider.gameObject.GetComponent<NPCShip>());
+					this.SetTargetForCurrentWeaponSystem(hit.collider.gameObject.GetComponent<Ship>());
 				}
 				else
 				{
 					this.SetTargetForCurrentWeaponSystem(null);
 				}
 			}
-
-			base.Update();
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Assets.Scripts.Ships
     /// <summary>
     /// Describes the basic functionality of a ship
     /// </summary>
-	public abstract class Ship : MonoBehaviour
+	public class Ship : MonoBehaviour
     {
         /// <summary>
         /// The main paintjob game object
@@ -56,22 +56,17 @@ namespace Assets.Scripts.Ships
 		public List<ShipWeaponSystem> WeaponSystems;
 
         /// <summary>
-        /// The current throttle
-        /// </summary>
-        protected float _currentThrottle;
-
-        /// <summary>
         /// Gets or sets the main color of the ship
         /// </summary>
         public Color MainColor
         {
             get
             {
-                return this._mainSpriteRenderer.color;
+                return this.MainSpriteRenderer.color;
             }
             set
             {
-                this._mainSpriteRenderer.color = value;
+                this.MainSpriteRenderer.color = value;
             }
         }
 
@@ -84,7 +79,7 @@ namespace Assets.Scripts.Ships
             {
                 return this.transform.eulerAngles.z;
             }
-            protected set
+            set
             {
                 this.transform.eulerAngles = new Vector3(0, 0, value);
             }
@@ -101,6 +96,11 @@ namespace Assets.Scripts.Ships
             }
         }
 
+		/// <summary>
+		/// The current throttle
+		/// </summary>
+		private float _currentThrottle;
+
         /// <summary>
         /// Gets the current throttle from 0 to 1. 0 means no throttle, 1 meaning full throttle
         /// </summary>
@@ -110,7 +110,7 @@ namespace Assets.Scripts.Ships
             {
                 return this._currentThrottle;
             }
-            protected set
+            set
             {
                 this._currentThrottle = value.LimitTo(0, 1);
             }
@@ -119,12 +119,12 @@ namespace Assets.Scripts.Ships
         /// <summary>
         /// The main sprite renderer to control the ship's main color
         /// </summary>
-        protected SpriteRenderer _mainSpriteRenderer;
+        public SpriteRenderer MainSpriteRenderer { get; private set; }
 
         /// <summary>
         /// The rigid body
         /// </summary>
-        protected Rigidbody2D _rgbd;
+        public Rigidbody2D RGBD { get; private set; }
 
         ///// <summary>
         ///// Try to orbit the target
@@ -139,15 +139,15 @@ namespace Assets.Scripts.Ships
         /// <summary>
         /// Try to stop the ship
         /// </summary>
-        protected void ApplyBreak()
+        public void ApplyBreak()
         {
             this._currentThrottle = 0;
-            this._rgbd.velocity -= this._rgbd.velocity * Time.deltaTime / this.TimeToStopFromFullSpeed;
+            this.RGBD.velocity -= this.RGBD.velocity * Time.deltaTime / this.TimeToStopFromFullSpeed;
 
             // limits the velocity to minimum.
-            if (this._rgbd.velocity.magnitude < ShipMovementSettings.MinimalSpeed)
+            if (this.RGBD.velocity.magnitude < ShipMovementSettings.MinimalSpeed)
             {
-                this._rgbd.velocity = new Vector2(0, 0);
+                this.RGBD.velocity = new Vector2(0, 0);
             }
         }
         
@@ -155,10 +155,10 @@ namespace Assets.Scripts.Ships
         /// Try to turn the ship with the given offset. Limited by how much can be turned overall
         /// </summary>
         /// <param name="degrees">Target degrees.</param>
-        protected void TryTurn(float degrees)
+        public void TryTurn(float degrees)
         {
             var maximumPossibleTurn = this.RotationSpeed * Time.deltaTime;
-
+			this.RGBD.angularVelocity = 0.0f;
             if (Math.Abs(degrees) > maximumPossibleTurn)
             {
                 degrees = Math.Sign(degrees) * maximumPossibleTurn;
@@ -171,7 +171,7 @@ namespace Assets.Scripts.Ships
 		/// Applies a side thrust
 		/// </summary>
 		/// <param name="toLeft">True if the thrust is to the left, false if it's to the right</param>
-		protected void ApplySideThrust(bool toLeft)
+		public void ApplySideThrust(bool toLeft)
 		{
 			Vector2 sideVector = new Vector2(this.ForwardVector.y, -this.ForwardVector.x);
 			if (toLeft)
@@ -179,31 +179,31 @@ namespace Assets.Scripts.Ships
 				sideVector *= -1;
 			}
 
-			this._rgbd.AddForce(sideVector * this.SideEngineThrust * Time.deltaTime, ForceMode2D.Force);
+			this.RGBD.AddForce(sideVector * this.SideEngineThrust * Time.deltaTime, ForceMode2D.Force);
 		}
 
         /// <summary>
         /// Called in the betginning
         /// </summary>
-        protected virtual void Start()
+        public virtual void Start()
         {
-            this._mainSpriteRenderer = this.MainPaintjob.GetComponent<SpriteRenderer>();
-            this._rgbd = this.GetComponent<Rigidbody2D>();
+            this.MainSpriteRenderer = this.MainPaintjob.GetComponent<SpriteRenderer>();
+            this.RGBD = this.GetComponent<Rigidbody2D>();
         }
 
         /// <summary>
         /// Called once per frame
         /// </summary>
-        protected virtual void Update()
+        protected void Update()
         {
             // Apply throttle
-            this._rgbd.AddForce(this.ForwardVector * this.MainEngineThrust * Time.deltaTime * this.CurrentThrottle, ForceMode2D.Force);
+            this.RGBD.AddForce(this.ForwardVector * this.MainEngineThrust * Time.deltaTime * this._currentThrottle, ForceMode2D.Force);
 
             // Limits velocity to maximum speed
-            if (this._rgbd.velocity.magnitude > this.MaximumSpeed)
+            if (this.RGBD.velocity.magnitude > this.MaximumSpeed)
             {
-                this._rgbd.velocity.Normalize();
-                this._rgbd.velocity *= this.MaximumSpeed;
+				var unitVelocity = this.RGBD.velocity.normalized;
+				this.RGBD.velocity = unitVelocity * this.MaximumSpeed;
             }
 
 			// Auto fire weapon systems

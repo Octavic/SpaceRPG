@@ -19,6 +19,6 @@ namespace Assets.Scripts.Settings
         /// <summary>
         /// The minimal speed that the ship can move at. Anything lower will be considered still
         /// </summary>
-        public const float MinimalSpeed = 0.05f;
+        public const float MinimalSpeed = 0.1f;
     }
 }

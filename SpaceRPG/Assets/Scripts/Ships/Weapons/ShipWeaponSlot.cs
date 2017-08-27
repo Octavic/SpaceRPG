@@ -88,7 +88,7 @@ namespace Assets.Scripts.Ships.Weapons
 		/// </summary>
 		private void UpdateWeaponRenderLayer()
 		{
-			this.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = this.IsOnTop ? 1 : -1;
+			this.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = this.IsOnTop ? 2 : -2;
 		}
 
         /// <summary>
@@ -109,14 +109,14 @@ namespace Assets.Scripts.Ships.Weapons
 
 			// If there's a target
 			if (Target != null)
-            {
+			{
 				// The angle that the target is at
-                var targetAngle = ((Vector2)(Target.transform.position - this.transform.position)).ToAngleDegree();
+				var targetAngle = ((Vector2)(Target.transform.position - this.transform.position)).ToAngleDegree();
 
-                var oldRotation = this.transform.eulerAngles.z;
-                var angleDiff = CalcAngleDiff.InDegrees(oldRotation, targetAngle);
-                var maxTurning = this.RotationSpeed * Time.deltaTime;
-                float angleToTurn = angleDiff;
+				var oldRotation = this.transform.eulerAngles.z;
+				var angleDiff = CalcAngleDiff.InDegrees(oldRotation, targetAngle);
+				var maxTurning = this.RotationSpeed * Time.deltaTime;
+				float angleToTurn = angleDiff;
 
 				// Check if the weapon is lined up. If the turning required is bigger than how much can be turned this frame, then weapon is no longer lined up
 				if (Math.Abs(angleDiff) > maxTurning)
@@ -137,7 +137,11 @@ namespace Assets.Scripts.Ships.Weapons
 						this.transform.localEulerAngles = new Vector3(0, 0, this._originalRotation + Math.Sign(diffToCenter) * this.MaxAngle);
 					}
 				}
-            }
+			}
+			else
+			{
+				this.IsLinedUp = false;
+			}
         }
     }
 }
