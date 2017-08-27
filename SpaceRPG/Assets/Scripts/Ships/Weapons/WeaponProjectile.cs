@@ -13,7 +13,7 @@ namespace Assets.Scripts.Ships.Weapons
 	using UnityEngine;
 	using Utility;
 
-	public class WeaponProjectile : MonoBehaviour
+	public class WeaponProjectile : DelayedSelfDestruct
 	{
 		/// <summary>
 		/// Speed of the projectile
@@ -21,12 +21,32 @@ namespace Assets.Scripts.Ships.Weapons
 		public float Speed;
 
 		/// <summary>
+		/// How far to move the bullet in the x direction
+		/// </summary>
+		public float StartDistance;
+
+		/// <summary>
+		/// How much to move per second
+		/// </summary>
+		protected Vector3 _offset;
+
+		/// <summary>
+		/// Called in the beginning for intialization
+		/// </summary>
+		protected void Start()
+		{
+			var angle = this.transform.eulerAngles.z*Mathf.Deg2Rad;
+			this._offset = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * Speed;
+			this.transform.position = this.transform.position + this._offset.normalized * this.StartDistance;
+		}
+
+		/// <summary>
 		/// Called once per frame
 		/// </summary>
-		protected void Update()
+		protected override void Update()
 		{
-			var oldPos = this.transform.localPosition;
-			this.transform.localPosition = new Vector3(oldPos.x + this.Speed * Time.deltaTime, oldPos.y);
+			this.transform.position = this.transform.position + this._offset * Time.deltaTime;
+			base.Update();
 		}
 	}
 }
