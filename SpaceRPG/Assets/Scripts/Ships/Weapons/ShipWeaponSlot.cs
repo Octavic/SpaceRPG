@@ -24,6 +24,11 @@ namespace Assets.Scripts.Ships.Weapons
 		public bool Customizable;
 
 		/// <summary>
+		/// If the weapon is on top
+		/// </summary>
+		public bool IsOnTop;
+
+		/// <summary>
 		/// How the weapon rotates
 		/// </summary>
 		public ShipWeaponRotateEnum RotationType;
@@ -67,7 +72,23 @@ namespace Assets.Scripts.Ships.Weapons
 		{
 			var oldWeapon = this.CurrentWeaponInSlot;
 			this.CurrentWeaponInSlot = newWeapon;
+
+			// Sets the new weapon to the right place with the right rotation
+			var newWeaponTransform = newWeapon.transform;
+			newWeaponTransform.localPosition = Vector3.zero;
+			newWeaponTransform.localEulerAngles = Vector3.zero;
+			newWeaponTransform.parent = this.transform;
+			this.UpdateWeaponRenderLayer();
+
 			return oldWeapon;
+		}
+
+		/// <summary>
+		/// Updates the weapon's rendering layer base on the "IsOnTop" boolean
+		/// </summary>
+		private void UpdateWeaponRenderLayer()
+		{
+			this.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = this.IsOnTop ? 1 : -1;
 		}
 
         /// <summary>
@@ -76,6 +97,7 @@ namespace Assets.Scripts.Ships.Weapons
         private void Start()
         {
 			this._originalRotation = this.transform.eulerAngles.z;
+			this.UpdateWeaponRenderLayer();
         }
 
         /// <summary>
