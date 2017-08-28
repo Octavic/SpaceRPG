@@ -18,17 +18,12 @@ namespace Assets.Scripts.Ships.Weapons
 		/// <summary>
 		/// Speed of the projectile
 		/// </summary>
-		public float Speed;
-
-		/// <summary>
-		/// How far to move the bullet in the x direction
-		/// </summary>
-		public float StartDistance;
+		public float Velocity;
 
 		/// <summary>
 		/// How much to move per second
 		/// </summary>
-		protected Vector3 _offset;
+		protected Vector3 _velocityPerSecond;
 
 		/// <summary>
 		/// Called in the beginning for intialization
@@ -36,8 +31,7 @@ namespace Assets.Scripts.Ships.Weapons
 		protected void Start()
 		{
 			var angle = this.transform.eulerAngles.z*Mathf.Deg2Rad;
-			this._offset = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * Speed;
-			this.transform.position = this.transform.position + this._offset.normalized * this.StartDistance;
+			this._velocityPerSecond = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * Velocity;
 		}
 
 		/// <summary>
@@ -45,7 +39,7 @@ namespace Assets.Scripts.Ships.Weapons
 		/// </summary>
 		protected override void Update()
 		{
-			this.transform.position = this.transform.position + this._offset * Time.deltaTime;
+			this.transform.position = this.transform.position + this._velocityPerSecond * Time.deltaTime;
 			base.Update();
 		}
 	}

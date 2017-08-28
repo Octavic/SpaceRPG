@@ -66,7 +66,9 @@ namespace Assets.Scripts.Ships.Weapons
 		/// <summary>
 		/// Try to fire the weapon
 		/// </summary>
-		public virtual bool TryFire()
+		/// <param name="target">The target ship</param>
+		/// <returns>True if the weapon fired succcessfully</returns>
+		public virtual bool TryFire(Ship target)
 		{
 			return this.FireCooldown == 0;
 		}

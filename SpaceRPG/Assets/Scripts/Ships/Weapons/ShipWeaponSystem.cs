@@ -36,16 +36,11 @@ namespace Assets.Scripts.Ships.Weapons
 		/// <summary>
 		/// Gets a list of cannons in the system
 		/// </summary>
-		public List<ShipWeapon> WeaponsInSystem
+		public List<ShipWeaponSlot> FilledWeaponSlots
 		{
 			get
 			{
-				if (this.ControlledWeaponSlots == null || this.ControlledWeaponSlots.Count == 0)
-				{
-					return null;
-				}
-
-				return this.ControlledWeaponSlots.Where(slot => slot.CurrentWeaponInSlot != null).Select(slot=>slot.CurrentWeaponInSlot).ToList();
+				return this.ControlledWeaponSlots.Where(slot => slot.CurrentWeaponInSlot != null).ToList();
 			}
 		}
 
@@ -56,7 +51,7 @@ namespace Assets.Scripts.Ships.Weapons
 		{
 			get
 			{
-				return this.WeaponsInSystem.Sum(cannon => cannon.CpuDragin);
+				return this.FilledWeaponSlots.Sum(slot => slot.CurrentWeaponInSlot.CpuDragin);
 			}
 		}
 
@@ -67,12 +62,7 @@ namespace Assets.Scripts.Ships.Weapons
 		{
 			get
 			{
-				if (this.ControlledWeaponSlots == null || this.ControlledWeaponSlots.Count == 0)
-				{
-					return false;
-				}
-
-				return !(this.ControlledWeaponSlots.Any(slot => !slot.IsLinedUp));
+				return !(this.FilledWeaponSlots.Any(slot => !slot.IsLinedUp));
 			}
 		}
 
@@ -83,12 +73,7 @@ namespace Assets.Scripts.Ships.Weapons
 		{
 			get
 			{
-				if (this.ControlledWeaponSlots == null || this.ControlledWeaponSlots.Count == 0)
-				{
-					return 0;
-				}
-
-				return this.WeaponsInSystem.Average(weapon => weapon.ReloadPercentage);
+				return this.FilledWeaponSlots.Average(slot=>slot.CurrentWeaponInSlot.ReloadPercentage);
 			}
 		}
 
@@ -127,14 +112,11 @@ namespace Assets.Scripts.Ships.Weapons
 
 					// Nothing to fire
 					var result = false;
-					foreach (var slot in this.ControlledWeaponSlots)
+					foreach (var slot in this.FilledWeaponSlots)
 					{
-						if (slot.CurrentWeaponInSlot != null && slot.IsLinedUp)
+						if (slot.IsLinedUp && slot.TryFire())
 						{
-							if (slot.CurrentWeaponInSlot.TryFire())
-							{
-								result = true;
-							}
+							result = true;
 						}
 					}
 
@@ -142,15 +124,10 @@ namespace Assets.Scripts.Ships.Weapons
 
 				// Default case, just try to fire all and return result
 				default:
-					if (this.WeaponsInSystem == null)
-					{
-						return false;
-					}
-
 					result = false;
-					foreach (var weapon in this.WeaponsInSystem)
+					foreach (var slot in this.FilledWeaponSlots)
 					{
-						if (weapon.TryFire())
+						if (slot.TryFire())
 						{
 							result = true;
 						}

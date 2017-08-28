@@ -18,6 +18,8 @@ namespace Assets.Scripts.Utility
 	{
 		Player,
 		MainCamera,
-		Ship
+		Ship,
+		Minimap,
+		GameController
 	}
 }

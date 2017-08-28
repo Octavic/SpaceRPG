@@ -84,6 +84,20 @@ namespace Assets.Scripts.Ships.Weapons
 		}
 
 		/// <summary>
+		/// Try to fire the weapon in slot
+		/// </summary>
+		/// <returns>If any weapon fired</returns>
+		public bool TryFire()
+		{
+			if (this.CurrentWeaponInSlot == null)
+			{
+				return false;
+			}
+
+			return this.CurrentWeaponInSlot.TryFire(this.Target);
+		}
+
+		/// <summary>
 		/// Updates the weapon's rendering layer base on the "IsOnTop" boolean
 		/// </summary>
 		private void UpdateWeaponRenderLayer()
@@ -110,20 +124,11 @@ namespace Assets.Scripts.Ships.Weapons
 			// If there's a target
 			if (Target != null)
 			{
-				// The angle that the target is at
-				var targetAngle = ((Vector2)(Target.transform.position - this.transform.position)).ToAngleDegree();
-
+				// Calculate how much to turn
 				var oldRotation = this.transform.eulerAngles.z;
-				var angleDiff = CalcAngleDiff.InDegrees(oldRotation, targetAngle);
-				var maxTurning = this.RotationSpeed * Time.deltaTime;
-				float angleToTurn = angleDiff;
-
-				// Check if the weapon is lined up. If the turning required is bigger than how much can be turned this frame, then weapon is no longer lined up
-				if (Math.Abs(angleDiff) > maxTurning)
-				{
-					this.IsLinedUp = false;
-					angleToTurn = Mathf.Sign(angleDiff) * maxTurning;
-				}
+				var maxTurningThisFrame = this.RotationSpeed * Time.deltaTime;
+				var angleToTurn = CalcTurnAngle.InDegree(this.transform.position, Target.transform.position, this.transform.eulerAngles.z, maxTurningThisFrame);
+				this.IsLinedUp = Mathf.Abs(angleToTurn) < maxTurningThisFrame;
 
 				this.transform.eulerAngles = new Vector3(0, 0, oldRotation + angleToTurn);
 

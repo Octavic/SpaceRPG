@@ -7,7 +7,8 @@
 namespace Assets.Scripts.Ships
 {
     using Assets.Scripts.Settings;
-    using Assets.Scripts.Utility;
+	using Assets.Scripts.UI;
+	using Assets.Scripts.Utility;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -189,6 +190,9 @@ namespace Assets.Scripts.Ships
         {
             this.MainSpriteRenderer = this.MainPaintjob.GetComponent<SpriteRenderer>();
             this.RGBD = this.GetComponent<Rigidbody2D>();
+
+			// Register ship on minimap
+			GameController.CurrentInstance.RegisterShip(this, this.gameObject.tag == Tags.Player.ToString() ? ShipIconTypeEnum.Player : ShipIconTypeEnum.Hostile);
         }
 
         /// <summary>
