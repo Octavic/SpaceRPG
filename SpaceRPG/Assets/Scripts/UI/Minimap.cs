@@ -21,9 +21,14 @@ namespace Assets.Scripts.UI
 	public class Minimap : MonoBehaviour
 	{
 		/// <summary>
-		/// The player's color
+		/// A list of normal icon colors
 		/// </summary>
-		public List<Color> IconColors;
+		public List<Color> NormalIconColors;
+
+		/// <summary>
+		/// A list of icon colors when selected 
+		/// </summary>
+		public List<Color> HighlightedIconColors;
 
 		/// <summary>
 		/// The prefab for an icon
@@ -36,20 +41,51 @@ namespace Assets.Scripts.UI
 		private static Minimap _currentInstance;
 
 		/// <summary>
-		/// Registers a new ship onto the map
+		/// Gets the current instance of the minimap
 		/// </summary>
-		/// <param name="newShip">New ship</param>
-		/// <param name="iconType">The kind of icon that this ship is</param>
-		public static void UpdateMinimap(Ship newShip, ShipIconTypeEnum iconType)
+		public static Minimap CurrentInstance
 		{
-			if (Minimap._currentInstance == null)
+			get
 			{
-				Minimap._currentInstance = GameObjectFinder.FindGameObjectWithTag(Tags.Minimap).GetComponent<Minimap>();
-			}
+				if (Minimap._currentInstance == null)
+				{
+					Minimap._currentInstance = GameObjectFinder.FindGameObjectWithTag(Tags.Minimap).GetComponent<Minimap>();
+				}
 
+				return Minimap._currentInstance;
+			}
+		}
+
+		/// <summary>
+		/// Creates a new ship icon
+		/// </summary>
+		/// <param name="newShip">New ship to be targeted</param>
+		/// <returns>The newly created icon</returns>
+		public MinimapIcon CreateShipIcon(Ship newShip)
+		{
 			var newIcon = Instantiate(Minimap._currentInstance.IconPrefab, Minimap._currentInstance.transform, false);
-			newIcon.GetComponent<MinimapIcon>().target = newShip;
-			newIcon.GetComponent<Image>().color = Minimap._currentInstance.IconColors[(int)iconType];
+			var newIconComponent = newIcon.GetComponent<MinimapIcon>();
+			newIconComponent.target = newShip;
+			newIcon.GetComponent<Image>().color = this.GetColor(newShip.ShipAttitude, false);
+			return newIconComponent;
+		}
+
+		/// <summary>
+		/// Gets the icon color based on the attitude enum
+		/// </summary>
+		/// <param name="shipAttitude">Target attitude</param>
+		/// <param name="isHighlighted">If the color is normal or highlighted</param>
+		/// <returns>Icon color</returns>
+		public Color GetColor(ShipAttitudeEnum shipAttitude, bool isHighlighted)
+		{
+			if (!isHighlighted)
+			{
+				return this.NormalIconColors[(int)shipAttitude];
+			}
+			else
+			{
+				return this.HighlightedIconColors[(int)shipAttitude];
+			}
 		}
 	}
 }

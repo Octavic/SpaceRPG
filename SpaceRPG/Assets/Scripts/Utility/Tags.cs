@@ -20,6 +20,7 @@ namespace Assets.Scripts.Utility
 		MainCamera,
 		Ship,
 		Minimap,
-		GameController
+		GameController,
+		ShipListUI
 	}
 }

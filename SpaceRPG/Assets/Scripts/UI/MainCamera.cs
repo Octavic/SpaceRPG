@@ -38,9 +38,10 @@ namespace Assets.Scripts.UI
 		/// <summary>
 		/// Called once per frame
 		/// </summary>
-		protected void Update()
+		protected void FixedUpdate()
 		{
-			this.transform.position = new Vector3(FocusTarget.transform.position.x, FocusTarget.transform.position.y, this._defaultZ);
+			var newPosition = new Vector3(FocusTarget.transform.position.x, FocusTarget.transform.position.y, this._defaultZ);
+			this.transform.position = Vector3.Lerp(this.transform.position, newPosition, 0.2f);
 		}
 	}
 }

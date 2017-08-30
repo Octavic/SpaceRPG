@@ -26,10 +26,15 @@ namespace Assets.Scripts.Ships
         /// </summary>
         public GameObject MainPaintjob;
 
-        /// <summary>
-        /// The max speed at which this vessel can travel
-        /// </summary>
-        public float MaximumSpeed;
+		/// <summary>
+		/// Name of the ship
+		/// </summary>
+		public string ShipName;
+
+		/// <summary>
+		/// The max speed at which this vessel can travel
+		/// </summary>
+		public float MaximumSpeed;
 
         /// <summary>
         /// The amount of forward thrust that the engine provides
@@ -98,24 +103,35 @@ namespace Assets.Scripts.Ships
         }
 
 		/// <summary>
+		/// Gets the ship attitude
+		/// </summary>
+		public ShipAttitudeEnum ShipAttitude
+		{
+			get
+			{
+				return this._shipAttitude;
+			}
+		}
+
+		/// <summary>
+		/// Gets the current throttle from 0 to 1. 0 means no throttle, 1 meaning full throttle
+		/// </summary>
+		public virtual float CurrentThrottle
+		{
+			get
+			{
+				return this._currentThrottle;
+			}
+			set
+			{
+				this._currentThrottle = value.LimitTo(0, 1);
+			}
+		}
+
+		/// <summary>
 		/// The current throttle
 		/// </summary>
 		private float _currentThrottle;
-
-        /// <summary>
-        /// Gets the current throttle from 0 to 1. 0 means no throttle, 1 meaning full throttle
-        /// </summary>
-        public virtual float CurrentThrottle
-        {
-            get
-            {
-                return this._currentThrottle;
-            }
-            set
-            {
-                this._currentThrottle = value.LimitTo(0, 1);
-            }
-        }
 
         /// <summary>
         /// The main sprite renderer to control the ship's main color
@@ -127,15 +143,10 @@ namespace Assets.Scripts.Ships
         /// </summary>
         public Rigidbody2D RGBD { get; private set; }
 
-        ///// <summary>
-        ///// Try to orbit the target
-        ///// </summary>
-        ///// <param name="target">Target that should be orbitted</param>
-        ///// <param name="distance">How far the orbit should be</param>
-        //protected void TryToOrbit(GameObject target, float distance)
-        //{
-
-        //}
+		/// <summary>
+		/// Gets the ship's attitude
+		/// </summary>
+		private ShipAttitudeEnum _shipAttitude;
 
         /// <summary>
         /// Try to stop the ship
@@ -191,8 +202,11 @@ namespace Assets.Scripts.Ships
             this.MainSpriteRenderer = this.MainPaintjob.GetComponent<SpriteRenderer>();
             this.RGBD = this.GetComponent<Rigidbody2D>();
 
+			// Decide the ship's attitude
+			this._shipAttitude = this.gameObject.tag == Tags.Player.ToString() ? ShipAttitudeEnum.Self : ShipAttitudeEnum.Hostile;
+
 			// Register ship on minimap
-			GameController.CurrentInstance.RegisterShip(this, this.gameObject.tag == Tags.Player.ToString() ? ShipIconTypeEnum.Player : ShipIconTypeEnum.Hostile);
+			GameController.CurrentInstance.RegisterShip(this);
         }
 
         /// <summary>

@@ -37,24 +37,39 @@ namespace Assets.Scripts
 		}
 
 		/// <summary>
-		/// A list of ships and their respective icon types
-		/// </summary>
-		public IList<KeyValuePair<Ship, ShipIconTypeEnum>> ShipRelationships { get; private set; }
-
-		/// <summary>
 		/// The current instance of the game controller
 		/// </summary>
 		private static GameController _currentInstance;
 
 		/// <summary>
+		/// A ship to map icon dictionary
+		/// </summary>
+		private IDictionary<Ship, MinimapIcon> _shipMapIconDictionary;
+
+		/// <summary>
+		/// The currently highlighted ship
+		/// </summary>
+		private Ship _currentlyHighlightedShip;
+
+		/// <summary>
 		/// Registers a new ship onto the map
 		/// </summary>
 		/// <param name="newShip">New ship</param>
-		/// <param name="iconType">The kind of icon that this ship is</param>
-		public void RegisterShip(Ship newShip, ShipIconTypeEnum iconType)
+		public void RegisterShip(Ship newShip)
 		{
-			this.ShipRelationships.Add(new KeyValuePair<Ship, ShipIconTypeEnum>(newShip, iconType));
-			Minimap.UpdateMinimap(newShip, iconType);
+			this._shipMapIconDictionary[newShip] = Minimap.CurrentInstance.CreateShipIcon(newShip);
+			ShipListUI.CurrentInstance.RegisterShip(newShip);
+		}
+
+		/// <summary>
+		/// Sets the highlight status of a ship
+		/// </summary>
+		/// <param name="targetShip">The target ship</param>
+		/// <param name="isHighlighted">If it's being highlighted or unhighlighted</param>
+		public void SetHighlightStatus(Ship targetShip, bool isHighlighted)
+		{
+			var color = Minimap.CurrentInstance.GetColor(targetShip.ShipAttitude, isHighlighted);
+			this._shipMapIconDictionary[targetShip].IconColor = color;
 		}
 
 		/// <summary>
@@ -67,7 +82,7 @@ namespace Assets.Scripts
 				GameController._currentInstance = this;
 			}
 
-			this.ShipRelationships = new List<KeyValuePair<Ship, ShipIconTypeEnum>>();
+			this._shipMapIconDictionary = new Dictionary<Ship, MinimapIcon>();
 		}
 	}
 }
