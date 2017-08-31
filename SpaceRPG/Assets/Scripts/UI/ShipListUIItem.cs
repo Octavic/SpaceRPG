@@ -80,6 +80,14 @@ namespace Assets.Scripts.UI
 		}
 
 		/// <summary>
+		/// Focuses the main camera on the target
+		/// </summary>
+		public void FocusCamera()
+		{
+			MainCamera.CurrentInstance.FocusTarget = this.Target.gameObject;
+		}
+
+		/// <summary>
 		/// Checks the mouse event
 		/// </summary>
 		/// <param name="isEnter">If the mouse just entered or exited</param>
@@ -94,6 +102,8 @@ namespace Assets.Scripts.UI
 		protected void Update()
 		{
 			this.DistanceText.text = this.Distance.ToString(".00");
+
+			this.TargetIcon.SetActive((PlayerController.CurrentInstance.WeaponSystems.Any(system => system.CurrentTarget == this.Target)));
 		}
 	}
 }

@@ -11,12 +11,30 @@ namespace Assets.Scripts.UI
 	using System.Linq;
 	using System.Text;
 	using UnityEngine;
+	using Utility;
 
 	/// <summary>
 	/// Controls the main camera
 	/// </summary>
 	public class MainCamera : MonoBehaviour
 	{
+		/// <summary>
+		/// Gets the current instance
+		/// </summary>
+		public static MainCamera CurrentInstance
+		{
+			get
+			{
+				if (MainCamera._currentInstance == null)
+				{
+					MainCamera._currentInstance = GameObjectFinder.FindGameObjectWithTag(Tags.MainCamera).GetComponent<MainCamera> ();
+				}
+
+				return MainCamera._currentInstance;
+			}
+
+		}
+
 		/// <summary>
 		/// What the camera is focused on
 		/// </summary>
@@ -34,6 +52,11 @@ namespace Assets.Scripts.UI
 		{
 			this._defaultZ = this.transform.position.z;
 		}
+
+		/// <summary>
+		/// The current instance
+		/// </summary>
+		private static MainCamera _currentInstance;
 
 		/// <summary>
 		/// Called once per frame

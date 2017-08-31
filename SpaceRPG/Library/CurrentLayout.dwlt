@@ -290,14 +290,14 @@ MonoBehaviour:
     width: 1145
     height: 650
   m_SceneLighting: 1
-  lastFramingTime: 19608.693620570368
+  lastFramingTime: 1677.8138383677392
   m_2DMode: 1
   m_isRotationLocked: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 416.20496, y: 386.93063, z: 0}
+    m_Target: {x: 0, y: 0, z: 0}
     speed: 2
-    m_Value: {x: 416.20496, y: 386.93063, z: 0}
+    m_Value: {x: 0, y: 0, z: 0}
   m_RenderMode: 0
   m_ValidateTrueMetals: 0
   m_SceneViewState:
@@ -324,9 +324,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 827.15356
+    m_Target: 165.30576
     speed: 2
-    m_Value: 827.15356
+    m_Value: 165.30576
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -480,19 +480,19 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 0
     m_Folders:
-    - Assets/Prefabs/UI
+    - Assets/Sprites/UI
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Prefabs/UI
+  - Assets/Sprites/UI
   m_LastFoldersGridSize: -1
   m_LastProjectPath: E:\GitHub\SpaceRPG\SpaceRPG
   m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 70}
-    m_SelectedIDs: 92260000
-    m_LastClickedID: 9874
-    m_ExpandedIDs: 000000004a250000de250000e22500001e2600006626000000ca9a3bffffff7f
+    scrollPos: {x: 0, y: 198}
+    m_SelectedIDs: 5a260000
+    m_LastClickedID: 9818
+    m_ExpandedIDs: 000000002e260000a2260000ca260000d0260000162700006027000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -520,7 +520,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000004a250000b8250000de250000e22500001e26000066260000
+    m_ExpandedIDs: 000000002e260000ca260000d02600001627000060270000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -636,20 +636,20 @@ MonoBehaviour:
     height: 650
   m_TreeViewState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 
-    m_LastClickedID: 0
-    m_ExpandedIDs: fac5fdff4aebfdff48fbfdff886afeff9685feffaef9feffba60ffff7a9dffffbefbffff00000000002700001a2700003827000062270000
+    m_SelectedIDs: 6a280000
+    m_LastClickedID: 10346
+    m_ExpandedIDs: 10ebffffb8f8ffff98fbffff00000000cc270000f0270000582800006a280000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: Name
-      m_OriginalName: Name
+      m_Name: ManagersAndControllers
+      m_OriginalName: ManagersAndControllers
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: -103800
+      m_UserData: 10266
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
       m_OriginalEventType: 0

@@ -57,6 +57,11 @@ namespace Assets.Scripts
 		/// <param name="newShip">New ship</param>
 		public void RegisterShip(Ship newShip)
 		{
+			if (this._shipMapIconDictionary == null)
+			{
+				this._shipMapIconDictionary = new Dictionary<Ship, MinimapIcon>();
+			}
+
 			this._shipMapIconDictionary[newShip] = Minimap.CurrentInstance.CreateShipIcon(newShip);
 			ShipListUI.CurrentInstance.RegisterShip(newShip);
 		}
@@ -82,7 +87,10 @@ namespace Assets.Scripts
 				GameController._currentInstance = this;
 			}
 
-			this._shipMapIconDictionary = new Dictionary<Ship, MinimapIcon>();
+			if (this._shipMapIconDictionary == null)
+			{
+				this._shipMapIconDictionary = new Dictionary<Ship, MinimapIcon>();
+			}
 		}
 	}
 }
