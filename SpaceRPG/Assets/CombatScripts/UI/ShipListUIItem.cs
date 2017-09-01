@@ -4,7 +4,7 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts.UI
+namespace Assets.CombatScripts.UI
 {
 	using System;
 	using System.Collections.Generic;
@@ -102,8 +102,7 @@ namespace Assets.Scripts.UI
 		protected void Update()
 		{
 			this.DistanceText.text = this.Distance.ToString(".00");
-
-			this.TargetIcon.SetActive((PlayerController.CurrentInstance.WeaponSystems.Any(system => system.CurrentTarget == this.Target)));
+			this.TargetIcon.SetActive(PlayerController.CurrentInstance.IsShipTargeted(this.Target));
 		}
 	}
 }

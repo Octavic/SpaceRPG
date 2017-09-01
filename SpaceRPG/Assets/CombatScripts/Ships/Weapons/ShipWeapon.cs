@@ -4,7 +4,7 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts.Ships.Weapons
+namespace Assets.CombatScripts.Ships.Weapons
 {
     using System;
     using System.Collections.Generic;
@@ -17,6 +17,11 @@ namespace Assets.Scripts.Ships.Weapons
     /// </summary>
     public abstract class ShipWeapon : MonoBehaviour    
     {
+		/// <summary>
+		/// Id for the faction
+		/// </summary>
+		public int FactoinId;
+
         /// <summary>
         /// How much fuel drain per shot
         /// </summary>
@@ -31,6 +36,11 @@ namespace Assets.Scripts.Ships.Weapons
 		/// How much CPU does the weapon take
 		/// </summary>
 		public float CpuDragin;
+
+		/// <summary>
+		/// Damage of the weapon
+		/// </summary>
+		public float Damage;
 
         /// <summary>
         /// The possible time gap between shots
@@ -71,6 +81,20 @@ namespace Assets.Scripts.Ships.Weapons
 		public virtual bool TryFire(Ship target)
 		{
 			return this.FireCooldown == 0;
+		}
+
+		/// <summary>
+		/// Generates a new projectile
+		/// </summary>
+		/// <returns>The new projectile</returns>
+		protected WeaponGeneratedObject GenerateProjectile()
+		{
+			var projectile = Instantiate(this.ProjectilePrefab, this.transform, false);
+			projectile.transform.parent = null;
+			var projectileClass = projectile.GetComponent<WeaponGeneratedObject>();
+			projectileClass.Damage = this.Damage;
+			projectileClass.FactionId = this.FactoinId;
+			return projectileClass;
 		}
 
         /// <summary>

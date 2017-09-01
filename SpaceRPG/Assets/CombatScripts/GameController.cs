@@ -4,7 +4,7 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts
+namespace Assets.CombatScripts
 {
 	using System;
 	using System.Collections.Generic;
@@ -13,7 +13,7 @@ namespace Assets.Scripts
 	using UnityEngine;
 	using Utility;
 	using Ships;
-	using Assets.Scripts.UI;
+	using Assets.CombatScripts.UI;
 
 	/// <summary>
 	/// The overall game controller

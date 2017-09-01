@@ -4,7 +4,7 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts.Ships
+namespace Assets.CombatScripts.Ships
 {
     using System;
     using System.Collections.Generic;
@@ -126,6 +126,16 @@ namespace Assets.Scripts.Ships
 				Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
 				this.CurrentSelectedSystemIndex = -1;
 			}
+		}
+
+		/// <summary>
+		/// Returns true if the target ship is targeted by one of the player's weapon system
+		/// </summary>
+		/// <param name="ship">Ship target</param>
+		/// <returns>True if the ship was targeted by one of the player's weapon system</returns>
+		public bool IsShipTargeted(Ship ship)
+		{
+			return this.WeaponSystems.Any(system => system.CurrentTarget == ship);
 		}
 
 		/// <summary>

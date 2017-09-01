@@ -1,10 +1,10 @@
 ﻿//  --------------------------------------------------------------------------------------------------------------------
-//  <copyright file="ShipWeapon.cs">
+//  <copyright file="ShipBallisticWeapon.cs">
 //    Copyright (c) Yifei Xu .  All rights reserved.
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts.Ships.Weapons
+namespace Assets.CombatScripts.Ships.Weapons
 {
 	using System;
 	using System.Collections.Generic;
@@ -15,7 +15,7 @@ namespace Assets.Scripts.Ships.Weapons
 	/// <summary>
 	/// A ship weapon that fires a non-seeking projectile
 	/// </summary>
-	public class ShipProjectileWeapon : ShipWeapon
+	public class ShipBallisticWeapon : ShipWeapon
 	{
 		/// <summary>
 		/// Gets the speed of the bullet
@@ -55,8 +55,7 @@ namespace Assets.Scripts.Ships.Weapons
 			}
 
 			// Create new projectile
-			var projectile = Instantiate(this.ProjectilePrefab, this.transform, false);
-			projectile.transform.parent = null;
+			var newProjectile = this.GenerateProjectile();
 			this.FireCooldown = this.TimeBetweenShots;
 			return true;
 		}

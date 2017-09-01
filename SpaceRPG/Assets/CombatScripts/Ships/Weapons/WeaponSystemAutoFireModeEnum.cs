@@ -4,7 +4,7 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts.Ships.Weapons
+namespace Assets.CombatScripts.Ships.Weapons
 {
 	/// <summary>
 	/// A collection of possible weapon auto fire modes

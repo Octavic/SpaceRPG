@@ -4,7 +4,7 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts.Settings
+namespace Assets.CombatScripts.Settings
 {
 	public static class MinimapSettings
 	{

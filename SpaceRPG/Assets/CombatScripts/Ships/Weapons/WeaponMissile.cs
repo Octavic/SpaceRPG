@@ -4,8 +4,9 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts.Ships.Weapons
+namespace Assets.CombatScripts.Ships.Weapons
 {
+	using Assets.CombatScripts.Ships.Weapons;
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
@@ -16,7 +17,7 @@ namespace Assets.Scripts.Ships.Weapons
 	/// <summary>
 	/// Describes a missile projectile
 	/// </summary>
-	public class WeaponMissile : DelayedSelfDestruct
+	public class WeaponMissile : WeaponGeneratedObject
 	{
 		/// <summary>
 		/// The target of the missile

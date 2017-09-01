@@ -4,9 +4,9 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts.UI
+namespace Assets.CombatScripts.UI
 {
-	using Assets.Scripts.Ships;
+	using Assets.CombatScripts.Ships;
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;

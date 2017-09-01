@@ -4,7 +4,7 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts.Ships.Weapons
+namespace Assets.CombatScripts.Ships.Weapons
 {
 	using System;
 	using System.Collections.Generic;
@@ -13,7 +13,10 @@ namespace Assets.Scripts.Ships.Weapons
 	using UnityEngine;
 	using Utility;
 
-	public class WeaponProjectile : DelayedSelfDestruct
+	/// <summary>
+	/// A simple project
+	/// </summary>
+	public class WeaponProjectile : WeaponGeneratedObject
 	{
 		/// <summary>
 		/// Speed of the projectile

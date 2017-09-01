@@ -4,11 +4,11 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts.Ships
+namespace Assets.CombatScripts.Ships
 {
-    using Assets.Scripts.Settings;
-	using Assets.Scripts.UI;
-	using Assets.Scripts.Utility;
+    using Assets.CombatScripts.Settings;
+	using Assets.CombatScripts.UI;
+	using Assets.CombatScripts.Utility;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -30,6 +30,11 @@ namespace Assets.Scripts.Ships
 		/// Name of the ship
 		/// </summary>
 		public string ShipName;
+
+		/// <summary>
+		/// The faction Id if the ship
+		/// </summary>
+		public int FactionId;
 
 		/// <summary>
 		/// The max speed at which this vessel can travel
@@ -57,9 +62,66 @@ namespace Assets.Scripts.Ships
         public float TimeToStopFromFullSpeed;
 
 		/// <summary>
+		/// The amount of shield available
+		/// </summary>
+		public float MaxShield;
+
+		/// <summary>
+		/// The amount of hull available
+		/// </summary>
+		public float MaxHull;
+
+		/// <summary>
+		/// How much shield the ship can regenerate per second
+		/// </summary>
+		public float ShieldRegenSpeed;
+
+		/// <summary>
 		/// A list of ship weapon systems
 		/// </summary>
 		public List<ShipWeaponSystem> WeaponSystems;
+
+		/// <summary>
+		/// Gets or sets the current shield health
+		/// </summary>
+		public float CurrentShield
+		{
+			get
+			{
+				return this._currentShield;
+			}
+			set
+			{
+				// Make sure that shield does not exceed max shield
+				this._currentShield = Math.Min(value, this.MaxShield);
+
+				// Make sure that shield cannot fall below zero. If so, the remaining damage goes onto hull
+				if (value < 0)
+				{
+					this._currentShield = 0;
+					this.CurrentHull += value;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the current hull health
+		/// </summary>
+		public float CurrentHull
+		{
+			get
+			{
+				return this._currentHull;
+			}
+			set
+			{
+				this._currentHull = value;
+				if (this._currentHull < 0)
+				{
+					this.OnShipDestroy();
+				}
+			}
+		}
 
         /// <summary>
         /// Gets or sets the main color of the ship
@@ -132,6 +194,16 @@ namespace Assets.Scripts.Ships
 		/// The current throttle
 		/// </summary>
 		private float _currentThrottle;
+
+		/// <summary>
+		/// The current shield
+		/// </summary>
+		private float _currentShield;
+
+		/// <summary>
+		/// The current hull
+		/// </summary>
+		private float _currentHull;
 
         /// <summary>
         /// The main sprite renderer to control the ship's main color
@@ -207,6 +279,10 @@ namespace Assets.Scripts.Ships
 
 			// Register ship on minimap
 			GameController.CurrentInstance.RegisterShip(this);
+
+			// Apply shield and hull
+			this._currentShield = this.MaxShield;
+			this._currentHull = this.MaxHull;
         }
 
         /// <summary>
@@ -229,6 +305,32 @@ namespace Assets.Scripts.Ships
 			{
 				weaponSystem.TryAutoFireAllWeapons();
 			}
+
+			// Apply shield regen
+			this.CurrentShield += this.ShieldRegenSpeed * Time.deltaTime;
         }
-    }
+
+		/// <summary>
+		/// When the ship collides with a trigger
+		/// </summary>
+		/// <param name="collision">The collision that occured</param>
+		protected void OnTriggerEnter2D(Collider2D collision)
+		{
+			var projectileClass = collision.gameObject.GetComponent<WeaponGeneratedObject>();
+
+			// if the collision is between this ship and an enemy projectile
+			if (projectileClass != null && projectileClass.FactionId != this.FactionId)
+			{
+				this.CurrentShield -= projectileClass.Damage;
+			}
+		}
+
+		/// <summary>
+		/// Called when the ship is destroyed
+		/// </summary>
+		protected void OnShipDestroy()
+		{
+			Destroy(this.gameObject);
+		}
+	}
 }

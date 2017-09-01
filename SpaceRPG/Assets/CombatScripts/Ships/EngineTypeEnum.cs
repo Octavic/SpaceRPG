@@ -4,7 +4,7 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.Scripts.Ships
+namespace Assets.CombatScripts.Ships
 {
 	/// <summary>
 	/// A collection of all possible engine sizes
