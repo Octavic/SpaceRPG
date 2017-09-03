@@ -54,14 +54,17 @@ namespace Assets.CombatScripts.Ships.Weapons
 			else
 			{
 				// Turn the missile if required
-				var angleToTurn = CalcTurnAngle.InDegree(
-					this.transform.position,
-					Target.transform.position,
-					oldRotation,
-					this.MaxTurningPerSecond * Time.deltaTime);
+				if (this.Target != null)
+				{
+					var angleToTurn = CalcTurnAngle.InDegree(
+						this.transform.position,
+						Target.transform.position,
+						oldRotation,
+						this.MaxTurningPerSecond * Time.deltaTime);
 
-				newAngle = oldRotation + angleToTurn;
-				this.transform.eulerAngles = new Vector3(0, 0, oldRotation + angleToTurn);
+					newAngle = oldRotation + angleToTurn;
+					this.transform.eulerAngles = new Vector3(0, 0, oldRotation + angleToTurn);
+				}
 			}
 
 			// Move missile forward

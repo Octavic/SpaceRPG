@@ -61,8 +61,7 @@ namespace Assets.CombatScripts.Ships.Weapons
 			}
 
 			// Create new missle
-			var projectile = Instantiate(this.ProjectilePrefab, this.transform, false);
-			projectile.transform.parent = null;
+			var projectile = this.GenerateProjectile();
 			projectile.GetComponent<WeaponMissile>().Target = target;
 			this.FireCooldown = this.TimeBetweenShots;
 			return true;
