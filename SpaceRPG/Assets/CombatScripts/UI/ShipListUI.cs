@@ -79,6 +79,23 @@ namespace Assets.CombatScripts.UI
 		}
 
 		/// <summary>
+		/// Destroys the target ship
+		/// </summary>
+		/// <param name="deadShip">The destroyed ship</param>
+		public void DestroyShip(Ship deadShip)
+		{
+			for (int i = 0; i < this.Items.Count; i++)
+			{
+				if (this.Items[i].Target == deadShip)
+				{
+					this.Items.RemoveAt(i);
+					this.Update();
+					return;
+				}
+			}
+		}
+
+		/// <summary>
 		/// Sort the ships by the ship's attitude
 		/// </summary>
 		public void SortByAttitude()

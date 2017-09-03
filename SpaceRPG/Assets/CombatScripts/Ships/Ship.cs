@@ -72,6 +72,11 @@ namespace Assets.CombatScripts.Ships
 		public float MaxHull;
 
 		/// <summary>
+		/// How much delay between the shield can start regenerating again
+		/// </summary>
+		public float ShieldRegenDelay;
+
+		/// <summary>
 		/// How much shield the ship can regenerate per second
 		/// </summary>
 		public float ShieldRegenSpeed;
@@ -205,6 +210,11 @@ namespace Assets.CombatScripts.Ships
 		/// </summary>
 		private float _currentHull;
 
+		/// <summary>
+		/// How much time passed since the last time the shield was attacked
+		/// </summary>
+		private float _timeSinceShieldDamage;
+
         /// <summary>
         /// The main sprite renderer to control the ship's main color
         /// </summary>
@@ -306,8 +316,15 @@ namespace Assets.CombatScripts.Ships
 				weaponSystem.TryAutoFireAllWeapons();
 			}
 
-			// Apply shield regen
-			this.CurrentShield += this.ShieldRegenSpeed * Time.deltaTime;
+			// Apply shield regen if applicable
+			if (this._timeSinceShieldDamage >= this.ShieldRegenDelay)
+			{
+				this.CurrentShield += this.ShieldRegenSpeed * Time.deltaTime;
+			}
+			else
+			{
+				this._timeSinceShieldDamage += Time.deltaTime;
+			}
         }
 
 		/// <summary>
@@ -321,6 +338,7 @@ namespace Assets.CombatScripts.Ships
 			// if the collision is between this ship and an enemy projectile
 			if (projectileClass != null && projectileClass.FactionId != this.FactionId)
 			{
+				this._timeSinceShieldDamage = 0;
 				this.CurrentShield -= projectileClass.Damage;
 			}
 		}
@@ -330,6 +348,7 @@ namespace Assets.CombatScripts.Ships
 		/// </summary>
 		protected void OnShipDestroy()
 		{
+			GameController.CurrentInstance.DestroyShip(this);
 			Destroy(this.gameObject);
 		}
 	}

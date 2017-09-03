@@ -67,6 +67,16 @@ namespace Assets.CombatScripts
 		}
 
 		/// <summary>
+		/// Destroy the ship
+		/// </summary>
+		/// <param name="deadShip">The ship that's been blown up</param>
+		public void DestroyShip(Ship deadShip)
+		{
+			ShipListUI.CurrentInstance.DestroyShip(deadShip);
+			Destroy(this._shipMapIconDictionary[deadShip].gameObject);
+		}
+
+		/// <summary>
 		/// Sets the highlight status of a ship
 		/// </summary>
 		/// <param name="targetShip">The target ship</param>

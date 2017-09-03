@@ -109,7 +109,14 @@ namespace Assets.CombatScripts.Ships
 				return;
 			}
 
-			Cursor.SetCursor(CursorManager.CurrentInstance.LockonCursors[index], new Vector2(9,9), CursorMode.Auto);
+			if (this.CurrentSelectedSystemIndex == index)
+			{
+				this.CurrentSelectedSystemIndex = -1;
+				Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+				return;
+			}
+
+			Cursor.SetCursor(CursorManager.CurrentInstance.LockonCursors[index], new Vector2(10,10), CursorMode.Auto);
 			this.CurrentSelectedSystemIndex = index;
 		}
 
@@ -208,17 +215,17 @@ namespace Assets.CombatScripts.Ships
 			}
 
 			// Apply target select
-			if (Input.GetMouseButtonDown(1))
+			if (Input.GetMouseButtonDown(0))
 			{
 				RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
 				if (hit.collider != null && hit.collider.gameObject.tag == Tags.Ship.ToString())
 				{
 					this.SetTargetForCurrentWeaponSystem(hit.collider.gameObject.GetComponent<Ship>());
 				}
-				else
-				{
-					this.SetTargetForCurrentWeaponSystem(null);
-				}
+				//else
+				//{
+				//	this.SetTargetForCurrentWeaponSystem(null);
+				//}
 			}
         }
     }
