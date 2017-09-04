@@ -74,6 +74,7 @@ namespace Assets.CombatScripts
 		{
 			ShipListUI.CurrentInstance.DestroyShip(deadShip);
 			Destroy(this._shipMapIconDictionary[deadShip].gameObject);
+			this._shipMapIconDictionary.Remove(deadShip);
 		}
 
 		/// <summary>
@@ -83,8 +84,12 @@ namespace Assets.CombatScripts
 		/// <param name="isHighlighted">If it's being highlighted or unhighlighted</param>
 		public void SetHighlightStatus(Ship targetShip, bool isHighlighted)
 		{
-			var color = Minimap.CurrentInstance.GetColor(targetShip.ShipAttitude, isHighlighted);
-			this._shipMapIconDictionary[targetShip].IconColor = color;
+			MinimapIcon result;
+			if (this._shipMapIconDictionary.TryGetValue(targetShip, out result))
+			{
+				var color = Minimap.CurrentInstance.GetColor(targetShip.ShipAttitude, isHighlighted);
+				result.IconColor = color;
+			}
 		}
 
 		/// <summary>

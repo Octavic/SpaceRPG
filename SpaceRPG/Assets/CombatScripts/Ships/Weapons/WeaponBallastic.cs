@@ -1,5 +1,5 @@
 ﻿//  --------------------------------------------------------------------------------------------------------------------
-//  <copyright file="WeaponProjectile.cs">
+//  <copyright file="WeaponBallastic.cs">
 //    Copyright (c) Yifei Xu .  All rights reserved.
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
@@ -16,12 +16,12 @@ namespace Assets.CombatScripts.Ships.Weapons
 	/// <summary>
 	/// A simple project
 	/// </summary>
-	public class WeaponProjectile : WeaponGeneratedObject
+	public class WeaponBallastic : WeaponGeneratedObject
 	{
 		/// <summary>
-		/// Speed of the projectile
+		/// If the projectile should disappear after being hit
 		/// </summary>
-		public float Velocity;
+		public bool DisappearAfterHit;
 
 		/// <summary>
 		/// How much to move per second

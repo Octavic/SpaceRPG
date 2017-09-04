@@ -6,6 +6,7 @@
 
 namespace Assets.CombatScripts.UI
 {
+	using Assets.CombatScripts.Ships;
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
@@ -63,6 +64,11 @@ namespace Assets.CombatScripts.UI
 		/// </summary>
 		protected void FixedUpdate()
 		{
+			if (FocusTarget == null)
+			{
+				FocusTarget = PlayerController.CurrentInstance.gameObject;
+			}
+
 			var newPosition = new Vector3(FocusTarget.transform.position.x, FocusTarget.transform.position.y, this._defaultZ);
 			this.transform.position = Vector3.Lerp(this.transform.position, newPosition, 0.2f);
 		}

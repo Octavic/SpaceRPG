@@ -84,11 +84,6 @@ namespace Assets.CombatScripts.Ships
 		}
 
 		/// <summary>
-		/// The main camera
-		/// </summary>
-		private Camera _mainCamera;
-
-		/// <summary>
 		/// The button used to select weapons
 		/// </summary>
 		private IList<ButtonNames> SelectWeaponButtons;
@@ -153,7 +148,6 @@ namespace Assets.CombatScripts.Ships
 			this._shipComponent = this.GetComponent<Ship>();
 			PlayerController.CurrentInstance = this;
 			this.CurrentSelectedSystemIndex = -1;
-			this._mainCamera = GameObjectFinder.FindGameObjectWithTag(Tags.MainCamera).GetComponent<Camera>();
 			this.SelectWeaponButtons = new List<ButtonNames>()
 			{
 				ButtonNames.Weapon1,

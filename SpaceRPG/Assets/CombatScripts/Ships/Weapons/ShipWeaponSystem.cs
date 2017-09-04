@@ -73,7 +73,12 @@ namespace Assets.CombatScripts.Ships.Weapons
 		{
 			get
 			{
-				return this.FilledWeaponSlots.Average(slot=>slot.CurrentWeaponInSlot.ReloadPercentage);
+				if (this.FilledWeaponSlots == null)
+				{
+					return 0;
+				}
+
+				return this.FilledWeaponSlots.Average(slot => slot.CurrentWeaponInSlot == null ? 0 : slot.CurrentWeaponInSlot.ReloadPercentage);
 			}
 		}
 
@@ -91,6 +96,10 @@ namespace Assets.CombatScripts.Ships.Weapons
 				foreach (var slot in this.ControlledWeaponSlots)
 				{
 					slot.Target = value;
+					if (slot.CurrentWeaponInSlot != null)
+					{
+						slot.CurrentWeaponInSlot.Target = value;
+					}
 				}
 			}
 		}

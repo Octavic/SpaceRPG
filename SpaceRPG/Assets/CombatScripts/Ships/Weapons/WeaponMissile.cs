@@ -25,11 +25,6 @@ namespace Assets.CombatScripts.Ships.Weapons
 		public Ship Target;
 
 		/// <summary>
-		/// The speed of the missile
-		/// </summary>
-		public float Velocity;
-
-		/// <summary>
 		/// How fast the missile can turn per second
 		/// </summary>
 		public float MaxTurningPerSecond;

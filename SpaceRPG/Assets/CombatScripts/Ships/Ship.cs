@@ -57,9 +57,9 @@ namespace Assets.CombatScripts.Ships
         public float RotationSpeed;
 
         /// <summary>
-        /// How long it takes to stop the vessel from full speed
+        /// The amount of velocity that can be canceled per second
         /// </summary>
-        public float TimeToStopFromFullSpeed;
+        public float StoppingForce;
 
 		/// <summary>
 		/// The amount of shield available
@@ -121,7 +121,7 @@ namespace Assets.CombatScripts.Ships
 			set
 			{
 				this._currentHull = value;
-				if (this._currentHull < 0)
+				if (this._currentHull <= 0)
 				{
 					this.OnShipDestroy();
 				}
@@ -236,13 +236,18 @@ namespace Assets.CombatScripts.Ships
         public void ApplyBreak()
         {
             this._currentThrottle = 0;
-            this.RGBD.velocity -= this.RGBD.velocity * Time.deltaTime / this.TimeToStopFromFullSpeed;
 
-            // limits the velocity to minimum.
-            if (this.RGBD.velocity.magnitude < ShipMovementSettings.MinimalSpeed)
-            {
-                this.RGBD.velocity = new Vector2(0, 0);
-            }
+			var velocityReductionThisFrame = this.StoppingForce * Time.deltaTime;
+			var curVelocity = this.RGBD.velocity.magnitude;
+			if (curVelocity <= velocityReductionThisFrame)
+			{
+				this.RGBD.velocity = Vector2.zero;
+			}
+			else
+			{
+				this.RGBD.velocity = this.RGBD.velocity.normalized;
+				this.RGBD.velocity *= (curVelocity - velocityReductionThisFrame);
+			}
         }
         
         /// <summary>
@@ -340,6 +345,7 @@ namespace Assets.CombatScripts.Ships
 			{
 				this._timeSinceShieldDamage = 0;
 				this.CurrentShield -= projectileClass.Damage;
+				Destroy(projectileClass.gameObject);
 			}
 		}
 

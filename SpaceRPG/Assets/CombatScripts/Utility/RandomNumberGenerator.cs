@@ -55,7 +55,7 @@ namespace Assets.CombatScripts.Utility
         /// <param name="maxValue">Maximal value</param>
         /// <param name="intervals">How many possible results in between</param>
         /// <returns>A random number with the given quiteria</returns>
-        public static float Next(float minValue, float maxValue, int intervals)
+        public static float Next(float minValue, float maxValue, int intervals = 100)
         {
             float r = RandomNumberGenerator._random.Next(intervals);
             return minValue + (r / intervals * (maxValue - minValue));

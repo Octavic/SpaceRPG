@@ -94,7 +94,7 @@ namespace Assets.CombatScripts.Ships.Weapons
 				return false;
 			}
 
-			return this.CurrentWeaponInSlot.TryFire(this.Target);
+			return this.CurrentWeaponInSlot.TryFire();
 		}
 
 		/// <summary>
@@ -102,7 +102,10 @@ namespace Assets.CombatScripts.Ships.Weapons
 		/// </summary>
 		private void UpdateWeaponRenderLayer()
 		{
-			this.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = this.IsOnTop ? 2 : -2;
+			if (this.transform.childCount > 0)
+			{
+				this.transform.GetChild(0).GetComponent<SpriteRenderer>().sortingOrder = this.IsOnTop ? 2 : -2;
+			}
 		}
 
         /// <summary>

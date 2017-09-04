@@ -22,6 +22,11 @@ namespace Assets.CombatScripts.Ships.Weapons
 		/// </summary>
 		public int FactoinId;
 
+		/// <summary>
+		/// The target
+		/// </summary>
+		public Ship Target;
+
         /// <summary>
         /// How much fuel drain per shot
         /// </summary>
@@ -76,9 +81,8 @@ namespace Assets.CombatScripts.Ships.Weapons
 		/// <summary>
 		/// Try to fire the weapon
 		/// </summary>
-		/// <param name="target">The target ship</param>
 		/// <returns>True if the weapon fired succcessfully</returns>
-		public virtual bool TryFire(Ship target)
+		public virtual bool TryFire()
 		{
 			return this.FireCooldown == 0;
 		}
@@ -87,13 +91,17 @@ namespace Assets.CombatScripts.Ships.Weapons
 		/// Generates a new projectile
 		/// </summary>
 		/// <returns>The new projectile</returns>
-		protected WeaponGeneratedObject GenerateProjectile()
+		public WeaponGeneratedObject GenerateProjectile()
 		{
 			var projectile = Instantiate(this.ProjectilePrefab, this.transform, false);
 			projectile.transform.parent = null;
 			var projectileClass = projectile.GetComponent<WeaponGeneratedObject>();
 			projectileClass.Damage = this.Damage;
 			projectileClass.FactionId = this.FactoinId;
+			if (projectileClass is WeaponMissile)
+			{
+				((WeaponMissile)projectileClass).Target = this.Target;
+			}
 			return projectileClass;
 		}
 

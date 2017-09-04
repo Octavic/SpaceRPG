@@ -19,6 +19,11 @@ namespace Assets.CombatScripts.Ships.Weapons
 	public abstract class WeaponGeneratedObject : DelayedSelfDestruct
 	{
 		/// <summary>
+		/// Speed of the projectile
+		/// </summary>
+		public float Velocity;
+
+		/// <summary>
 		/// The faction who fired this object
 		/// </summary>
 		public int FactionId;

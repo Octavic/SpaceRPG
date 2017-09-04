@@ -88,8 +88,10 @@ namespace Assets.CombatScripts.UI
 			{
 				if (this.Items[i].Target == deadShip)
 				{
+					var deadShipItem = this.Items[i];
+					Destroy(deadShipItem.gameObject);
 					this.Items.RemoveAt(i);
-					this.Update();
+					this.RearrangeItems();
 					return;
 				}
 			}
