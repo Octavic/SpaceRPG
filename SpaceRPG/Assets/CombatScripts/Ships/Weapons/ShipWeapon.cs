@@ -42,11 +42,6 @@ namespace Assets.CombatScripts.Ships.Weapons
 		/// </summary>
 		public float CpuDragin;
 
-		/// <summary>
-		/// Damage of the weapon
-		/// </summary>
-		public float Damage;
-
         /// <summary>
         /// The possible time gap between shots
         /// </summary>
@@ -79,12 +74,22 @@ namespace Assets.CombatScripts.Ships.Weapons
 		}
 
 		/// <summary>
+		/// The order in layer
+		/// </summary>
+		protected int _orderInLayer;
+
+		/// <summary>
+		/// The weapon projectile's component
+		/// </summary>
+		protected WeaponGeneratedObject _projectileComponent;
+
+		/// <summary>
 		/// Try to fire the weapon
 		/// </summary>
 		/// <returns>True if the weapon fired succcessfully</returns>
 		public virtual bool TryFire()
 		{
-			return this.FireCooldown == 0;
+			return this.FireCooldown == 0 && this.Target != null;
 		}
 
 		/// <summary>
@@ -93,16 +98,33 @@ namespace Assets.CombatScripts.Ships.Weapons
 		/// <returns>The new projectile</returns>
 		public WeaponGeneratedObject GenerateProjectile()
 		{
+			// Create new instance as child
 			var projectile = Instantiate(this.ProjectilePrefab, this.transform, false);
+
+			// Let new projectile run free
 			projectile.transform.parent = null;
+
+			// Set variables
 			var projectileClass = projectile.GetComponent<WeaponGeneratedObject>();
-			projectileClass.Damage = this.Damage;
 			projectileClass.FactionId = this.FactoinId;
 			if (projectileClass is WeaponMissile)
 			{
 				((WeaponMissile)projectileClass).Target = this.Target;
 			}
+
+			// See display sorting layer
+			projectile.GetComponent<SpriteRenderer>().sortingOrder = this._orderInLayer;
+
 			return projectileClass;
+		}
+
+		/// <summary>
+		/// Called in the beginning for intialization
+		/// </summary>
+		protected virtual void Start()
+		{
+			this._orderInLayer = this.GetComponent<SpriteRenderer>().sortingOrder;
+			this._projectileComponent = this.ProjectilePrefab.GetComponent<WeaponGeneratedObject>();
 		}
 
         /// <summary>

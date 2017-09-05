@@ -32,5 +32,10 @@ namespace Assets.CombatScripts.Ships.Weapons
 		/// The amount of damage done
 		/// </summary>
 		public float Damage;
+
+		/// <summary>
+		/// Called when the projectile hits an enemy ship
+		/// </summary>
+		public abstract void OnHitEnemyShip();
 	}
 }

@@ -20,15 +20,15 @@ namespace Assets.CombatScripts.Utility
 		/// <summary>
 		/// How many seconds until self destruct
 		/// </summary>
-		public float DelayInSeconds;
+		public float DeathDelayInSeconds;
 
 		/// <summary>
 		/// Called once per frame
 		/// </summary>
 		protected virtual void Update()
 		{
-			this.DelayInSeconds -= Time.deltaTime;
-			if (this.DelayInSeconds < 0)
+			this.DeathDelayInSeconds -= Time.deltaTime;
+			if (this.DeathDelayInSeconds <= 0)
 			{
 				Destroy(this.gameObject);
 			}

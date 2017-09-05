@@ -278,7 +278,7 @@ namespace Assets.CombatScripts.Ships
 				sideVector *= -1;
 			}
 
-			this.RGBD.AddForce(sideVector * this.SideEngineThrust * Time.deltaTime, ForceMode2D.Force);
+			this.RGBD.AddForce(sideVector * this.SideEngineThrust, ForceMode2D.Force);
 		}
 
         /// <summary>
@@ -303,7 +303,7 @@ namespace Assets.CombatScripts.Ships
         /// <summary>
         /// Called once per frame
         /// </summary>
-        protected void Update()
+        protected void FixedUpdate()
         {
             // Apply throttle
             this.RGBD.AddForce(this.ForwardVector * this.MainEngineThrust * Time.deltaTime * this._currentThrottle, ForceMode2D.Force);
@@ -343,9 +343,10 @@ namespace Assets.CombatScripts.Ships
 			// if the collision is between this ship and an enemy projectile
 			if (projectileClass != null && projectileClass.FactionId != this.FactionId)
 			{
+				projectileClass.OnHitEnemyShip();
 				this._timeSinceShieldDamage = 0;
 				this.CurrentShield -= projectileClass.Damage;
-				Destroy(projectileClass.gameObject);
+				//Destroy(projectileClass.gameObject);
 			}
 		}
 

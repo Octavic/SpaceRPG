@@ -35,6 +35,16 @@ namespace Assets.CombatScripts.Ships.Weapons
 		public float TimeTillStartSeeking;
 
 		/// <summary>
+		/// Called when the projectile hits an enemy ship
+		/// </summary>
+		public override void OnHitEnemyShip()
+		{
+			this.Velocity = 0;
+			this.GetComponent<SpriteRenderer>().enabled = false;
+			this.DeathDelayInSeconds = 0.3f;
+		}
+
+		/// <summary>
 		/// Called once per frame
 		/// </summary>
 		protected override void Update()

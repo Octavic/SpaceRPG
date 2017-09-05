@@ -50,11 +50,6 @@ namespace Assets.CombatScripts.Ships.Weapons
 		}
 
 		/// <summary>
-		/// The weapon projectile's component
-		/// </summary>
-		private WeaponGeneratedObject _projectileComponent;
-
-		/// <summary>
 		/// The fire mode for this weapon
 		/// </summary>
 		private IShipWeaponFireMode _fireMode;
@@ -62,9 +57,11 @@ namespace Assets.CombatScripts.Ships.Weapons
 		/// <summary>
 		/// Called in the beginning
 		/// </summary>
-		protected virtual void Start()
+		protected override void Start()
 		{
-			this._projectileComponent = this.ProjectilePrefab.GetComponent<WeaponGeneratedObject>();
+			base.Start();
+
+			
 
 			switch (this.FireMode)
 			{

@@ -19,14 +19,17 @@ namespace Assets.CombatScripts.Ships.Weapons
 	public class WeaponBallastic : WeaponGeneratedObject
 	{
 		/// <summary>
-		/// If the projectile should disappear after being hit
-		/// </summary>
-		public bool DisappearAfterHit;
-
-		/// <summary>
 		/// How much to move per second
 		/// </summary>
 		protected Vector3 _velocityPerSecond;
+
+		/// <summary>
+		/// Called when the projectile hits an enemy ship
+		/// </summary>
+		public override void OnHitEnemyShip()
+		{
+			this.DeathDelayInSeconds = 0.0f;
+		}
 
 		/// <summary>
 		/// Called in the beginning for intialization

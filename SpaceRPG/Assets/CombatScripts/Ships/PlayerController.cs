@@ -19,13 +19,8 @@ namespace Assets.CombatScripts.Ships
 	/// <summary>
 	/// A ship that's controlled by a player
 	/// </summary>
-	public class PlayerController : MonoBehaviour
+	public class PlayerController : ShipController
 	{
-		/// <summary>
-		/// The current instance of the player's ship
-		/// </summary>
-		public static PlayerController CurrentInstance { get; private set; }
-
 		/// <summary>
 		/// How fast the throttle adjusts
 		/// </summary>
@@ -35,6 +30,22 @@ namespace Assets.CombatScripts.Ships
 		/// If the throttle is controlled with adjustment, or just tap/release
 		/// </summary>
 		public bool AdvancedThrottleControl;
+
+		/// <summary>
+		/// The current instance of the player's ship
+		/// </summary>
+		public static PlayerController CurrentInstance
+		{
+			get
+			{
+				if (PlayerController._currentInstance == null)
+				{
+					PlayerController._currentInstance = GameObjectFinder.FindGameObjectWithTag(Tags.Player).GetComponent<PlayerController>();
+				}
+
+				return PlayerController._currentInstance;
+			}
+		}
 
 		/// <summary>
 		/// The currently selected weapon system
@@ -57,41 +68,14 @@ namespace Assets.CombatScripts.Ships
 		}
 
 		/// <summary>
-		/// Gets the ship's weapon systems
-		/// </summary>
-		public List<ShipWeaponSystem> WeaponSystems
-		{
-			get
-			{
-				if (this._shipComponent == null)
-				{
-					this._shipComponent = this.GetComponent<Ship>();
-				}
-
-				return this._shipComponent.WeaponSystems;
-			}
-		}
-
-		/// <summary>
-		/// Gets the related ship component
-		/// </summary>
-		public Ship ShipComponent
-		{
-			get
-			{
-				return this._shipComponent;
-			}
-		}
-
-		/// <summary>
 		/// The button used to select weapons
 		/// </summary>
-		private IList<ButtonNames> SelectWeaponButtons;
+		private IList<ButtonNames> _selectWeaponButtons;
 
 		/// <summary>
-		/// The ship component
+		/// Gets the current instance
 		/// </summary>
-		private Ship _shipComponent;
+		private static PlayerController _currentInstance;
 
 		/// <summary>
 		/// Selects a weapon system
@@ -146,9 +130,9 @@ namespace Assets.CombatScripts.Ships
 		protected void Start()
 		{
 			this._shipComponent = this.GetComponent<Ship>();
-			PlayerController.CurrentInstance = this;
+			PlayerController._currentInstance = this;
 			this.CurrentSelectedSystemIndex = -1;
-			this.SelectWeaponButtons = new List<ButtonNames>()
+			this._selectWeaponButtons = new List<ButtonNames>()
 			{
 				ButtonNames.Weapon1,
 				ButtonNames.Weapon2,
@@ -160,7 +144,7 @@ namespace Assets.CombatScripts.Ships
 		/// <summary>
 		/// Called once per frame
 		/// </summary>
-		protected void Update()
+		protected void FixedUpdate()
         {
             // Turn the ship
             var rotateDirection = InputHelper.GetAxis(ButtonNames.Turn);
@@ -199,9 +183,9 @@ namespace Assets.CombatScripts.Ships
             }
 
 			// Apply select weapon system
-			for (int i = 0; i < this.SelectWeaponButtons.Count; i++)
+			for (int i = 0; i < this._selectWeaponButtons.Count; i++)
 			{
-				if (InputHelper.GetButtonDown(this.SelectWeaponButtons[i]))
+				if (InputHelper.GetButtonDown(this._selectWeaponButtons[i]))
 				{
 					this.SelectWeaponSystem(i);
 					break;
