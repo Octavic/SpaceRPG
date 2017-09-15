@@ -1,0 +1,88 @@
+# Scene number
+<SCENE 1>
+
+# Empty lines are ignored, so are lines starting with #
+# NPC starter line
+Hello  traveler
+
+# Sample player response.
+# Start with four spaces to indicate player response. Players can have multiple choices,  just list them here
+    Hello.
+    Hi.
+    Greetings.
+
+# NPC line can also be multiple lines, but they are just rendered one after another sequentially
+Perhaps you've heard the tale of the one true pirate of the galaxy?
+His name is Stan
+
+# Possible player responses that leads to different 'scenes'. Just add the scene at the end
+# This is where branch happens
+    I am Stan. <SCENE 2>
+    That's just a fairy tale <SCENE 3>
+# You may also default to nothing so the conversation continues
+    No, can you tell me more?
+He was the kind of pirate that everyone loved.
+He robbed only the rich and corrupted, and never hurt an innocent fly.
+
+# Here let's introduce conditions. Certain things are only available if the conditions are met, and you do  it like this
+<IF Morale > 5>
+{
+    Well, he sounds  like quite a man
+    Doesn't matter, criminals need to be brought down, no matter how justified they may seem <4>
+}
+    That's something.
+
+# Essentially, there will be a bunch of 'flags' that contains either a value, or just 'true/false'.
+# So something like 'Morale' will be a value from -10(Really bad person) to 10(Really good person)
+# And something like 'HasBeenArrested' will  just be 'true/false'
+# You can do condition like '<IF HasBeenArrested>', and the following curly brackets will only be shown if the condition is met
+# You can also do things like '<IF HasBeenArrested AND Morale < 5>' as combinations,  but keep it simple.
+# Things like 'A AND B OR C' can be ambiguous depends on how you look at it. You could always place another if inside an if like
+# <IF A AND B>
+# {
+#	<IF C>
+#	{
+#		SOMETHING HERE
+#	}
+# }
+
+Indeed. But, all good things come to an end.
+He had a downfall. No one really know what happened.
+But one day, he just up and vanished.
+
+# At the end of a script, you want to return something as result.
+# The thing you return should be a non-negative number.
+# 0 should always mean nothing special happened, aka no further action required
+# Things like listening to a story, asking directions, or refusing a trivial quest (Since refusing major quests could have an impact on the story)
+# THings that won't lead to any change in the game
+# But if they do, you'll have to make up numbers and document what they mean
+# It would be nice if you have a collection of all return values at the end,  so I can just glance at them and know how to hand them
+<RETURN 0>
+
+# NPC disbelief
+<SCENE 2>
+HAHA, good one.
+<RETURN 0>
+
+# NPC shun non believer
+<SCENE 3>
+Keep that attitude up, and you are gonna get killed some day,  kiddo.
+<RETURN 0>
+
+# Player claim justice
+<SCENE 4>
+Well aren't you a righteous man. If that's the case, wanna help out with some local bandits?
+They've been terrorizing the neighborhood. Should be an easy challenge.
+    All right. <SCENE 5>
+    I don't have the time
+that's  a shame.
+<RETURN 0>
+
+# Player accept quest
+<SCENE 5>
+Go knock em' dead.
+<RETURN 1>
+
+# RETURN values:
+# 0: Nothing
+# 1: Accept 'Kill local bandits' quest
