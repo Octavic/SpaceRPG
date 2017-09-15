@@ -12,9 +12,9 @@ namespace Assets.GeneralScripts.Dialogue
         /// </summary>
         /// <param name="s">Target string</param>
         /// <returns>True if the string is a comment</returns>
-        public static bool IsComment(this string s)
+        public static bool ShouldBeIgnored(this string s)
         {
-            return s.StartsWith("#");
+            return (string.IsNullOrEmpty(s) || s.StartsWith("#"));
         }
     }
 }
