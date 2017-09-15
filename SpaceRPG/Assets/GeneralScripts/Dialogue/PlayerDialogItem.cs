@@ -54,7 +54,30 @@ namespace Assets.GeneralScripts.Dialogue
         /// <returns>True if successful</returns>
         public bool TryConsume(Queue<string> data)
         {
-            return true;
+			// Keep reading as long as there's data
+			while (data.Count > 0)
+			{
+				var curLine = data.Peek();
+
+				// if we  see a return statement or the line is an NPC line
+				if (curLine.StartsWith("{RETURN ") || !curLine.StartsWith("    "))
+				{
+					return this.Options.Count > 0;
+				}
+
+				var split = curLine.Split('<');
+				int branchSceneId = -1;
+				if (split.Length > 1)
+				{
+					branchSceneId = int.Parse(split[1]);
+				}
+
+				this.Options.Add(new PlayerDialogOption(split[0], branchSceneId));
+				data.Dequeue();
+			}
+
+			// Unexpected end of data reached, false
+            return false;
         }
     }
 }

@@ -27,7 +27,24 @@ namespace Assets.GeneralScripts.Dialogue
         /// <returns>True if successful</returns>
         public bool TryConsume(Queue<string> data)
         {
-            return true;
+			// While there is data to be read
+			while (data.Count > 0)
+			{
+				var curLine = data.Peek();
+
+				// If we get a return statement or a player dialog, we are done
+				if (curLine.StartsWith("{RETURN ") || curLine.StartsWith("    "))
+				{
+					//  If we read anything, then it's a success
+					return this.Pages.Count > 0;
+				}
+
+				this.Pages.Add(curLine);
+				data.Dequeue();
+			}
+
+			// Unexpected end of data
+            return false;
         }
     }
 }
