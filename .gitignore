@@ -32,3 +32,8 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+SpaceRPG/Temp/
+SpaceRPG/Library/
+SpaceRPG/Library/metadata/
+SpaceRPG/Library/metadata/f4/f48df919adea4fa095a7407e773e5aa4
+SpaceRPG/Library/metadata/bb/bb6b4101ad2c42ec99f064a70c354e3c
