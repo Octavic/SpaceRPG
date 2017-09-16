@@ -33,7 +33,7 @@ namespace Assets.GeneralScripts.Dialogue
 				var curLine = data.Peek();
 
 				// If we get a return statement or a player dialog, we are done
-				if (curLine.StartsWith("{RETURN ") || curLine.StartsWith("    "))
+				if (curLine.StartsWith("    ") || curLine.StartsWith("<RETURN ") || curLine.StartsWith("<JUMP "))
 				{
 					//  If we read anything, then it's a success
 					return this.Pages.Count > 0;

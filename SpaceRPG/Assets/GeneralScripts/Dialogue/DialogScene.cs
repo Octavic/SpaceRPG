@@ -22,6 +22,11 @@ namespace Assets.GeneralScripts.Dialogue
 		public int ReturnValue;
 
 		/// <summary>
+		/// Possible scene to jump to
+		/// </summary>
+		public int JumpSceneId;
+
+		/// <summary>
 		/// Gets the dialogs
 		/// </summary>
 		public IList<IDialogItem> Dialogues { get; private set; }
@@ -52,6 +57,7 @@ namespace Assets.GeneralScripts.Dialogue
         public DialogScene()
         {
             this.Dialogues = new List<IDialogItem>();
+			this._isNextItemNpc = true;
         }
 
         /// <summary>
@@ -81,10 +87,19 @@ namespace Assets.GeneralScripts.Dialogue
 			// Loop through. If the top line isn't {RETURN}, then pass it off and create a new IDialogItem, alternating between NPC and Player
 			while (data.Count > 0)
             {
-				if (DialogTag.TryParse(data.Peek(), out tagName, out tagValue) && tagName == _returnTag)
+				if (DialogTag.TryParse(data.Peek(), out tagName, out tagValue))
 				{
-					this.ReturnValue = int.Parse(tagValue);
-					return true;
+					if (tagName == TagNames.RETURN)
+					{
+						this.ReturnValue = int.Parse(tagValue);
+						return true;
+					}
+
+					if (tagName == TagNames.JUMP)
+					{
+						this.JumpSceneId = int.Parse(tagValue);
+						return true;
+					}
 				}
 
 				IDialogItem newItem;

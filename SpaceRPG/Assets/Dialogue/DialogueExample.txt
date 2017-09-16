@@ -13,12 +13,14 @@ Hello  traveler
 
 # NPC line can also be multiple lines, but they are just rendered one after another sequentially
 Perhaps you've heard the tale of the one true pirate of the galaxy?
+	Yes <JUMP 2>
+	No
 His name is Stan
 
 # Possible player responses that leads to different 'scenes'. Just add the scene at the end
 # This is where branch happens
-    I am Stan. <SCENE 2>
-    That's just a fairy tale <SCENE 3>
+    I am Stan. <JUMP 3>
+    That's just a fairy tale <JUMP 4>
 # You may also default to nothing so the conversation continues
     No, can you tell me more?
 He was the kind of pirate that everyone loved.
@@ -26,10 +28,9 @@ He robbed only the rich and corrupted, and never hurt an innocent fly.
 
 # Here let's introduce conditions. Certain things are only available if the conditions are met, and you do  it like this
 <IF Morale > 5>
-{
     Well, he sounds  like quite a man
     Doesn't matter, criminals need to be brought down, no matter how justified they may seem <4>
-}
+<ENDIF>
     That's something.
 
 # Essentially, there will be a bunch of 'flags' that contains either a value, or just 'true/false'.
@@ -39,18 +40,16 @@ He robbed only the rich and corrupted, and never hurt an innocent fly.
 # You can also do things like '<IF HasBeenArrested AND Morale < 5>' as combinations,  but keep it simple.
 # Things like 'A AND B OR C' can be ambiguous depends on how you look at it. You could always place another if inside an if like
 # <IF A AND B>
-# {
 #	<IF C>
-#	{
 #		SOMETHING HERE
-#	}
-# }
+#	<ENDIF>
+# <ENDIF>
 
 Indeed. But, all good things come to an end.
 He had a downfall. No one really know what happened.
 But one day, he just up and vanished.
 
-# At the end of a script, you want to return something as result.
+# At the end of a scene, you can return something as result, or jump to a different scene with <JUMP #> just like player choices
 # The thing you return should be a non-negative number.
 # 0 should always mean nothing special happened, aka no further action required
 # Things like listening to a story, asking directions, or refusing a trivial quest (Since refusing major quests could have an impact on the story)
@@ -59,27 +58,32 @@ But one day, he just up and vanished.
 # It would be nice if you have a collection of all return values at the end,  so I can just glance at them and know how to hand them
 <RETURN 0>
 
-# NPC disbelief
+# NPC skip explain about stain
 <SCENE 2>
+Well, I won't repeat myself then. Anyway.
+<JUMP 5>
+
+# NPC disbelief
+<SCENE 3>
 HAHA, good one.
 <RETURN 0>
 
 # NPC shun non believer
-<SCENE 3>
+<SCENE 4>
 Keep that attitude up, and you are gonna get killed some day,  kiddo.
 <RETURN 0>
 
 # Player claim justice
-<SCENE 4>
-Well aren't you a righteous man. If that's the case, wanna help out with some local bandits?
+<SCENE 5>
+If that's the case, wanna help out with some local bandits?
 They've been terrorizing the neighborhood. Should be an easy challenge.
-    All right. <SCENE 5>
+    All right. <SCENE 6>
     I don't have the time
 that's  a shame.
 <RETURN 0>
 
 # Player accept quest
-<SCENE 5>
+<SCENE 6>
 Go knock em' dead.
 <RETURN 1>
 
