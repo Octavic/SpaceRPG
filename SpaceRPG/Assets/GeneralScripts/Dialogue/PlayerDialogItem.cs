@@ -65,6 +65,8 @@ namespace Assets.GeneralScripts.Dialogue
 					return this.Options.Count > 0;
 				}
 
+				curLine = curLine.Trim();
+
 				var split = curLine.Split('<');
 				int branchSceneId = -1;
 				if (split.Length > 1)
