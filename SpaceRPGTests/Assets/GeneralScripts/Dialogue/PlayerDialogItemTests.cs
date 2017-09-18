@@ -19,7 +19,7 @@ namespace Assets.GeneralScripts.Dialogue.Tests
 			data.Enqueue("    Hi");
 			Assert.AreEqual(item.TryConsume(data), true);
 			Assert.AreEqual(item.Options.Count, 1);
-			Assert.AreEqual(item.Options[0].Option, "Hi.");
+			Assert.AreEqual(item.Options[0].Option, "Hi");
 			Assert.AreEqual(item.Options[0].ChangeSceneId, -1);
 		}
 	}
