@@ -21,5 +21,15 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		/// The type of tile that this is
 		/// </summary>
 		public GalaxyMapTileEnum TileType { get; private set; }
+
+		/// <summary>
+		/// A scale of population from 0 to 1. 1 being extremely populated and 0 being completely empty
+		/// </summary>
+		public float PopulationScale;
+
+		/// <summary>
+		/// A scale of government security from 0 to 1. 1 being extremely secure and 0 being lawless land
+		/// </summary>
+		public float SecurityScale;
 	}
 }
