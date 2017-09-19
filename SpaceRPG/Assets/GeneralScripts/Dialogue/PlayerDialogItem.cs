@@ -71,7 +71,7 @@ namespace Assets.GeneralScripts.Dialogue
 				int branchSceneId = -1;
 				if (split.Length > 1)
 				{
-					branchSceneId = int.Parse(split[1]);
+					branchSceneId = int.Parse(split[1].Substring(0, split[1].Length-1));
 				}
 
 				this.Options.Add(new PlayerDialogOption(split[0], branchSceneId));

@@ -21,5 +21,15 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
         /// Gets the tiles for this galaxy map
         /// </summary>
         public GalaxyMapTile[,] Tiles { get; private set; }
+
+		/// <summary>
+		/// width of the map
+		/// </summary>
+		public int Width;
+
+		/// <summary>
+		/// Height of the map
+		/// </summary>
+		public int Height;
     }
 }
