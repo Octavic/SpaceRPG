@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Assets.GeneralScripts.Utility;
 
 namespace Assets.GeneralScripts.UI.GalaxyMap
 {
@@ -31,5 +32,34 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		/// Height of the map
 		/// </summary>
 		public int Height;
+
+		/// <summary>
+		/// Creates a new instance of the <see cref="GalaxyMap"/> class
+		/// </summary>
+		/// <param name="width">width of the map</param>
+		/// <param name="height">height of the map</param>
+		public GalaxyMap(int width, int height)
+		{
+			this.Width = width;
+			this.Height = height;
+			this.Tiles = new GalaxyMapTile[width, height];
+
+			// For now, just scramble the map
+			var tileWeightedList = new WeightedRandomList<GalaxyMapTileEnum>();
+			tileWeightedList.AddNewItem(GalaxyMapTileEnum.SpaceStation, 10);
+			tileWeightedList.AddNewItem(GalaxyMapTileEnum.Empty, 90);
+			tileWeightedList.AddNewItem(GalaxyMapTileEnum.Asteroid, 25);
+			for (int y = 0; y < this.Height; y++)
+			{
+				for (int x = 0; x < this.Width; x++)
+				{
+					var newTile = new GalaxyMapTile();
+					newTile.TileType = tileWeightedList.GetRandomItem();
+					newTile.PopulationRating = GlobalRandom.Next(0, 1, 10);
+					newTile.SecurityRating = GlobalRandom.Next(0, 1, 10);
+					this.Tiles[x, y] = newTile;
+				}
+			}
+		}
     }
 }

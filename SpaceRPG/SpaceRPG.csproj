@@ -13,11 +13,13 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile></CompilerResponseFile>
+    <CompilerResponseFile>
+    </CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>5.6.1f1</UnityVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <LangVersion Condition=" '$(VisualStudioVersion)' != '10.0' ">4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -132,7 +134,7 @@
     <Compile Include="Assets\CombatScripts\Utility\FloatExtension.cs" />
     <Compile Include="Assets\CombatScripts\Utility\GameObjectFinder.cs" />
     <Compile Include="Assets\CombatScripts\Utility\InputHelper.cs" />
-    <Compile Include="Assets\CombatScripts\Utility\RandomNumberGenerator.cs" />
+    <Compile Include="Assets\GeneralScripts\Utility\GlobalRandom.cs" />
     <Compile Include="Assets\CombatScripts\Utility\ScaleBar.cs" />
     <Compile Include="Assets\CombatScripts\Utility\Tags.cs" />
     <Compile Include="Assets\CombatScripts\Utility\Vector2Extension.cs" />
@@ -152,6 +154,7 @@
     <Compile Include="Assets\GeneralScripts\Utility\CharExtension.cs" />
     <Compile Include="Assets\GeneralScripts\Utility\ColorExtensions.cs" />
     <Compile Include="Assets\GeneralScripts\Utility\FloatExtensions.cs" />
+    <Compile Include="Assets\GeneralScripts\Utility\WeightedRandomList.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Dialogue\DialogueExample.txt" />

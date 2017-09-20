@@ -34,6 +34,16 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		public GameObject AsteroidPrefab;
 
 		/// <summary>
+		/// Width of the map
+		/// </summary>
+		public int MapWidth;
+
+		/// <summary>
+		/// Height of the map
+		/// </summary>
+		public int MapHeight;
+
+		/// <summary>
 		/// Size of each tile
 		/// </summary>
 		public float TileSize;
@@ -80,9 +90,9 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		}
 
 		/// <summary>
-		/// Update the map
+		/// Redraw the map
 		/// </summary>
-		public void UpdateMap()
+		public void RedrawMap()
 		{
 
 		}
@@ -92,27 +102,44 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		/// </summary>
 		protected void Start()
 		{
-			this.Map = new GalaxyMap();
+			this.Map = new GalaxyMap(this.MapWidth, this.MapHeight);
 			GalaxyMapBehavior._currentInstance = this;
 
 			// Generating map is expensive, so don't destroy this UI item
 			DontDestroyOnLoad(this.gameObject);
 
 			// Loop through the map and generate the tiles
-			for (int i = 0; i < this.Map.Height; i++)
+			for (int y = 0; y < this.Map.Height; y++)
 			{
-				for (int j = 0; j < this.Map.Width; j++)
+				for (int x = 0; x < this.Map.Width; x++)
 				{
-					var curTile = this.Map.Tiles[j, i];
+					var curTile = this.Map.Tiles[x, y];
 					GameObject prefab = null;
 					switch (curTile.TileType)
 					{
 						case GalaxyMapTileEnum.SpaceStation:
-						{
-							prefab = this.SpacesStationPrefab;
-							break;
-						}
+							{
+								prefab = this.SpacesStationPrefab;
+								break;
+							}
+						case GalaxyMapTileEnum.Asteroid:
+							{
+								prefab = this.AsteroidPrefab;
+								break;
+							}
+						default:
+							{
+								prefab = this.EmptyTilePrefab;
+								break;
+							}
 					}
+
+					// Instantiate a new tile
+					var newTileObject = Instantiate(prefab, this.transform);
+					var newTileBehavior = newTileObject.GetComponent<GalaxyMapTileBehavior>();
+					newTileBehavior.Tile = curTile;
+					newTileBehavior.Color = this.GetColor(curTile.SecurityRating);
+					newTileObject.transform.localPosition = new Vector3(x * this.TileSize, y * this.TileSize, 0);
 				}
 			}
 		}
