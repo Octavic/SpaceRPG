@@ -134,6 +134,8 @@
     <Compile Include="Assets\CombatScripts\Utility\FloatExtension.cs" />
     <Compile Include="Assets\CombatScripts\Utility\GameObjectFinder.cs" />
     <Compile Include="Assets\CombatScripts\Utility\InputHelper.cs" />
+    <Compile Include="Assets\GeneralScripts\UI\GalaxyMap\GalaxyMapPath.cs" />
+    <Compile Include="Assets\GeneralScripts\UI\GalaxyMap\GalaxyMapPathPriorityEnum.cs" />
     <Compile Include="Assets\GeneralScripts\Utility\GlobalRandom.cs" />
     <Compile Include="Assets\CombatScripts\Utility\ScaleBar.cs" />
     <Compile Include="Assets\CombatScripts\Utility\Tags.cs" />
@@ -154,6 +156,7 @@
     <Compile Include="Assets\GeneralScripts\Utility\CharExtension.cs" />
     <Compile Include="Assets\GeneralScripts\Utility\ColorExtensions.cs" />
     <Compile Include="Assets\GeneralScripts\Utility\FloatExtensions.cs" />
+    <Compile Include="Assets\GeneralScripts\UI\GalaxyMap\MapCoordinate.cs" />
     <Compile Include="Assets\GeneralScripts\Utility\WeightedRandomList.cs" />
   </ItemGroup>
   <ItemGroup>

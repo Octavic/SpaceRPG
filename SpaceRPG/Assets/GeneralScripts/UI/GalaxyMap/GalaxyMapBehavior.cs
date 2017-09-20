@@ -90,6 +90,21 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		}
 
 		/// <summary>
+		/// Gets the tile at the given coordinate
+		/// </summary>
+		/// <param name="coordinate">Target coordinate</param>
+		/// <returns>tile at that coordinate, null if out of range</returns>
+		public GalaxyMapTile GetTileAt(MapCoordinate coordinate)
+		{
+			if ((coordinate.X < 0 || coordinate.X >= this.Map.Width) || (coordinate.Y < 0 || coordinate.Y >= this.Map.Height))
+			{
+				return null;
+			}
+
+			return this.Map.Tiles[coordinate.X, coordinate.Y];
+		}
+
+		/// <summary>
 		/// Redraw the map
 		/// </summary>
 		public void RedrawMap()
