@@ -46,12 +46,21 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SpaceRPG\Library\UnityAssemblies\UnityEngine.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\GeneralScripts\Dialogue\DialogSceneTests.cs" />
     <Compile Include="Assets\GeneralScripts\Dialogue\NpcDialogItemTests.cs" />
     <Compile Include="Assets\GeneralScripts\Dialogue\PlayerDialogItemTests.cs" />
     <Compile Include="Assets\GeneralScripts\UI\GalaxyMap\GalaxyMapPathTest.cs" />
+    <Compile Include="Assets\GeneralScripts\Utility\CharExtensionTest.cs" />
+    <Compile Include="Assets\GeneralScripts\Utility\ColorExtensionTest.cs" />
+    <Compile Include="Assets\GeneralScripts\Utility\FloatExtensionTest.cs" />
+    <Compile Include="Assets\GeneralScripts\Utility\GlobalRandomTest.cs" />
+    <Compile Include="Assets\GeneralScripts\Utility\WeightedRandomListTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

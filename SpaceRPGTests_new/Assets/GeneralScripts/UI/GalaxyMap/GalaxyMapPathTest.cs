@@ -40,5 +40,41 @@ namespace SpaceRPGTests_new.Assets.GeneralScripts.UI.GalaxyMap
 			Assert.AreEqual(path.Nodes[0], source);
 			Assert.AreEqual(path.Nodes[1], dest);
 		}
+
+		[TestMethod()]
+		public void SimplifyTest_MultiplePathsNoSimplify()
+		{
+			var path = new GalaxyMapPath();
+			var turn = new MapCoordinate(0, 2);
+			var source = new MapCoordinate(0, 0);
+			var dest = new MapCoordinate(2, 2);
+			path.Nodes.Add(source);
+			path.Nodes.Add(turn);
+			path.Nodes.Add(dest);
+			path.Simplify();
+			Assert.AreEqual(path.Nodes.Count, 3);
+			Assert.AreEqual(path.Nodes[0], source);
+			Assert.AreEqual(path.Nodes[1], turn);
+			Assert.AreEqual(path.Nodes[2], dest);
+		}
+
+		[TestMethod()]
+		public void SimplifyTest_MultiplePathsCombine()
+		{
+			var path = new GalaxyMapPath();
+			var source = new MapCoordinate(0, 0);
+			var turn = new MapCoordinate(0, 2);
+			var dest = new MapCoordinate(2, 2);
+			path.Nodes.Add(source);
+			path.Nodes.Add(new MapCoordinate(0, 1));
+			path.Nodes.Add(turn);
+			path.Nodes.Add(new MapCoordinate(1, 2));
+			path.Nodes.Add(dest);
+			path.Simplify();
+			Assert.AreEqual(path.Nodes.Count, 3);
+			Assert.AreEqual(path.Nodes[0], source);
+			Assert.AreEqual(path.Nodes[1], turn);
+			Assert.AreEqual(path.Nodes[2], dest);
+		}
 	}
 }

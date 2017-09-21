@@ -11,7 +11,7 @@ namespace Assets.GeneralScripts.Utility
 		/// The item definition
 		/// </summary>
 		/// <typeparam name="T">Return type</typeparam>
-		private class WeightedItem<T>
+		public class WeightedItem<T>
 		{
 			/// <summary>
 			/// Gets or sets the item
@@ -38,7 +38,7 @@ namespace Assets.GeneralScripts.Utility
 		/// <summary>
 		/// A list of weighted items
 		/// </summary>
-		private IList<WeightedItem<T>> _items;
+		public IList<WeightedItem<T>> Items { get; private set; }
 
 		/// <summary>
 		/// The current sum of all  weights in the list
@@ -50,7 +50,7 @@ namespace Assets.GeneralScripts.Utility
 		/// </summary>
 		public WeightedRandomList()
 		{
-			this._items = new List<WeightedItem<T>>();
+			this.Items = new List<WeightedItem<T>>();
 			this._total = 0;
 		}
 
@@ -61,7 +61,7 @@ namespace Assets.GeneralScripts.Utility
 		/// <param name="weight">Weight of this item</param>
 		public void AddNewItem(T item, int weight)
 		{
-			this._items.Add(new WeightedItem<T>(item, weight));
+			this.Items.Add(new WeightedItem<T>(item, weight));
 			this._total += weight;
 		}
 
@@ -71,13 +71,13 @@ namespace Assets.GeneralScripts.Utility
 		/// <returns>Result item</returns>
 		public T GetRandomItem()
 		{
-			if (this._items.Count == 0)
+			if (this.Items.Count == 0)
 			{
 				return default(T);
 			}
 
 			var rand = GlobalRandom.Next(this._total);
-			foreach (var item in this._items)
+			foreach (var item in this.Items)
 			{
 				if (rand <= item.Weight)
 				{
@@ -87,7 +87,7 @@ namespace Assets.GeneralScripts.Utility
 				rand -= item.Weight;
 			}
 
-			return this._items.Last().Item;
+			return this.Items.Last().Item;
 		}
 	}
 }
