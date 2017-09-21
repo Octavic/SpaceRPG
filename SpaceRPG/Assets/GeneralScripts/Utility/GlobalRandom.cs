@@ -4,7 +4,7 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.CombatScripts.Utility
+namespace Assets.GeneralScripts.Utility
 {
     using System;
     using System.Collections.Generic;
@@ -14,7 +14,7 @@ namespace Assets.CombatScripts.Utility
     /// <summary>
     /// Generates a new random number
     /// </summary>
-    public static class RandomNumberGenerator
+    public static class GlobalRandom
     {
         private static Random _random = new Random();
 
@@ -24,7 +24,7 @@ namespace Assets.CombatScripts.Utility
         /// <returns>A new random integer</returns>
         public static int Next()
         {
-            return RandomNumberGenerator._random.Next();
+            return GlobalRandom._random.Next();
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace Assets.CombatScripts.Utility
         /// <returns>Gets a random integer between 0 and the given max</returns>
         public static int Next(int maxValue)
         {
-            return RandomNumberGenerator._random.Next(maxValue);
+            return GlobalRandom._random.Next(maxValue);
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace Assets.CombatScripts.Utility
         /// <returns>Gets a random integer between the given min and max</returns>
         public static int Next(int minValue, int maxValue)
         {
-            return RandomNumberGenerator._random.Next(minValue, maxValue);
+            return GlobalRandom._random.Next(minValue, maxValue);
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace Assets.CombatScripts.Utility
         /// <returns>A random number with the given quiteria</returns>
         public static float Next(float minValue, float maxValue, int intervals = 100)
         {
-            float r = RandomNumberGenerator._random.Next(intervals);
+            float r = GlobalRandom._random.Next(intervals);
             return minValue + (r / intervals * (maxValue - minValue));
         }
     }

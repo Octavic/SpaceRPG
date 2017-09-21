@@ -36,12 +36,12 @@ He robbed only the rich and corrupted, and never hurt an innocent fly.
 # Essentially, there will be a bunch of 'flags' that contains either a value, or just 'true/false'.
 # So something like 'Morale' will be a value from -10(Really bad person) to 10(Really good person)
 # And something like 'HasBeenArrested' will  just be 'true/false'
-# You can do condition like '<IF HasBeenArrested>', and the following curly brackets will only be shown if the condition is met
+# You can do condition like '<IF HasBeenArrested>', and the following item up until the corresponding <ENDIF> will only show if the condition is met
 # You can also do things like '<IF HasBeenArrested AND Morale < 5>' as combinations,  but keep it simple.
-# Things like 'A AND B OR C' can be ambiguous depends on how you look at it. You could always place another if inside an if like
-# <IF A AND B>
+# Things like 'A AND B OR C' can be ambiguous depends on how you look at it. You could always place another <IF> inside an if like
+# <IF A OR B>
 #	<IF C>
-#		SOMETHING HERE
+#		SOMETHING HERE 
 #	<ENDIF>
 # <ENDIF>
 
@@ -49,13 +49,13 @@ Indeed. But, all good things come to an end.
 He had a downfall. No one really know what happened.
 But one day, he just up and vanished.
 
-# At the end of a scene, you can return something as result, or jump to a different scene with <JUMP #> just like player choices
+# At the end of a scene, you can return something as result and end the conversation, or jump to a different scene with <JUMP #> just like player choices
 # The thing you return should be a non-negative number.
 # 0 should always mean nothing special happened, aka no further action required
 # Things like listening to a story, asking directions, or refusing a trivial quest (Since refusing major quests could have an impact on the story)
 # THings that won't lead to any change in the game
 # But if they do, you'll have to make up numbers and document what they mean
-# It would be nice if you have a collection of all return values at the end,  so I can just glance at them and know how to hand them
+# It would be nice if you have a collection of all return values at the end,  so I can just glance at them and know how to handle them
 <RETURN 0>
 
 # NPC skip explain about stain

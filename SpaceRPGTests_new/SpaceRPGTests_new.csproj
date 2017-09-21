@@ -51,6 +51,7 @@
     <Compile Include="Assets\GeneralScripts\Dialogue\DialogSceneTests.cs" />
     <Compile Include="Assets\GeneralScripts\Dialogue\NpcDialogItemTests.cs" />
     <Compile Include="Assets\GeneralScripts\Dialogue\PlayerDialogItemTests.cs" />
+    <Compile Include="Assets\GeneralScripts\UI\GalaxyMap\GalaxyMapPathTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

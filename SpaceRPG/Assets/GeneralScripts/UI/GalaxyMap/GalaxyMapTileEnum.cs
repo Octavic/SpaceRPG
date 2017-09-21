@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Assetss.GeneralScripts.UI.GalaxyMap
+namespace Assets.GeneralScripts.UI.GalaxyMap
 {
 	/// <summary>
 	/// A collection of galaxy map items

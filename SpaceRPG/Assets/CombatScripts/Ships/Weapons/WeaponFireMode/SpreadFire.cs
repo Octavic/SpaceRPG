@@ -6,6 +6,7 @@
 
 namespace Assets.CombatScripts.Ships.Weapons.WeaponFireMode
 {
+	using GeneralScripts.Utility;
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
@@ -56,7 +57,7 @@ namespace Assets.CombatScripts.Ships.Weapons.WeaponFireMode
 			{
 				var newWeapon = this._weapon.GenerateProjectile();
 				var oldEulerZ = newWeapon.transform.eulerAngles.z;
-				var offset = RandomNumberGenerator.Next(-this._spread, this._spread);
+				var offset = GlobalRandom.Next(-this._spread, this._spread);
 				newWeapon.transform.eulerAngles = new Vector3(0, 0, oldEulerZ + offset);
 			}
 
