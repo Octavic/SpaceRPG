@@ -39,6 +39,16 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		}
 
 		/// <summary>
+		/// Creates a new instance  of the <see cref="MapCoordinate"/> class that mirros the given class
+		/// </summary>
+		/// <param name="c">target class</param>
+		public MapCoordinate(MapCoordinate c)
+		{
+			this.X = c.X;
+			this.Y = c.Y;
+		}
+
+		/// <summary>
 		/// Gets the magnitude of the coordinate
 		/// </summary>
 		public float Magnitude

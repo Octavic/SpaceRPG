@@ -56,7 +56,7 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 					var newTile = new GalaxyMapTile();
 					newTile.TileType = tileWeightedList.GetRandomItem();
 					newTile.PopulationRating = GlobalRandom.Next(0, 1, 10);
-					newTile.SecurityRating = GlobalRandom.Next(0, 1, 10);
+					newTile.CrimeRating = GlobalRandom.Next(0, 1, 10);
 					this.Tiles[x, y] = newTile;
 				}
 			}

@@ -30,6 +30,6 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		/// <summary>
 		/// A scale of government security from 0 to 1. 1 being extremely secure and 0 being lawless land
 		/// </summary>
-		public float SecurityRating;
+		public float CrimeRating;
 	}
 }

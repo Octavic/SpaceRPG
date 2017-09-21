@@ -153,7 +153,7 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 					var newTileObject = Instantiate(prefab, this.transform);
 					var newTileBehavior = newTileObject.GetComponent<GalaxyMapTileBehavior>();
 					newTileBehavior.Tile = curTile;
-					newTileBehavior.Color = this.GetColor(curTile.SecurityRating);
+					newTileBehavior.Color = this.GetColor(curTile.CrimeRating);
 					newTileObject.transform.localPosition = new Vector3(x * this.TileSize, y * this.TileSize, 0);
 				}
 			}
