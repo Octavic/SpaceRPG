@@ -67,11 +67,6 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		}
 
 		/// <summary>
-		/// The priority of the path
-		/// </summary>
-		private GalaxyMapPathPriorityEnum _priority;
-
-		/// <summary>
 		/// Creates a new instance of the <see cref="GalaxyMapPath"/> class
 		/// </summary>
 		/// <param name="map">The galaxy map</param>
@@ -87,7 +82,76 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 			}
 
 			// A hash map of every single coordinate and the total crime rating when traveling from there to the destination
-			Dictionary<MapCoordinate, float> totalCrimeToDest;
+			var totalCrimeToDest = new Dictionary<MapCoordinate, float>();
+			totalCrimeToDest[destination] = map.Tiles[destination.X, destination.Y].CrimeRating;
+			this.GenerateCrimeCostMap(destination, totalCrimeToDest, map);
+
+			// Generate nodes
+			var curCoor = source;
+			while (curCoor != destination)
+			{
+				this.Nodes.Add(curCoor);
+
+				var curWinnerNode = curCoor + _availableMoves[0];
+				float curWinnder = totalCrimeToDest[curWinnerNode];
+				for (int i = 1; i < _availableMoves.Count(); i++)
+				{
+					var curCheckNode = curCoor + _availableMoves[i];
+					var curValue = totalCrimeToDest[curCheckNode];
+					if (curValue < curWinnder)
+					{
+						curWinnder = curValue;
+						curWinnerNode = curCheckNode;
+					}
+				}
+
+				this.Nodes.Add(curWinnerNode);
+				curCoor = curWinnerNode;
+			}
+
+			this.Nodes.Add(destination);
+			this.Simplify();
+		}
+
+		/// <summary>
+		/// A list  of possible move directions from a node
+		/// </summary>
+		private static readonly MapCoordinate[] _availableMoves = {
+			new MapCoordinate(0,1),
+			new MapCoordinate(0,-1),
+			new MapCoordinate(-1,1),
+			new MapCoordinate(1,0)
+		};
+
+		private void GenerateCrimeCostMap(MapCoordinate cur, Dictionary<MapCoordinate, float> totalCrimeToDest, GalaxyMap map)
+		{
+			var curValue = totalCrimeToDest[cur];
+			foreach (var direction in _availableMoves)
+			{
+				var checkCoor = cur + direction;
+				if (checkCoor.X < 0 || checkCoor.X >= map.Width || checkCoor.Y < 0 || checkCoor.Y >= map.Height)
+				{
+					continue;
+				}
+
+				var checkValue = curValue + map.Tiles[checkCoor.X, checkCoor.Y].CrimeRating;
+				float existValue;
+				if (!totalCrimeToDest.TryGetValue(checkCoor, out existValue) && existValue > curValue)
+				{
+					totalCrimeToDest[checkCoor] = curValue;
+				}
+			}
+
+			foreach (var direction in _availableMoves)
+			{
+				var checkCoor = cur + direction;
+				if (checkCoor.X < 0 || checkCoor.X >= map.Width || checkCoor.Y < 0 || checkCoor.Y >= map.Height)
+				{
+					continue;
+				}
+
+				GenerateCrimeCostMap(checkCoor, totalCrimeToDest, map);
+			}
 		}
 
 		/// <summary>
