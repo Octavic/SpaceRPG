@@ -154,7 +154,7 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		/// <returns>Hash code</returns>
 		public override int GetHashCode()
 		{
-			return base.GetHashCode();
+			return this.X + this.Y;
 		}
 
 		/// <summary>

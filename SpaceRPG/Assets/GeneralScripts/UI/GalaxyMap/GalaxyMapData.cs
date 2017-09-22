@@ -61,5 +61,45 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 				}
 			}
 		}
+
+		/// <summary>
+		/// Checks if a coordinate is within map
+		/// </summary>
+		/// <param name="c">coordinate</param>
+		/// <returns>True if the coordinate is valid</returns>
+		public bool IsValidCoordinate(MapCoordinate c)
+		{
+			return (c.X >= 0 && c.X < this.Width && c.Y >= 0 && c.Y < this.Height);
+		}
+
+		/// <summary>
+		/// Gets the sourrounding coordinates
+		/// </summary>
+		/// <param name="c">center coordinate</param>
+		/// <returns>A list of surrounding coordinates</returns>
+		public IList<MapCoordinate> GetSurroundingCoordinates(MapCoordinate c)
+		{
+			var result = new List<MapCoordinate>();
+			foreach (var direction in _moveDirections)
+			{
+				var candidate = c + direction;
+				if (this.IsValidCoordinate(candidate))
+				{
+					result.Add(candidate); 
+				}
+			}
+
+			return result;
+		}
+
+		/// <summary>
+		/// A list of possible move directions
+		/// </summary>
+		private static readonly MapCoordinate[] _moveDirections = {
+			new MapCoordinate(0, 1),
+			new MapCoordinate(0, -1),
+			new MapCoordinate(1, 0),
+			new MapCoordinate(-1, 0)
+		};
     }
 }
