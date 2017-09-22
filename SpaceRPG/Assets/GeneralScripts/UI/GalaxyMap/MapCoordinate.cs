@@ -156,5 +156,14 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		{
 			return base.GetHashCode();
 		}
+
+		/// <summary>
+		/// Overrides the ToSTring method
+		/// </summary>
+		/// <returns>A string representation of the map coordinate</returns>
+		public override string ToString()
+		{
+			return "[" + this.X + ", " + this.Y + ']';
+		}
 	}
 }

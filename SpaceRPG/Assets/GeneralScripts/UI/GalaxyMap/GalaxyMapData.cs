@@ -16,7 +16,7 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
     /// Describes the galaxy map
     /// </summary>
     [Serializable]
-    public class GalaxyMap
+    public class GalaxyMapData
     {
         /// <summary>
         /// Gets the tiles for this galaxy map
@@ -34,11 +34,11 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		public int Height;
 
 		/// <summary>
-		/// Creates a new instance of the <see cref="GalaxyMap"/> class
+		/// Creates a new instance of the <see cref="GalaxyMapData"/> class
 		/// </summary>
 		/// <param name="width">width of the map</param>
 		/// <param name="height">height of the map</param>
-		public GalaxyMap(int width, int height)
+		public GalaxyMapData(int width, int height)
 		{
 			this.Width = width;
 			this.Height = height;

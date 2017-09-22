@@ -148,7 +148,7 @@
     <Compile Include="Assets\GeneralScripts\Dialogue\PlayerDialogItem.cs" />
     <Compile Include="Assets\GeneralScripts\Dialogue\TagNames.cs" />
     <Compile Include="Assets\GeneralScripts\Dialogue\scriptStringExtensions.cs" />
-    <Compile Include="Assets\GeneralScripts\UI\GalaxyMap\GalaxyMap.cs" />
+    <Compile Include="Assets\GeneralScripts\UI\GalaxyMap\GalaxyMapData.cs" />
     <Compile Include="Assets\GeneralScripts\UI\GalaxyMap\GalaxyMapBehavior.cs" />
     <Compile Include="Assets\GeneralScripts\UI\GalaxyMap\GalaxyMapTile.cs" />
     <Compile Include="Assets\GeneralScripts\UI\GalaxyMap\GalaxyMapTileBehavior.cs" />

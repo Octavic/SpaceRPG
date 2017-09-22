@@ -67,14 +67,20 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		}
 
 		/// <summary>
+		/// The path's priority
+		/// </summary>
+		private GalaxyMapPathPriorityEnum _priority;
+
+		/// <summary>
 		/// Creates a new instance of the <see cref="GalaxyMapPath"/> class
 		/// </summary>
 		/// <param name="map">The galaxy map</param>
 		/// <param name="source">Source of the trip</param>
 		/// <param name="destination">Destination of the trip</param>
 		/// <param name="priority"> The priority when generating the path</param>
-		public GalaxyMapPath(GalaxyMap map, MapCoordinate source, MapCoordinate destination, GalaxyMapPathPriorityEnum priority)
+		public GalaxyMapPath(GalaxyMapData map, MapCoordinate source, MapCoordinate destination, GalaxyMapPathPriorityEnum priority)
 		{
+			this._priority = priority;
 			if (priority == GalaxyMapPathPriorityEnum.MostFuelEfficient)
 			{
 				this.Nodes = this.GenerateShortestPath(map, source, destination);
@@ -123,7 +129,7 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 			new MapCoordinate(1,0)
 		};
 
-		private void GenerateCrimeCostMap(MapCoordinate cur, Dictionary<MapCoordinate, float> totalCrimeToDest, GalaxyMap map)
+		public void GenerateCrimeCostMap(MapCoordinate cur, Dictionary<MapCoordinate, float> totalCrimeToDest, GalaxyMapData map)
 		{
 			var curValue = totalCrimeToDest[cur];
 			foreach (var direction in _availableMoves)
@@ -136,7 +142,7 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 
 				var checkValue = curValue + map.Tiles[checkCoor.X, checkCoor.Y].CrimeRating;
 				float existValue;
-				if (!totalCrimeToDest.TryGetValue(checkCoor, out existValue) && existValue > curValue)
+				if (!totalCrimeToDest.TryGetValue(checkCoor, out existValue) || existValue > curValue)
 				{
 					totalCrimeToDest[checkCoor] = curValue;
 				}
@@ -203,7 +209,7 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		/// <param name="source">source coordinate</param>
 		/// <param name="destination">destination< coordinate/param>
 		/// <returns>A list of coordinates to get to the destination from source</returns>
-		private IList<MapCoordinate> GenerateShortestPath(GalaxyMap map, MapCoordinate source, MapCoordinate destination)
+		private IList<MapCoordinate> GenerateShortestPath(GalaxyMapData map, MapCoordinate source, MapCoordinate destination)
 		{
 			// If they are on the same line, then just connect and return
 			if (source.X == destination.X || source.Y == destination.Y)
@@ -249,7 +255,7 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		/// <param name="map">galaxy map</param>
 		/// <param name="nodes">the list of nodes</param>
 		/// <returns></returns>
-		public static float CalcTotalCrimeRating(GalaxyMap map, IList<MapCoordinate> nodes)
+		public static float CalcTotalCrimeRating(GalaxyMapData map, IList<MapCoordinate> nodes)
 		{
 			float total = 0;
 

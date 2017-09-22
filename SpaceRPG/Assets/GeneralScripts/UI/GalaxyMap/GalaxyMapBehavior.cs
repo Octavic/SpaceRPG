@@ -72,7 +72,7 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		/// <summary>0
 		/// Gets the current map object containing all of the data
 		/// </summary>
-		public GalaxyMap Map { get; private set; }
+		public GalaxyMapData Map { get; private set; }
 
 		/// <summary>
 		/// The current instance
@@ -117,7 +117,7 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		/// </summary>
 		protected void Start()
 		{
-			this.Map = new GalaxyMap(this.MapWidth, this.MapHeight);
+			this.Map = new GalaxyMapData(this.MapWidth, this.MapHeight);
 			GalaxyMapBehavior._currentInstance = this;
 
 			// Generating map is expensive, so don't destroy this UI item

@@ -76,5 +76,28 @@ namespace SpaceRPGTests_new.Assets.GeneralScripts.UI.GalaxyMap
 			Assert.AreEqual(path.Nodes[1], turn);
 			Assert.AreEqual(path.Nodes[2], dest);
 		}
+
+		[TestMethod()]
+		public void GenerateCrimeCostMap_SimpleTest()
+		{
+			var cur = new MapCoordinate(1, 1);
+			var dic = new Dictionary<MapCoordinate, float>();
+			dic[cur] = 0.1f;
+			var map = new GalaxyMapData(2, 2);
+			var tile1 = new GalaxyMapTile();
+			tile1.CrimeRating = 0.1f;
+			var tile2 = new GalaxyMapTile();
+			tile2.CrimeRating = 0.1f;
+			var tile3 = new GalaxyMapTile();
+			tile3.CrimeRating = 0.9f;
+			var tile4 = new GalaxyMapTile();
+			tile4.CrimeRating = 0.1f;
+			map.Tiles[0, 0] = tile1;
+			map.Tiles[0, 1] = tile2;
+			map.Tiles[1, 0] = tile3;
+			map.Tiles[1, 1] = tile4;
+
+			var newPath = new GalaxyMapPath(map, new MapCoordinate(0, 0), cur, GalaxyMapPathPriorityEnum.LeastCrimeRating);
+		}
 	}
 }
