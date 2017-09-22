@@ -78,7 +78,30 @@ namespace SpaceRPGTests_new.Assets.GeneralScripts.UI.GalaxyMap
 		}
 
 		[TestMethod()]
-		public void GenerateCrimeCostMap_SimpleTest()
+		public void GenerateFastestPath_SimpleTest()
+		{
+			var map = new GalaxyMapData(10, 10);
+			var path = new GalaxyMapPath(map, new MapCoordinate(0, 0), new MapCoordinate(0, 9), GalaxyMapPathPriorityEnum.MostFuelEfficient);
+			Assert.AreEqual(path.Nodes.Count, 2);
+			Assert.AreEqual(path.Nodes[0], new MapCoordinate(0, 0));
+			Assert.AreEqual(path.Nodes[1], new MapCoordinate(0, 9));
+		}
+
+		[TestMethod()]
+		public void GenerateFastestPath_TurnTest()
+		{
+			var map = new GalaxyMapData(10, 10);
+			var path = new GalaxyMapPath(map, new MapCoordinate(0, 0), new MapCoordinate(9, 9), GalaxyMapPathPriorityEnum.MostFuelEfficient);
+			var possibleTurn1 = new MapCoordinate(0, 9);
+			var possibleTurn2 = new MapCoordinate(9, 0);
+			Assert.AreEqual(path.Nodes.Count, 3);
+			Assert.AreEqual(path.Nodes[0], new MapCoordinate(0, 0));
+			Assert.IsTrue(path.Nodes[1] == possibleTurn1 || path.Nodes[1] == possibleTurn2);
+			Assert.AreEqual(path.Nodes[2], new MapCoordinate(9, 9));
+		}
+
+		[TestMethod()]
+		public void GenerateSafestPath_SimpleTest()
 		{
 			var cur = new MapCoordinate(1, 1);
 			var dic = new Dictionary<MapCoordinate, float>();
@@ -105,7 +128,7 @@ namespace SpaceRPGTests_new.Assets.GeneralScripts.UI.GalaxyMap
 		}
 
 		[TestMethod()]
-		public void GenerateCrimeCostMap_ComplexTest()
+		public void GenerateSafestPath_ComplexTest()
 		{
 			var source = new MapCoordinate(0, 1);
 			var dest = new MapCoordinate(2, 1);

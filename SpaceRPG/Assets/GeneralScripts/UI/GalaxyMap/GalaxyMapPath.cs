@@ -89,7 +89,7 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 
 			// A hash map of every single coordinate and the total crime rating when traveling from there to the destination
 			var totalCrimeToDest = new Dictionary<MapCoordinate, float>();
-			totalCrimeToDest[destination] = map.Tiles[destination.X, destination.Y].CrimeRating;
+			totalCrimeToDest[destination] = map[destination].CrimeRating;
 			this.GenerateCrimeCostMap(destination, totalCrimeToDest, map);
 
 			this.Nodes = new List<MapCoordinate>();
@@ -133,7 +133,7 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 			for (int i = validCoors.Count - 1; i >= 0; i--)
 			{
 				var validCoor = validCoors[i];
-				var checkValue = curValue + map.Tiles[validCoor.X, validCoor.Y].CrimeRating;
+				var checkValue = curValue + map[validCoor].CrimeRating;
 				float existValue;
 				if (totalCrimeToDest.TryGetValue(validCoor, out existValue))
 				{
@@ -263,7 +263,8 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 				var cur = new MapCoordinate(from);
 				while (cur != to)
 				{
-					total += map.Tiles[cur.X, cur.Y].CrimeRating;
+					total += map[cur].CrimeRating;
+					cur = cur + step;
 				}
 			}
 

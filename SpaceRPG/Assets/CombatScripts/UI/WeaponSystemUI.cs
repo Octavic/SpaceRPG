@@ -16,6 +16,7 @@ namespace Assets.CombatScripts.UI
 	using Ships.Weapons;
 	using System.Collections;
 	using Utility;
+	using Assets.GeneralScripts.Utility;
 
 	/// <summary>
 	/// Shows all iniformation related to a weapon system

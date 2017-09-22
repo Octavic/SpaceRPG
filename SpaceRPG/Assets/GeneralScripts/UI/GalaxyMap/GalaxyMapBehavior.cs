@@ -65,6 +65,12 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		{
 			get
 			{
+				if (GalaxyMapBehavior._currentInstance == null)
+				{
+					GalaxyMapBehavior._currentInstance = 
+						GameObjectFinder.FindGameObjectWithTag(Tags.GalaxyMap).GetComponent<GalaxyMapBehavior>();
+				}
+
 				return GalaxyMapBehavior._currentInstance;
 			}
 		}
@@ -94,14 +100,16 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		/// </summary>
 		/// <param name="coordinate">Target coordinate</param>
 		/// <returns>tile at that coordinate, null if out of range</returns>
-		public GalaxyMapTile GetTileAt(MapCoordinate coordinate)
+		public GalaxyMapTile this[MapCoordinate coordinate]
 		{
-			if ((coordinate.X < 0 || coordinate.X >= this.Map.Width) || (coordinate.Y < 0 || coordinate.Y >= this.Map.Height))
+			get
 			{
-				return null;
+				return this.Map[coordinate];
 			}
-
-			return this.Map.Tiles[coordinate.X, coordinate.Y];
+			set
+			{
+				this.Map[coordinate] = value;
+			}
 		}
 
 		/// <summary>
@@ -152,6 +160,8 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 					// Instantiate a new tile
 					var newTileObject = Instantiate(prefab, this.transform);
 					var newTileBehavior = newTileObject.GetComponent<GalaxyMapTileBehavior>();
+
+					// Assign it to the current map and set color and position
 					newTileBehavior.Tile = curTile;
 					newTileBehavior.Color = this.GetColor(curTile.CrimeRating);
 					newTileObject.transform.localPosition = new Vector3(x * this.TileSize, y * this.TileSize, 0);

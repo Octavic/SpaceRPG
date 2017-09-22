@@ -4,7 +4,7 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.CombatScripts.Utility
+namespace Assets.GeneralScripts.Utility
 {
 	using System;
 	using System.Collections.Generic;
@@ -21,6 +21,7 @@ namespace Assets.CombatScripts.Utility
 		Ship,
 		Minimap,
 		GameController,
-		ShipListUI
+		ShipListUI,
+		GalaxyMap
 	}
 }

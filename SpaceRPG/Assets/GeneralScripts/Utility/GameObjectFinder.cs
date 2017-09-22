@@ -4,7 +4,7 @@
 //  </copyright>
 //  --------------------------------------------------------------------------------------------------------------------
 
-namespace Assets.CombatScripts.Utility
+namespace Assets.GeneralScripts.Utility
 {
 	using System;
 	using System.Collections.Generic;

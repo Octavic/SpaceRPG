@@ -15,10 +15,11 @@ namespace Assets.CombatScripts.Ships
     using System.Text;
     using UnityEngine;
 	using Weapons;
+	using Assets.GeneralScripts.Utility;
 
-    /// <summary>
-    /// Describes the basic functionality of a ship
-    /// </summary>
+	/// <summary>
+	/// Describes the basic functionality of a ship
+	/// </summary>
 	public class Ship : MonoBehaviour
     {
         /// <summary>

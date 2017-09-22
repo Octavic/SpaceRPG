@@ -132,13 +132,13 @@
     <Compile Include="Assets\CombatScripts\Utility\CalcTurnAngle.cs" />
     <Compile Include="Assets\CombatScripts\Utility\DelayedSelfDestruct.cs" />
     <Compile Include="Assets\CombatScripts\Utility\FloatExtension.cs" />
-    <Compile Include="Assets\CombatScripts\Utility\GameObjectFinder.cs" />
+    <Compile Include="Assets\GeneralScripts\Utility\GameObjectFinder.cs" />
     <Compile Include="Assets\CombatScripts\Utility\InputHelper.cs" />
     <Compile Include="Assets\GeneralScripts\UI\GalaxyMap\GalaxyMapPath.cs" />
     <Compile Include="Assets\GeneralScripts\UI\GalaxyMap\GalaxyMapPathPriorityEnum.cs" />
     <Compile Include="Assets\GeneralScripts\Utility\GlobalRandom.cs" />
     <Compile Include="Assets\CombatScripts\Utility\ScaleBar.cs" />
-    <Compile Include="Assets\CombatScripts\Utility\Tags.cs" />
+    <Compile Include="Assets\GeneralScripts\Utility\Tags.cs" />
     <Compile Include="Assets\CombatScripts\Utility\Vector2Extension.cs" />
     <Compile Include="Assets\GeneralScripts\Dialogue\DialogParser.cs" />
     <Compile Include="Assets\GeneralScripts\Dialogue\DialogScene.cs" />

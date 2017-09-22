@@ -56,6 +56,7 @@
     <Compile Include="Assets\GeneralScripts\Dialogue\NpcDialogItemTests.cs" />
     <Compile Include="Assets\GeneralScripts\Dialogue\PlayerDialogItemTests.cs" />
     <Compile Include="Assets\GeneralScripts\UI\GalaxyMap\GalaxyMapPathTest.cs" />
+    <Compile Include="Assets\GeneralScripts\UI\GalaxyMap\GalaxyMapDataTest.cs" />
     <Compile Include="Assets\GeneralScripts\Utility\CharExtensionTest.cs" />
     <Compile Include="Assets\GeneralScripts\Utility\ColorExtensionTest.cs" />
     <Compile Include="Assets\GeneralScripts\Utility\FloatExtensionTest.cs" />
