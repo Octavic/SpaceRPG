@@ -14,6 +14,7 @@ namespace Assets.CombatScripts.UI
 	using Ships;
 	using UnityEngine.UI;
 	using Utility;
+	using Assets.GeneralScripts.Utility;
 
 	/// <summary>
 	/// The starmap 

@@ -55,8 +55,8 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 				{
 					var newTile = new GalaxyMapTile();
 					newTile.TileType = tileWeightedList.GetRandomItem();
-					newTile.PopulationRating = GlobalRandom.Next(0, 1, 10);
-					newTile.CrimeRating = GlobalRandom.Next(0, 1, 10);
+					newTile.PopulationRating = GlobalRandom.Next(0, 1, 20);
+					newTile.CrimeRating = GlobalRandom.Next(0, 1, 20);
 					this.Tiles[x, y] = newTile;
 				}
 			}
@@ -70,6 +70,35 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		public bool IsValidCoordinate(MapCoordinate c)
 		{
 			return (c.X >= 0 && c.X < this.Width && c.Y >= 0 && c.Y < this.Height);
+		}
+
+		/// <summary>
+		/// Gets or sets the tile at the target coordinate
+		/// </summary>
+		/// <param name="coordinate">The target coordinate</param>
+		/// <returns>the result tile if set</returns>
+		public GalaxyMapTile this[MapCoordinate coordinate]
+		{
+			get
+			{
+				if (this.IsValidCoordinate(coordinate))
+				{
+					return this.Tiles[coordinate.X, coordinate.Y];
+				}
+
+				return null;
+			}
+			set
+			{
+				if (this.IsValidCoordinate(coordinate))
+				{
+					this.Tiles[coordinate.X, coordinate.Y] = value;
+				}
+				else
+				{
+					throw new IndexOutOfRangeException("Not a valid coordinate!");
+				}
+			}
 		}
 
 		/// <summary>

@@ -14,6 +14,7 @@ namespace Assets.CombatScripts
 	using Utility;
 	using Ships;
 	using Assets.CombatScripts.UI;
+	using Assets.GeneralScripts.Utility;
 
 	/// <summary>
 	/// The overall game controller

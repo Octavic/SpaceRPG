@@ -13,6 +13,7 @@ namespace Assets.CombatScripts.UI
 	using System.Text;
 	using UnityEngine;
 	using Utility;
+	using Assets.GeneralScripts.Utility;
 
 	/// <summary>
 	/// A list of ships
