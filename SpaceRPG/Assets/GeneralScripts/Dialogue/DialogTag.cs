@@ -34,7 +34,7 @@ namespace Assets.GeneralScripts.Dialogue
 
 			input = input.Substring(1, input.Length - 2);
 
-			// Grab name and valut that's split by ' '
+			// Grab name and value that's split by ' '
 			var split = input.Split(' ');
 			name = split[0];
 			if (split.Length > 1)
