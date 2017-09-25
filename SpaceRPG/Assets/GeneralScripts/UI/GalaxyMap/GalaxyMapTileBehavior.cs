@@ -30,25 +30,30 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		{
 			get
 			{
-				return this._imageComponent.color;
+				return this._spriteRenderer.color;
 			}
 			set
 			{
-				this._imageComponent.color = value;
+				if (this._spriteRenderer == null)
+				{
+					this._spriteRenderer = this.GetComponent<SpriteRenderer>();
+				}
+
+				this._spriteRenderer.color = value;
 			}
 		}
 
 		/// <summary>
 		/// Gets the image component;
 		/// </summary>
-		private Image _imageComponent;
+		private SpriteRenderer _spriteRenderer;
 
 		/// <summary>
 		/// Used for initialization
 		/// </summary>
 		protected void Start()
 		{
-			this._imageComponent = this.GetComponent<Image>();
+			this._spriteRenderer = this.GetComponent<SpriteRenderer>();
 		}
 	}
 }

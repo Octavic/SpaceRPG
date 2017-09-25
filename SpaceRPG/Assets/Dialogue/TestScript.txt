@@ -1,0 +1,23 @@
+<SCENE 1>
+What do you want to know?
+    Where is the bathroom? <JUMP 3>
+	Why am I here? <JUMP 4>
+	Who are you? <JUMP 5>
+
+<SCENE 3>
+EXPLAIN 
+	okay, i have more questions <JUMP 1>
+	I'm good
+<JUMP 6>
+
+<SCENE 4>
+EXPLAIN 
+<JUMP 6>
+
+<SCENE 5>
+EXPLAIN 
+<JUMP 6>
+
+
+<SCENE 6>
+Well alright, we'd better get going then.

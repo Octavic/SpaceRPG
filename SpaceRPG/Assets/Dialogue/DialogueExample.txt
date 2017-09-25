@@ -7,7 +7,6 @@ Hello  traveler
 
 # Sample player response.
 # Start with four spaces to indicate player response. Players can have multiple choices,  just list them here
-    Hello.
     Hi.
     Greetings.
 
@@ -29,8 +28,9 @@ He robbed only the rich and corrupted, and never hurt an innocent fly.
 # Here let's introduce conditions. Certain things are only available if the conditions are met, and you do  it like this
 <IF Morale > 5>
     Well, he sounds  like quite a man
-    Doesn't matter, criminals need to be brought down, no matter how justified they may seem <4>
+    Doesn't matter, criminals need to be brought down, no matter how justified they may seem <JUMP 4>
 <ENDIF>
+
     That's something.
 
 # Essentially, there will be a bunch of 'flags' that contains either a value, or just 'true/false'.
