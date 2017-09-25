@@ -34,6 +34,11 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		public float PanScale;
 
 		/// <summary>
+		/// The tile info
+		/// </summary>
+		public TileInfoBehavior TileInfo;
+
+		/// <summary>
 		/// Gets or sets the current camera size
 		/// </summary>
 		private float CurCameraSize
@@ -94,6 +99,21 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		private float _defaultZ;
 
 		/// <summary>
+		/// Hides the info
+		/// </summary>
+		public void HideInfo()
+		{
+			this.TileInfo.gameObject.SetActive(false);
+		}
+
+		/// <summary>
+		/// Generates a new path
+		/// </summary>
+		public void GeneratePath()
+		{
+		}
+
+		/// <summary>
 		/// Called once in the beginning
 		/// </summary>
 		protected void Start()
@@ -128,7 +148,12 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 				RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
 				if (hit.collider != null)
 				{
-					this._focusTransform = hit.collider.gameObject.transform;
+					var hitTile = hit.collider.gameObject.GetComponent<GalaxyMapTileBehavior>();
+					if (hitTile != null)
+					{
+						this._focusTransform = hit.collider.gameObject.transform;
+						this.TileInfo.RenderTile(hitTile.Tile);
+					}
 				}
 			}
 

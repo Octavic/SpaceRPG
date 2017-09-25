@@ -24,6 +24,11 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		public GalaxyMapTile Tile { get; set; }
 
 		/// <summary>
+		/// Gets or sets the map coordinate
+		/// </summary>
+		public MapCoordinate Coordinate { get; set; }
+
+		/// <summary>
 		/// gets or sets the color of the tile
 		/// </summary>
 		public Color Color

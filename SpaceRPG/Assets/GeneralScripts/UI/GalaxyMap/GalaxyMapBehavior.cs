@@ -86,6 +86,13 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		protected static GalaxyMapBehavior _currentInstance;
 
 		/// <summary>
+		/// Calculates a new path
+		/// </summary>
+		public void CalculatePath()
+		{
+		}
+
+		/// <summary>
 		/// Gets the color of a tile based on its security rating
 		/// </summary>
 		/// <param name="securityRating">The security rating</param>
@@ -163,6 +170,7 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 
 					// Assign it to the current map and set color and position
 					newTileBehavior.Tile = curTile;
+					newTileBehavior.Coordinate = new MapCoordinate(x, y);
 					newTileBehavior.Color = this.GetColor(curTile.CrimeRating);
 					newTileObject.transform.localPosition = new Vector3(x * this.TileSize, y * this.TileSize, 0);
 				}
