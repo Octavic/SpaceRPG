@@ -29,6 +29,11 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		public float MaxSize;
 
 		/// <summary>
+		/// THe speed at which the camera pans
+		/// </summary>
+		public float PanScale;
+
+		/// <summary>
 		/// Gets or sets the current camera size
 		/// </summary>
 		private float CurCameraSize
@@ -79,11 +84,22 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		private Camera _cameraComponent;
 
 		/// <summary>
-		/// Called once in the begining
+		/// The object that this camera is currently focusing on
+		/// </summary>
+		private Transform _focusTransform;
+
+		/// <summary>
+		/// The default depth of the camera
+		/// </summary>
+		private float _defaultZ;
+
+		/// <summary>
+		/// Called once in the beginning
 		/// </summary>
 		protected void Start()
 		{
-			this._cameraComponent = this.GetComponent<Camera>();	
+			this._cameraComponent = this.GetComponent<Camera>();
+			this._defaultZ = this.transform.position.z;
 		}
 
 		/// <summary>
@@ -91,7 +107,39 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		/// </summary>
 		protected void Update()
 		{
-			this.CurCameraSize -= Input.GetAxis("MouseScroll");
+			var scroll = Input.GetAxis("MouseScroll");
+			if (scroll != 0)
+			{
+				this.CurCameraSize -= scroll;
+				this._focusTransform = null;
+			}
+
+			// If left click is down, pan the map
+			if (Input.GetMouseButton(0))
+			{
+				this._focusTransform = null;
+				var mouseX = Input.GetAxis("MouseX");
+				var mouseY = Input.GetAxis("MouseY");
+				this.transform.position -= new Vector3(mouseX, mouseY) * this.PanScale * this.CurCameraSize;
+			}
+			// On right click, pan to the tile clicked and show info
+			else if (Input.GetMouseButtonDown(1))
+			{
+				RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+				if (hit.collider != null)
+				{
+					this._focusTransform = hit.collider.gameObject.transform;
+				}
+			}
+
+			if (this._focusTransform != null)
+			{
+				this.transform.position = Vector3.Lerp(
+					this.transform.position, 
+					new Vector3(this._focusTransform.position.x, this._focusTransform.position.y, _defaultZ), 
+					0.15f);
+				this.CurCameraSize= this.CurCameraSize.Lerp(3, 0.15f);
+			}
 		}
 	}
 }
