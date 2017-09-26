@@ -67,7 +67,7 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 			{
 				if (GalaxyMapBehavior._currentInstance == null)
 				{
-					GalaxyMapBehavior._currentInstance = 
+					GalaxyMapBehavior._currentInstance =
 						GameObjectFinder.FindGameObjectWithTag(Tags.GalaxyMap).GetComponent<GalaxyMapBehavior>();
 				}
 
@@ -86,9 +86,14 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		public MapCoordinate PlayerCurrentCoordiante { get; private set; }
 
 		/// <summary>
+		/// An array of tile behaviors
+		/// </summary>
+		private GalaxyMapTileBehavior[,] _tileBehaviors;
+
+		/// <summary>
 		/// The current instance
 		/// </summary>
-		protected static GalaxyMapBehavior _currentInstance;
+		private static GalaxyMapBehavior _currentInstance;
 
 		/// <summary>
 		/// Calculates a new path
@@ -131,6 +136,7 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		protected void Start()
 		{
 			this.Map = new GalaxyMapData(this.MapWidth, this.MapHeight);
+			this._tileBehaviors = new GalaxyMapTileBehavior[this.MapWidth, this.MapHeight];
 			GalaxyMapBehavior._currentInstance = this;
 
 			// Generating map is expensive, so don't destroy this UI item
@@ -171,8 +177,18 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 					newTileBehavior.Coordinate = new MapCoordinate(x, y);
 					newTileBehavior.Color = this.GetColor(curTile.CrimeRating);
 					newTileObject.transform.localPosition = new Vector3(x * this.TileSize, y * this.TileSize, 0);
+					this._tileBehaviors[x, y] = newTileBehavior;
 				}
 			}
+		}
+
+		/// <summary>
+		/// Renders the map onto the map
+		/// </summary>
+		/// <param name="path">The target path to be rendered</param>
+		private void RenderPath(GalaxyMapPath path)
+		{
+
 		}
     }
 }
