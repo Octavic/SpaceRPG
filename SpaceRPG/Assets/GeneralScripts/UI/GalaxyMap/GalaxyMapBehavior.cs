@@ -126,14 +126,6 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		}
 
 		/// <summary>
-		/// Redraw the map
-		/// </summary>
-		public void RedrawMap()
-		{
-
-		}
-
-		/// <summary>
 		/// Called once in the beginning for initialization
 		/// </summary>
 		protected void Start()

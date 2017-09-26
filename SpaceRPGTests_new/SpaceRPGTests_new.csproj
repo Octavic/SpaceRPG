@@ -52,7 +52,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\CombatScripts\Utility\ScaleBarTest.cs" />
     <Compile Include="Assets\GeneralScripts\Dialogue\DialogSceneTests.cs" />
     <Compile Include="Assets\GeneralScripts\Dialogue\NpcDialogItemTests.cs" />
     <Compile Include="Assets\GeneralScripts\Dialogue\PlayerDialogItemTests.cs" />
@@ -73,6 +72,9 @@
       <Project>{72c099bc-cb7c-c150-b3fc-c808e48f4428}</Project>
       <Name>SpaceRPG</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Assets\CombatScripts\Utility\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

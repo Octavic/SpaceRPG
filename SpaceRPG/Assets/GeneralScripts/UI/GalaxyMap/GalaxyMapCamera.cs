@@ -137,7 +137,7 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 			// If left click is down, pan the map
 			if (Input.GetMouseButton(0))
 			{
-				this._focusTransform = null;
+				this.TileInfo.gameObject.SetActive(false);
 				var mouseX = Input.GetAxis("MouseX");
 				var mouseY = Input.GetAxis("MouseY");
 				this.transform.position -= new Vector3(mouseX, mouseY) * this.PanScale * this.CurCameraSize;
