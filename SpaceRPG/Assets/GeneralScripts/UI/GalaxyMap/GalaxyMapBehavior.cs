@@ -81,6 +81,11 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		public GalaxyMapData Map { get; private set; }
 
 		/// <summary>
+		/// Gets the player's current coordinate
+		/// </summary>
+		public MapCoordinate PlayerCurrentCoordiante { get; private set; }
+
+		/// <summary>
 		/// The current instance
 		/// </summary>
 		protected static GalaxyMapBehavior _currentInstance;
@@ -88,8 +93,9 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		/// <summary>
 		/// Calculates a new path
 		/// </summary>
-		public void CalculatePath()
+		public void CalculatePath(MapCoordinate destination, GalaxyMapPathPriorityEnum priority)
 		{
+			var newPath = new GalaxyMapPath(this.Map, this.PlayerCurrentCoordiante, destination, priority);
 		}
 
 		/// <summary>
