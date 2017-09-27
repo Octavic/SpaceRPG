@@ -99,14 +99,6 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		private float _defaultZ;
 
 		/// <summary>
-		/// Hides the info
-		/// </summary>
-		public void HideInfo()
-		{
-			this.TileInfo.gameObject.SetActive(false);
-		}
-
-		/// <summary>
 		/// Generates a new path
 		/// </summary>
 		public void GeneratePath()
@@ -137,9 +129,14 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 			// If left click is down, pan the map
 			if (Input.GetMouseButton(0))
 			{
-				this.TileInfo.gameObject.SetActive(false);
 				var mouseX = Input.GetAxis("MouseX");
 				var mouseY = Input.GetAxis("MouseY");
+				if (Math.Abs(mouseX) > 0.5f || Math.Abs(mouseY) > 0.5f)
+				{
+					this.TileInfo.gameObject.SetActive(false);
+				}
+
+				this._focusTransform = null;
 				this.transform.position -= new Vector3(mouseX, mouseY) * this.PanScale * this.CurCameraSize;
 			}
 			// On right click, pan to the tile clicked and show info
@@ -152,7 +149,7 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 					if (hitTile != null)
 					{
 						this._focusTransform = hit.collider.gameObject.transform;
-						this.TileInfo.RenderTile(hitTile.Tile);
+						this.TileInfo.RenderTile(hitTile);
 					}
 				}
 			}

@@ -156,6 +156,7 @@
     <Compile Include="Assets\GeneralScripts\Utility\CharExtension.cs" />
     <Compile Include="Assets\GeneralScripts\Utility\ColorExtensions.cs" />
     <Compile Include="Assets\GeneralScripts\Utility\FloatExtensions.cs" />
+    <Compile Include="Assets\GeneralScripts\Utility\GameObjectExtension.cs" />
     <Compile Include="Assets\GeneralScripts\Utility\GameObjectFinder.cs" />
     <Compile Include="Assets\GeneralScripts\Utility\GlobalRandom.cs" />
     <Compile Include="Assets\GeneralScripts\Utility\Tags.cs" />

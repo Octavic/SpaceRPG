@@ -59,6 +59,11 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		public Color HighestSecurityColor;
 
 		/// <summary>
+		/// Transform for the path's parent
+		/// </summary>
+		public Transform PathParentTransform;
+
+		/// <summary>
 		/// Gets the current instance
 		/// </summary>
 		public static GalaxyMapBehavior CurrentInstance
@@ -188,7 +193,14 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		/// <param name="path">The target path to be rendered</param>
 		private void RenderPath(GalaxyMapPath path)
 		{
+			// Delete old path if applicable
+			this.PathParentTransform.gameObject.DestroyAllChildren();
 
+			for (int i = 1; i < path.Nodes.Count; i++)
+			{
+				var prev = path.Nodes[i - 1];
+				var cur = path.Nodes[i];
+			}
 		}
     }
 }

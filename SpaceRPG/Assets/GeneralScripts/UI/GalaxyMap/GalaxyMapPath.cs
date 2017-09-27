@@ -227,7 +227,7 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		/// <param name="from">source coordinate</param>
 		/// <param name="to">destination coordinate</param>
 		/// <returns>coordinate of each step</returns>
-		private static MapCoordinate CalcStep(MapCoordinate from, MapCoordinate to)
+		public static MapCoordinate CalcStep(MapCoordinate from, MapCoordinate to)
 		{
 			// Check to make sure they are on the same row/column
 			if (from.X != to.X && from.Y != to.Y)
