@@ -91,7 +91,7 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		/// <summary>
 		/// The object that this camera is currently focusing on
 		/// </summary>
-		private Transform _focusTransform;
+		private GalaxyMapTileBehavior _focusTile;
 
 		/// <summary>
 		/// The default depth of the camera
@@ -99,10 +99,17 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		private float _defaultZ;
 
 		/// <summary>
-		/// Generates a new path
+		/// Used for tile info ui
 		/// </summary>
-		public void GeneratePath()
+		public void GenerateSafestPath()
 		{
+			GalaxyMapBehavior.CurrentInstance.GeneratePath(GalaxyMapPathPriorityEnum.LeastCrimeRating,	
+				this._focusTile.Coordinate);
+		}
+		public void GenerateFastestPath()
+		{
+			GalaxyMapBehavior.CurrentInstance.GeneratePath(GalaxyMapPathPriorityEnum.MostFuelEfficient,
+				this._focusTile.Coordinate);
 		}
 
 		/// <summary>
@@ -123,7 +130,7 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 			if (scroll != 0)
 			{
 				this.CurCameraSize -= scroll;
-				this._focusTransform = null;
+				this._focusTile = null;
 			}
 
 			// If left click is down, pan the map
@@ -133,10 +140,10 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 				var mouseY = Input.GetAxis("MouseY");
 				if (Math.Abs(mouseX) > 0.5f || Math.Abs(mouseY) > 0.5f)
 				{
+					this._focusTile = null;
 					this.TileInfo.gameObject.SetActive(false);
 				}
 
-				this._focusTransform = null;
 				this.transform.position -= new Vector3(mouseX, mouseY) * this.PanScale * this.CurCameraSize;
 			}
 			// On right click, pan to the tile clicked and show info
@@ -148,17 +155,17 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 					var hitTile = hit.collider.gameObject.GetComponent<GalaxyMapTileBehavior>();
 					if (hitTile != null)
 					{
-						this._focusTransform = hit.collider.gameObject.transform;
+						this._focusTile = hitTile;
 						this.TileInfo.RenderTile(hitTile);
 					}
 				}
 			}
 
-			if (this._focusTransform != null)
+			if (this._focusTile != null)
 			{
 				this.transform.position = Vector3.Lerp(
 					this.transform.position, 
-					new Vector3(this._focusTransform.position.x, this._focusTransform.position.y, _defaultZ), 
+					new Vector3(this._focusTile.transform.position.x, this._focusTile.transform.position.y, _defaultZ), 
 					0.15f);
 				this.CurCameraSize= this.CurCameraSize.Lerp(3, 0.15f);
 			}

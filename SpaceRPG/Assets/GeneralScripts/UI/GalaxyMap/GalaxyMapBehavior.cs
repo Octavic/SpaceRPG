@@ -34,6 +34,16 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		public GameObject AsteroidPrefab;
 
 		/// <summary>
+		/// Prefab for a section of the path
+		/// </summary>
+		public GameObject PathSectionPrefab;
+
+		/// <summary>
+		/// Prefab for the path's node
+		/// </summary>
+		public GameObject PathNodePrefab;
+
+		/// <summary>
 		/// Width of the map
 		/// </summary>
 		public int MapWidth;
@@ -136,6 +146,16 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		}
 
 		/// <summary>
+		/// Generates a path with the given priority
+		/// </summary>
+		/// <param name="priority">target priority</param>
+		public void GeneratePath(GalaxyMapPathPriorityEnum priority, MapCoordinate destination)
+		{
+			var path = new GalaxyMapPath(this.Map, new MapCoordinate(0, 0), destination, priority);
+			this.RenderPath(path);
+		}
+
+		/// <summary>
 		/// Called once in the beginning for initialization
 		/// </summary>
 		protected void Start()
@@ -188,6 +208,16 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		}
 
 		/// <summary>
+		/// generates a single node
+		/// </summary>
+		/// <param name="node">node</param>
+		private void GeneratePathNode(MapCoordinate node)
+		{
+			var newNode = Instantiate(this.PathNodePrefab, this.PathParentTransform);
+			newNode.transform.localPosition = new Vector3(node.X, node.Y) * this.TileSize;
+		}
+
+		/// <summary>
 		/// Renders the map onto the map
 		/// </summary>
 		/// <param name="path">The target path to be rendered</param>
@@ -196,10 +226,29 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 			// Delete old path if applicable
 			this.PathParentTransform.gameObject.DestroyAllChildren();
 
+			// Generate the first node
+			this.GeneratePathNode(path.Nodes[0]);
+
+			// Generate the new  path
 			for (int i = 1; i < path.Nodes.Count; i++)
 			{
 				var prev = path.Nodes[i - 1];
-				var cur = path.Nodes[i];
+				var next = path.Nodes[i];
+				this.GeneratePathNode(next);
+
+				var step = GalaxyMapPath.CalcStep(prev, next);
+				var cur = prev;
+
+				// Generate sections
+				while (cur != next)
+				{
+					var newPath = Instantiate(this.PathSectionPrefab, this.PathParentTransform);
+					newPath.transform.localPosition = new Vector3(
+						(0.5f * step.X + cur.X) * this.TileSize, 
+						(0.5f * step.Y + cur.Y) * this.TileSize);
+					newPath.transform.localEulerAngles = new Vector3(0, 0, Mathf.Atan2(step.Y, step.X) * Mathf.Rad2Deg);
+					cur = cur + step;
+				}
 			}
 		}
     }
