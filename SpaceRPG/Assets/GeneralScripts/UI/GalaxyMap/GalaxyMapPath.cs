@@ -124,8 +124,41 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 			this.Simplify();
 		}
 
+		private enum MapNodeDirection
+		{
+			Up,
+			Down,
+			Left,
+			Right,
+			None
+		}
 
-		public void GenerateCrimeCostMap(MapCoordinate cur, Dictionary<MapCoordinate, float> totalCrimeToDest, GalaxyMapData map)
+		private class MapNodeData
+		{
+			private static List<MapCoordinate> directionVectors = new List<MapCoordinate>()
+			{
+				new MapCoordinate(0,1),
+				new MapCoordinate(0,-1),
+				new MapCoordinate(-1,0),
+				new MapCoordinate(1,0),
+				new MapCoordinate(0,0)
+			};
+			public float Total { get; set; }
+			public MapNodeDirection SourceDirection { get; set; }
+			public List<MapCoordinate> Dependencies { get; private set; }
+			public MapNodeData(float total, MapNodeDirection sourceDirection)
+			{
+				this.Total = total;
+				this.SourceDirection = sourceDirection;
+				this.Dependencies = new List<MapCoordinate>();
+			}
+			public MapCoordinate GetSourceCoordiante()
+			{
+				return MapNodeData.directionVectors[(int)this.SourceDirection];
+			}
+		}
+
+		private void GenerateCrimeCostMap(MapCoordinate cur, Dictionary<MapCoordinate, float> totalCrimeToDest, GalaxyMapData map)
 		{
 			var curValue = totalCrimeToDest[cur];
 			var validCoors = map.GetSurroundingCoordinates(cur);
@@ -141,6 +174,7 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 					if (existValue > curValue)
 					{
 						totalCrimeToDest[validCoor] = checkValue;
+						this.UpdateCrimeCostMap(validCoor, totalCrimeToDest, map);
 					}
 				}
 				else 
@@ -156,6 +190,30 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		}
 
 		/// <summary>
+		/// Updates the crime sum map
+		/// </summary>
+		/// <param name="cur">node to be updated</param>
+		/// <param name="totalCrimeToDest">the hash map</param>
+		/// <param name="map">galaxy map</param>
+		private void UpdateCrimeCostMap(MapCoordinate cur, Dictionary<MapCoordinate, float> totalCrimeToDest, GalaxyMapData map)
+		{
+			var curValue = map[cur];
+			var curTotal = totalCrimeToDest[cur];
+			var neighbors = map.GetSurroundingCoordinates(cur);
+			foreach (var neighbor in neighbors)
+			{
+				var newPossible = curTotal + map[neighbor].CrimeRating;
+				float neighborTotal;
+				if (totalCrimeToDest.TryGetValue(neighbor, out neighborTotal) && neighborTotal > newPossible)
+				{
+					totalCrimeToDest[neighbor] = newPossible;
+					this.UpdateCrimeCostMap(neighbor, totalCrimeToDest, map);
+				}
+			}
+		}
+
+
+		/// <summary>
 		/// Initializes a default instance of the <see cref="GalaxyMapPath"/> class
 		/// </summary>
 		public GalaxyMapPath()
@@ -164,7 +222,7 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		}
 
 		/// <summary>
-		/// Simplies the nodes 
+		/// Simplifies the nodes 
 		/// </summary>
 		public void Simplify()
 		{
