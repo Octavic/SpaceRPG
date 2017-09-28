@@ -212,7 +212,6 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 			}
 		}
 
-
 		/// <summary>
 		/// Initializes a default instance of the <see cref="GalaxyMapPath"/> class
 		/// </summary>
