@@ -103,8 +103,10 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		/// </summary>
 		public void GenerateSafestPath()
 		{
+			var testX = (int)(this.transform.position.x+0.95f / 0.96f);
+			var testY = (int)(this.transform.position.y+0.95f / 0.96f);
 			GalaxyMapBehavior.CurrentInstance.GeneratePath(GalaxyMapPathPriorityEnum.LeastCrimeRating,	
-				this._focusTile.Coordinate);
+				new MapCoordinate(testX, testY));
 		}
 		public void GenerateFastestPath()
 		{
