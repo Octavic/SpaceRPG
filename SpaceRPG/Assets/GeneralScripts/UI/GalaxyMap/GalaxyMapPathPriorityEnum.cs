@@ -12,6 +12,6 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 	public enum GalaxyMapPathPriorityEnum
 	{
 		MostFuelEfficient,
-		LeastCrimeRating,
+		LeastCrimeRating
 	}
 }

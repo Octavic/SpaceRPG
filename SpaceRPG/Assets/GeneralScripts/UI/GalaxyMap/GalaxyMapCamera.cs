@@ -29,6 +29,11 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		public float MaxSize;
 
 		/// <summary>
+		/// The size  of the camera when right clicking on a tile
+		/// </summary>
+		public float FocusSize;
+
+		/// <summary>
 		/// THe speed at which the camera pans
 		/// </summary>
 		public float PanScale;
@@ -173,7 +178,7 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 					this.transform.position, 
 					new Vector3(this._focusTile.transform.position.x, this._focusTile.transform.position.y, _defaultZ), 
 					0.15f);
-				this.CurCameraSize= this.CurCameraSize.Lerp(3, 0.15f);
+				this.CurCameraSize= this.CurCameraSize.Lerp(this.FocusSize, 0.15f);
 			}
 		}
 	}
