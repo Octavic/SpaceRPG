@@ -11,6 +11,7 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Text;
+	using UnityEngine;
 
 	/// <summary>
 	/// A path from a given node to a target node
@@ -89,125 +90,105 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 
 			// A hash map of every single coordinate and the total crime rating when traveling from there to the destination
 			var totalCrimeToDest = new Dictionary<MapCoordinate, float>();
+			var updateQueue = new Queue<MapCoordinate>();
+			foreach (var validCoor in map.GetSurroundingCoordinates(destination))
+			{
+				updateQueue.Enqueue(validCoor);
+			}
 			totalCrimeToDest[destination] = map[destination].CrimeRating;
-			this.GenerateCrimeCostMap(destination, totalCrimeToDest, map);
+			this.GenerateCrimeCostMap(updateQueue, totalCrimeToDest, map);
 
 			this.Nodes = new List<MapCoordinate>();
 
 			// Generate nodes
 			var curCoor = source;
+			this.Nodes.Add(source);
 			while (curCoor != destination)
 			{
-				this.Nodes.Add(curCoor);
-
 				// Get a list of available nodes
 				var surroundCoors = map.GetSurroundingCoordinates(curCoor);
-				var curWinnerCoor = surroundCoors[0];
-				var curWinnerValue = totalCrimeToDest[curWinnerCoor];
-
+				var winCoor = surroundCoors[0];
+				var winValue = totalCrimeToDest[winCoor];
 				for (int i = 1; i < surroundCoors.Count; i++)
 				{
-					var curCheckCoor = surroundCoors[i];
-					var curValue = totalCrimeToDest[curCheckCoor];
-					if (curValue < curWinnerValue)
+					var checkCoor = surroundCoors[i];
+					if (winValue > totalCrimeToDest[checkCoor])
 					{
-						curWinnerValue = curValue;
-						curWinnerCoor = curCheckCoor;
+						winValue = totalCrimeToDest[checkCoor];
+						winCoor = checkCoor;
 					}
 				}
-
-				this.Nodes.Add(curWinnerCoor);
-				curCoor = curWinnerCoor;
+				this.Nodes.Add(winCoor);
+				curCoor = winCoor;
 			}
 
 			this.Nodes.Add(destination);
 			this.Simplify();
 		}
-
-		private enum MapNodeDirection
-		{
-			Up,
-			Down,
-			Left,
-			Right,
-			None
-		}
-
-		private class MapNodeData
-		{
-			private static List<MapCoordinate> directionVectors = new List<MapCoordinate>()
-			{
-				new MapCoordinate(0,1),
-				new MapCoordinate(0,-1),
-				new MapCoordinate(-1,0),
-				new MapCoordinate(1,0),
-				new MapCoordinate(0,0)
-			};
-			public float Total { get; set; }
-			public MapNodeDirection SourceDirection { get; set; }
-			public List<MapCoordinate> Dependencies { get; private set; }
-			public MapNodeData(float total, MapNodeDirection sourceDirection)
-			{
-				this.Total = total;
-				this.SourceDirection = sourceDirection;
-				this.Dependencies = new List<MapCoordinate>();
-			}
-			public MapCoordinate GetSourceCoordiante()
-			{
-				return MapNodeData.directionVectors[(int)this.SourceDirection];
-			}
-		}
-
-		private void GenerateCrimeCostMap(MapCoordinate cur, Dictionary<MapCoordinate, float> totalCrimeToDest, GalaxyMapData map)
-		{
-			var curValue = totalCrimeToDest[cur];
-			var validCoors = map.GetSurroundingCoordinates(cur);
-
-			for (int i = validCoors.Count - 1; i >= 0; i--)
-			{
-				var validCoor = validCoors[i];
-				var checkValue = curValue + map[validCoor].CrimeRating;
-				float existValue;
-				if (totalCrimeToDest.TryGetValue(validCoor, out existValue))
-				{
-					validCoors.RemoveAt(i);
-					if (existValue > curValue)
-					{
-						totalCrimeToDest[validCoor] = checkValue;
-						this.UpdateCrimeCostMap(validCoor, totalCrimeToDest, map);
-					}
-				}
-				else 
-				{
-					totalCrimeToDest[validCoor] = checkValue;
-				}
-			}
-
-			foreach (var validCoor in validCoors)
-			{
-				GenerateCrimeCostMap(validCoor, totalCrimeToDest, map);
-			}
-		}
-
+		
 		/// <summary>
-		/// Updates the crime sum map
+		/// Updates all of the nodes in the queue
 		/// </summary>
-		/// <param name="cur">node to be updated</param>
-		/// <param name="totalCrimeToDest">the hash map</param>
-		/// <param name="map">galaxy map</param>
-		private void UpdateCrimeCostMap(MapCoordinate cur, Dictionary<MapCoordinate, float> totalCrimeToDest, GalaxyMapData map)
+		/// <param name="updateQueue">the list of nodes to be updated</param>
+		/// <param name="totalCrimeToDest">the hash map containing the result</param>
+		/// <param name="map">the galaxy map data</param>
+		private void GenerateCrimeCostMap(
+			Queue<MapCoordinate> updateQueue, 
+			Dictionary<MapCoordinate, float> totalCrimeToDest, 
+			GalaxyMapData map)
 		{
-			var curValue = map[cur];
-			var curTotal = totalCrimeToDest[cur];
-			var neighbors = map.GetSurroundingCoordinates(cur);
-			foreach (var neighbor in neighbors)
+			var pendingCoors = new HashSet<MapCoordinate>();
+			foreach (var item in updateQueue)
 			{
-				var newPossible = curTotal + map[neighbor].CrimeRating;
-				float neighborTotal;
-				if (totalCrimeToDest.TryGetValue(neighbor, out neighborTotal) && neighborTotal > newPossible)
+				pendingCoors.Add(item);
+			}
+			while (updateQueue.Count > 0)
+			{
+				var curCoor = updateQueue.Dequeue();
+				var curValue = map[curCoor].CrimeRating;
+				float? curTotal = null;
+				if (totalCrimeToDest.ContainsKey(curCoor))
 				{
-					totalCrimeToDest[neighbor] = newPossible;
-					this.UpdateCrimeCostMap(neighbor, totalCrimeToDest, map);
+					curTotal = totalCrimeToDest[curCoor];
+				}
+
+				foreach (var neighborCoor in map.GetSurroundingCoordinates(curCoor))
+				{
+					float neighborTotal;
+					var neighborValue = map[neighborCoor].CrimeRating;
+					if (!totalCrimeToDest.TryGetValue(neighborCoor, out neighborTotal))
+					{
+						// If the neighbor coordinate has not been touched, add it to the update queue
+						if (!pendingCoors.Contains(neighborCoor))
+						{
+							updateQueue.Enqueue(neighborCoor);
+							pendingCoors.Add(neighborCoor);
+						}
+						continue;
+					}
+
+					// The neighbor coordinate has been touched, if there's no current total, then assign
+					if (curTotal == null)
+					{
+						curTotal = neighborTotal + curValue;
+						totalCrimeToDest[curCoor] = curTotal.Value;
+						continue;
+					}
+
+					// Both cur and neighbor nodes touched, compared and update
+					float totalThroughNeighbor = neighborTotal + curValue;
+					if (curTotal > totalThroughNeighbor)
+					{
+						curTotal = totalThroughNeighbor;
+						totalCrimeToDest[curCoor] = totalThroughNeighbor;
+						continue;
+					}
+
+					float totalThroughCur = curTotal.Value + neighborValue;
+					if (neighborTotal > totalThroughCur)
+					{
+						totalCrimeToDest[neighborCoor] = totalThroughCur;
+					}
 				}
 			}
 		}
