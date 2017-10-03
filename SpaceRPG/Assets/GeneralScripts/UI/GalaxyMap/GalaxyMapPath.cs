@@ -125,6 +125,54 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 			this.Nodes.Add(destination);
 			this.Simplify();
 		}
+
+		/// <summary>
+		/// Each node of the cost dictionary
+		/// </summary>
+		private class CostMapNode
+		{
+			/// <summary>
+			/// The average crime rate
+			/// </summary>
+			public float Average;
+
+			/// <summary>
+			/// The coordinate
+			/// </summary>
+			public MapCoordinate Coordinate;
+
+			/// <summary>
+			/// How many tile was calculated for the previous path, aka the weight
+			/// </summary>
+			public int Count;
+
+			/// <summary>
+			/// Which tile did this node originate from
+			/// </summary>
+			public CostMapNode Source;
+
+			/// <summary>
+			/// A list of child nodes that depends on this node
+			/// </summary>
+			public List<CostMapNode> Children;
+
+			/// <summary>
+			/// Creates a new instance of the <see cref="CostMapNode"/> class 
+			/// </summary>
+			/// <param name="thisCrimeRating">The crime rating for this tile</param>
+			/// <param name="coordinate">The coordinate for this node</param>
+			/// <param name="from">Which node this node originated from</param>
+			public CostMapNode(float thisCrimeRating, MapCoordinate coordinate, CostMapNode from = null)
+			{
+				var fromAverage = from != null ? from.Average : 0;
+				var fromCount = from != null ? from.Count : 0;
+				this.Count = fromCount + 1;
+				this.Average = (fromAverage * fromCount + thisCrimeRating) / this.Count;
+				this.Source = from;
+				this.Children = new List<CostMapNode>();
+				this.Coordinate = coordinate;
+			}
+		}
 		
 		/// <summary>
 		/// Updates all of the nodes in the queue
@@ -134,63 +182,20 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		/// <param name="map">the galaxy map data</param>
 		private void GenerateCrimeCostMap(
 			Queue<MapCoordinate> updateQueue, 
-			Dictionary<MapCoordinate, float> totalCrimeToDest, 
+			Dictionary<MapCoordinate, CostMapNode> totalCrimeToDest, 
 			GalaxyMapData map)
 		{
-			var pendingCoors = new HashSet<MapCoordinate>();
-			foreach (var item in updateQueue)
+			
+		}
+
+		private void recurUpdate(CostMapNode node, GalaxyMapData)
+		{
+			if (node.Source == null)
 			{
-				pendingCoors.Add(item);
+				return;
 			}
-			while (updateQueue.Count > 0)
-			{
-				var curCoor = updateQueue.Dequeue();
-				var curValue = map[curCoor].CrimeRating;
-				float? curTotal = null;
-				if (totalCrimeToDest.ContainsKey(curCoor))
-				{
-					curTotal = totalCrimeToDest[curCoor];
-				}
 
-				foreach (var neighborCoor in map.GetSurroundingCoordinates(curCoor))
-				{
-					float neighborTotal;
-					var neighborValue = map[neighborCoor].CrimeRating;
-					if (!totalCrimeToDest.TryGetValue(neighborCoor, out neighborTotal))
-					{
-						// If the neighbor coordinate has not been touched, add it to the update queue
-						if (!pendingCoors.Contains(neighborCoor))
-						{
-							updateQueue.Enqueue(neighborCoor);
-							pendingCoors.Add(neighborCoor);
-						}
-						continue;
-					}
-
-					// The neighbor coordinate has been touched, if there's no current total, then assign
-					if (curTotal == null)
-					{
-						curTotal = neighborTotal + curValue;
-						totalCrimeToDest[curCoor] = curTotal.Value;
-						continue;
-					}
-
-					// Both cur and neighbor nodes touched, compared and update
-					float totalThroughNeighbor = neighborTotal + curValue;
-					if (curTotal > totalThroughNeighbor)
-					{
-						curTotal = totalThroughNeighbor;
-						totalCrimeToDest[curCoor] = totalThroughNeighbor;
-						continue;
-					}
-
-					float totalThroughCur = curTotal.Value + neighborValue;
-					if (neighborTotal > totalThroughCur)
-					{
-						totalCrimeToDest[neighborCoor] = totalThroughCur;
-					}
-				}
-			}
+			var potentialAvg = node.Source.Average * node.Source.
 		}
 
 		/// <summary>
