@@ -44,6 +44,11 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		public TileInfoBehavior TileInfo;
 
 		/// <summary>
+		/// Prefab for the focus tile icon
+		/// </summary>
+		public GameObject FocusTileIndicatorPrefab;
+
+		/// <summary>
 		/// Gets or sets the current camera size
 		/// </summary>
 		private float CurCameraSize
@@ -99,6 +104,16 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		private GalaxyMapTileBehavior _focusTile;
 
 		/// <summary>
+		/// The last clicked title for rendering tile info
+		/// </summary>
+		private GalaxyMapTileBehavior _lastclickedTile;
+
+		/// <summary>
+		/// The indicator for focus tile
+		/// </summary>
+		private GameObject _lastFocusTileIndicator;
+
+		/// <summary>
 		/// The default depth of the camera
 		/// </summary>
 		private float _defaultZ;
@@ -108,10 +123,8 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		/// </summary>
 		public void GenerateSafestPath()
 		{
-			var testX = (int)(this.transform.position.x + 0.95f / 0.96f);
-			var testY = (int)(this.transform.position.y + 0.95f / 0.96f);
 			GalaxyMapBehavior.CurrentInstance.GeneratePath(GalaxyMapPathPriorityEnum.LeastCrimeRating,
-				new MapCoordinate(testX, testY));
+				this._lastclickedTile.Coordinate);
 		}
 
 		/// <summary>
@@ -120,7 +133,7 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		public void GenerateFastestPath()
 		{
 			GalaxyMapBehavior.CurrentInstance.GeneratePath(GalaxyMapPathPriorityEnum.MostFuelEfficient,
-				this._focusTile.Coordinate);
+				this._lastclickedTile.Coordinate);
 		}
 
 		/// <summary>
@@ -137,6 +150,7 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 		/// </summary>
 		protected void Update()
 		{
+			// Control zoom
 			var scroll = Input.GetAxis("MouseScroll");
 			if (scroll != 0)
 			{
@@ -152,7 +166,6 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 				if (Math.Abs(mouseX) > 0.5f || Math.Abs(mouseY) > 0.5f)
 				{
 					this._focusTile = null;
-					this.TileInfo.gameObject.SetActive(false);
 				}
 
 				this.transform.position -= new Vector3(mouseX, mouseY) * this.PanScale * this.CurCameraSize;
@@ -167,7 +180,18 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 					if (hitTile != null)
 					{
 						this._focusTile = hitTile;
+						this._lastclickedTile = hitTile;
 						this.TileInfo.RenderTile(hitTile);
+
+						// Create the focus tile indicator
+						if (this._lastFocusTileIndicator != null)
+						{
+							Destroy(this._lastFocusTileIndicator);
+						}
+
+						var newIndicator = Instantiate(this.FocusTileIndicatorPrefab);
+						newIndicator.transform.position = hitTile.transform.position;
+						this. _lastFocusTileIndicator = newIndicator;
 					}
 				}
 			}
