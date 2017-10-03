@@ -31,11 +31,6 @@ sysinfo.txt
 *.unitypackage
 *.meta
 *.cs.meta
-SpaceRPG/Library/ScriptAssemblies/Assembly-CSharp.dll.mdb
-SpaceRPG/Library/ScriptAssemblies/Assembly-CSharp.dll
+SpaceRPG/Library/*
 *.mdb
-SpaceRPG/Library/metadata/62/628f0f5e13d3b6a49b7a7e78bed28c94
-SpaceRPG/Library/assetDatabase3
-SpaceRPG/Library/CurrentLayout.dwlt
-SpaceRPG/Library/metadata/01/016b62986a98fda4fafd99611c8723f0.info
-SpaceRPG/Library/metadata/62/628f0f5e13d3b6a49b7a7e78bed28c94
+*.dwlt
