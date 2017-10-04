@@ -168,5 +168,15 @@ namespace SpaceRPGTests_new.Assets.GeneralScripts.UI.GalaxyMap
 			Assert.AreEqual(newPath.Nodes[2], new MapCoordinate(2, 0));
 			Assert.AreEqual(newPath.Nodes[3], dest);
 		}
+
+		[TestMethod()]
+		public void GenerateSafestPath_BigMap()
+		{
+			var map = new GalaxyMapData(40, 40);
+			
+			var newPath = new GalaxyMapPath(map, new MapCoordinate(0,0), new MapCoordinate(35,35), GalaxyMapPathPriorityEnum.LeastCrimeRating);
+			Assert.AreEqual(newPath.Nodes[0], new MapCoordinate(0,0));
+			Assert.AreEqual(newPath.Nodes.Last(), new MapCoordinate(35,35));
+		}
 	}
 }

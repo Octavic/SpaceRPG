@@ -1,15 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿//  --------------------------------------------------------------------------------------------------------------------
+//  <copyright file="TagNames.cs">
+//    Copyright (c) Yifei Xu .  All rights reserved.
+//  </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
 
 namespace Assets.GeneralScripts.Dialogue
 {
-	public static class TagNames
+	/// <summary>
+	/// A collection of common tag names
+	/// </summary>
+	public enum TagNames
 	{
-		public const string RETURN = "RETURN";
-		public const string JUMP = "JUMP";
-		public const string IF = "IF";
-		public const string ENDIF = "ENDIF";
+		RETURN,
+		JUMP,
+		IF,
+		ENDIF
 	}
 }
