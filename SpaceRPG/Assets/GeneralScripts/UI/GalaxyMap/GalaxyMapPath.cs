@@ -89,40 +89,28 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 			}
 
 			// A hash map of every single coordinate and the total crime rating when traveling from there to the destination
-			var totalCrimeToDest = new Dictionary<MapCoordinate, float>();
+			var totalCrimeToDest = new Dictionary<MapCoordinate, CostMapNode>();
 			var updateQueue = new Queue<MapCoordinate>();
 			foreach (var validCoor in map.GetSurroundingCoordinates(destination))
 			{
 				updateQueue.Enqueue(validCoor);
 			}
-			totalCrimeToDest[destination] = map[destination].CrimeRating;
+
+			totalCrimeToDest[destination] = new CostMapNode(map[destination].CrimeRating, destination, null);
 			this.GenerateCrimeCostMap(updateQueue, totalCrimeToDest, map);
 
 			this.Nodes = new List<MapCoordinate>();
 
 			// Generate nodes
-			var curCoor = source;
-			this.Nodes.Add(source);
-			while (curCoor != destination)
+			var curNode = totalCrimeToDest[source];
+			while (curNode.Coordinate != destination)
 			{
-				// Get a list of available nodes
-				var surroundCoors = map.GetSurroundingCoordinates(curCoor);
-				var winCoor = surroundCoors[0];
-				var winValue = totalCrimeToDest[winCoor];
-				for (int i = 1; i < surroundCoors.Count; i++)
-				{
-					var checkCoor = surroundCoors[i];
-					if (winValue > totalCrimeToDest[checkCoor])
-					{
-						winValue = totalCrimeToDest[checkCoor];
-						winCoor = checkCoor;
-					}
-				}
-				this.Nodes.Add(winCoor);
-				curCoor = winCoor;
+				this.Nodes.Add(curNode.Coordinate);
+				curNode = curNode.Source;
 			}
 
 			this.Nodes.Add(destination);
+
 			this.Simplify();
 		}
 
@@ -134,7 +122,7 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 			/// <summary>
 			/// The average crime rate
 			/// </summary>
-			public float Average;
+			public float RatingSum;
 
 			/// <summary>
 			/// The coordinate
@@ -142,12 +130,7 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 			public MapCoordinate Coordinate;
 
 			/// <summary>
-			/// How many tile was calculated for the previous path, aka the weight
-			/// </summary>
-			public int Count;
-
-			/// <summary>
-			/// Which tile did this node originate from
+			/// Which node does this node depend on
 			/// </summary>
 			public CostMapNode Source;
 
@@ -164,13 +147,43 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 			/// <param name="from">Which node this node originated from</param>
 			public CostMapNode(float thisCrimeRating, MapCoordinate coordinate, CostMapNode from = null)
 			{
-				var fromAverage = from != null ? from.Average : 0;
-				var fromCount = from != null ? from.Count : 0;
-				this.Count = fromCount + 1;
-				this.Average = (fromAverage * fromCount + thisCrimeRating) / this.Count;
+				var fromSum = from != null ? from.RatingSum : 0;
+				this.RatingSum = fromSum + thisCrimeRating;
 				this.Source = from;
 				this.Children = new List<CostMapNode>();
+				if (from != null)
+				{
+					from.Children.Add(this);
+				}
 				this.Coordinate = coordinate;
+			}
+
+			/// <summary>
+			/// switch to a new source
+			/// </summary>
+			/// <param name="newSource">The new source</param>
+			public void SwitchTo(CostMapNode newSource)
+			{
+				this.Source.Children.Remove(this);
+				this.Source = newSource;
+				newSource.Children.Add(this);
+			}
+
+			/// <summary>
+			/// Calculates the potential average if this node comes from the given node
+			/// </summary>
+			/// <param name="from">originate node</param>
+			/// <param name="thisCrimeRating">Crime rating for this tile</param>
+			/// <returns>Potential average</returns>
+			public float SumFrom(CostMapNode from, float thisCrimeRating)
+			{
+				var fromSum = from != null ? from.RatingSum : 0;
+				return fromSum + thisCrimeRating;
+			}
+
+			public float AverageTo(float newCrimeRating)
+			{
+				return this.RatingSum + newCrimeRating;
 			}
 		}
 		
@@ -185,17 +198,85 @@ namespace Assets.GeneralScripts.UI.GalaxyMap
 			Dictionary<MapCoordinate, CostMapNode> totalCrimeToDest, 
 			GalaxyMapData map)
 		{
-			
+			var pendingCoors = new HashSet<MapCoordinate>();
+
+			while (updateQueue.Count > 0)
+			{
+				var curCoor = updateQueue.Dequeue();
+				var curRating = map[curCoor].CrimeRating;
+
+				CostMapNode winner = null;
+				float winnerAverage = 0.0f ;
+
+				var potentialImprovements = new List<CostMapNode>();
+				foreach (var neighborCoor in map.GetSurroundingCoordinates(curCoor))
+				{
+					CostMapNode neighborNode;
+
+					//  If the neighbor is null, check if it's already waiting in queue
+					if (!totalCrimeToDest.TryGetValue(neighborCoor, out neighborNode))
+					{
+						if (!pendingCoors.Contains(neighborCoor))
+						{
+							pendingCoors.Add(neighborCoor);
+							updateQueue.Enqueue(neighborCoor);
+						}
+						continue;
+					}
+
+					// Neighbor is available for comparison
+					if (winner == null)
+					{
+						winner = neighborNode;
+						winnerAverage = neighborNode.AverageTo(curRating);
+						continue;
+					}
+
+					var neightborAvg = neighborNode.AverageTo(curRating);
+					if (neightborAvg < winnerAverage)
+					{
+						potentialImprovements.Add(winner);
+						winner = neighborNode;
+						winnerAverage = neightborAvg;
+					}
+				}
+
+				// Finish scan, winner is best route to take
+				var curNode = new CostMapNode(curRating, curCoor, winner);
+				totalCrimeToDest[curCoor] = curNode;
+
+				// Go through potential nodes and see if they can be improved
+				foreach (var potentialNode in potentialImprovements)
+				{
+					if (curNode.AverageTo(map[potentialNode.Coordinate].CrimeRating) < potentialNode.RatingSum)
+					{
+						potentialNode.SwitchTo(curNode);
+						recurUpdate(potentialNode, map);
+					}
+				}
+			}
 		}
 
-		private void recurUpdate(CostMapNode node, GalaxyMapData)
+		private void recurUpdate(CostMapNode node, GalaxyMapData map)
 		{
 			if (node.Source == null)
 			{
 				return;
 			}
 
-			var potentialAvg = node.Source.Average * node.Source.
+			var potentialSum = node.AverageTo(map[node.Coordinate].CrimeRating);
+
+			// Check if the current node is worth updating
+			if (node.RatingSum <= potentialSum)
+			{
+				return;
+			}
+
+			node.RatingSum = potentialSum;
+			foreach (var child in node.Children)
+			{
+				recurUpdate(child, map);
+			}
 		}
 
 		/// <summary>

@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2017
+# Visual Studio 2015
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceRPG", "SpaceRPG.csproj", "{72C099BC-CB7C-C150-B3FC-C808E48F4428}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceRPGTests_new", "..\SpaceRPGTests_new\SpaceRPGTests_new.csproj", "{6A5BB48D-DBE4-4735-998D-DE65AC87E171}"
