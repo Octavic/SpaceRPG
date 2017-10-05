@@ -29,7 +29,7 @@ namespace Assets.GeneralScripts.Dialogue.Tests
 		{
 			var item = new PlayerDialogItem();
 			var data = new Queue<string>();
-			data.Enqueue("    Hi<1>");
+			data.Enqueue("    Hi<JUMP 1>");
 			data.Enqueue("<RETURN 1>");
 			Assert.AreEqual(item.TryConsume(data), true);
 			Assert.AreEqual(item.Options.Count, 1);
@@ -59,8 +59,8 @@ namespace Assets.GeneralScripts.Dialogue.Tests
 		{
 			var item = new PlayerDialogItem();
 			var data = new Queue<string>();
-			data.Enqueue("    Hi<1>");
-			data.Enqueue("    Hello<2>");
+			data.Enqueue("    Hi<JUMP 1>");
+			data.Enqueue("    Hello<JUMP 2>");
 			data.Enqueue("<RETURN 1>");
 			Assert.AreEqual(item.TryConsume(data), true);
 			Assert.AreEqual(item.Options.Count, 2);

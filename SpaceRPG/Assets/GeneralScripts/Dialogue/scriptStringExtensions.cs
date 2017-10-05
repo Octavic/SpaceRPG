@@ -1,11 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿//  --------------------------------------------------------------------------------------------------------------------
+//  <copyright file="ScriptStringExtensions.cs">
+//    Copyright (c) Yifei Xu .  All rights reserved.
+//  </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
 
 namespace Assets.GeneralScripts.Dialogue
 {
-    public static class ScriptStringExtensions
+	using System.Linq;
+	using System.Text;
+
+	public static class ScriptStringExtensions
     {
         /// <summary>
         /// returns true if the given string is a comment
@@ -16,6 +20,16 @@ namespace Assets.GeneralScripts.Dialogue
         {
             return (string.IsNullOrEmpty(s) || s.StartsWith("#"));
         }
+
+		/// <summary>
+		/// Checks if the string is a player's line
+		/// </summary>
+		/// <param name="s">extension string</param>
+		/// <returns>true if the string is a player's line</returns>
+		public static bool IsPlayerLine(this string s)
+		{
+			return s[0] == '\t' || s.StartsWith("    ");
+		}
 
 		/// <summary>
 		/// Gets the tag of a certain line

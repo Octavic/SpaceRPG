@@ -60,21 +60,20 @@ namespace Assets.GeneralScripts.Dialogue
 				var curLine = data.Peek();
 
 				// if we  see a return statement or the line is an NPC line
-				if (curLine.StartsWith("<RETURN ") || !curLine.StartsWith("    "))
+				if (!curLine.IsPlayerLine())
 				{
 					return this.Options.Count > 0;
 				}
 
-				curLine = curLine.Trim();
-
-				var split = curLine.Split('<');
-				int branchSceneId = -1;
-				if (split.Length > 1)
+				string tagName;
+				string tagValue;
+				string content = curLine;
+				if (curLine.TryGetTagNameValue(out tagName, out tagValue))
 				{
-					branchSceneId = int.Parse(split[1].Substring(0, split[1].Length-1));
+					content = curLine.Substring(0, curLine.Length - tagName.Length - tagValue.Length - 3);
 				}
 
-				this.Options.Add(new PlayerDialogOption(split[0], branchSceneId));
+				this.Options.Add(new PlayerDialogOption(content.Trim(), string.IsNullOrEmpty(tagValue)?-1: int.Parse(tagValue)));
 				data.Dequeue();
 			}
 

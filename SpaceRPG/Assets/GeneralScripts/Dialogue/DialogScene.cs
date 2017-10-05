@@ -1,4 +1,9 @@
-﻿
+﻿//  --------------------------------------------------------------------------------------------------------------------
+//  <copyright file="DialogScene.cs">
+//    Copyright (c) Yifei Xu .  All rights reserved.
+//  </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
+
 namespace Assets.GeneralScripts.Dialogue
 {
     using System;
@@ -67,8 +72,8 @@ namespace Assets.GeneralScripts.Dialogue
         /// <returns>True if the consumed data was parsed with no error.</returns>
         public bool TryConsume(Queue<string> data)
         {
-			// Skip leading comment
-			if (data.Peek() == null)
+			// If reached end of stream
+			if (data.Count == 0)
 			{
 				return false;
 			}
@@ -76,7 +81,7 @@ namespace Assets.GeneralScripts.Dialogue
 			// Check if the first line is a valid scene starter
 			string tagName;
 			string tagValue;
-			if (!DialogTag.TryParse(data.Peek(), out tagName, out tagValue) || tagName != _sceneTag)
+			if (!data.Peek().TryGetTagNameValue(out tagName, out tagValue) || tagName != _sceneTag)
 			{
 				return false;
 			}
@@ -89,16 +94,18 @@ namespace Assets.GeneralScripts.Dialogue
             {
 				string nextTagName;
 				string nextTagValue;
-				if (data.Peek().TryGetTagNameValue(out nextTagName, out nextTagValue))
+				if (!data.Peek().IsPlayerLine() &&  data.Peek().TryGetTagNameValue(out nextTagName, out nextTagValue))
 				{
 					if (nextTagName == TagNames.RETURN.ToString())
 					{
 						this.ReturnValue = int.Parse(nextTagValue);
+						data.Dequeue();
 						return true;
 					}
 					if (nextTagName == TagNames.JUMP.ToString())
 					{
 						this.JumpSceneId = int.Parse(nextTagValue);
+						data.Dequeue();
 						return true;
 					}
 				}

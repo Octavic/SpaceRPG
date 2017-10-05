@@ -137,6 +137,7 @@
     <Compile Include="Assets\CombatScripts\Utility\Vector2Extension.cs" />
     <Compile Include="Assets\GeneralScripts\Dialogue\Conversation.cs" />
     <Compile Include="Assets\GeneralScripts\Dialogue\ConversationBehaviour.cs" />
+    <Compile Include="Assets\GeneralScripts\Dialogue\DialogBoxBehaviour.cs" />
     <Compile Include="Assets\GeneralScripts\Dialogue\DialogScene.cs" />
     <Compile Include="Assets\GeneralScripts\Dialogue\DialogTag.cs" />
     <Compile Include="Assets\GeneralScripts\Dialogue\IDialogItem.cs" />
