@@ -26,7 +26,7 @@ He was the kind of pirate that everyone loved.
 He robbed only the rich and corrupted, and never hurt an innocent fly.
 
 # Here let's introduce conditions. Certain things are only available if the conditions are met, and you do  it like this
-<IF Morale > 5>
+<IF Morale MORETHAN 5>
     Well, he sounds  like quite a man
     Doesn't matter, criminals need to be brought down, no matter how justified they may seem <JUMP 4>
 <ENDIF>

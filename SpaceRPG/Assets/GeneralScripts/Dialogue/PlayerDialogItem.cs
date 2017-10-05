@@ -60,7 +60,7 @@ namespace Assets.GeneralScripts.Dialogue
 				var curLine = data.Peek();
 
 				// if we  see a return statement or the line is an NPC line
-				if (curLine.StartsWith("{RETURN ") || !curLine.StartsWith("    "))
+				if (curLine.StartsWith("<RETURN ") || !curLine.StartsWith("    "))
 				{
 					return this.Options.Count > 0;
 				}

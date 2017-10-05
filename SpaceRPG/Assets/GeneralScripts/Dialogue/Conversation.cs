@@ -22,18 +22,23 @@ namespace Assets.GeneralScripts.Dialogue
 		/// Creates a  new instance  of the <see cref="Conversation"/> class 
 		/// </summary>
 		/// <param name="input">A list of unfiltered strings</param>
-		public Conversation(Queue<string> input)
+		public Conversation(IList<string> input)
 		{
 			var parsed = new Queue<string>();
-			while (input.Count > 0)
+			for(int i =0;i<input.Count;i++)
 			{
-				var line = input.Dequeue();
+				var line = input[i];
 				if (line.ShouldBeIgnored())
 				{
 					continue;
 				}
 
+				if (line.StartsWith("\t"))
+				{
+					line = line.Replace("\t", "    ");
+				}
 
+				parsed.Enqueue(line);
 			}
 
 			this.Scenes = new List<DialogScene>();

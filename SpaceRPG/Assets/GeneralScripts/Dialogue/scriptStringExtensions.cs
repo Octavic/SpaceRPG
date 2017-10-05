@@ -18,58 +18,87 @@ namespace Assets.GeneralScripts.Dialogue
         }
 
 		/// <summary>
-		/// Returns true if the string is a given tag
-		/// </summary>
-		/// <param name="s">extension string</param>
-		/// <param name="tag">target tag</param>
-		/// <returns>True if the string is this tag
-		/// Example: "<IF Morale > 5>" </returns>
-		public static bool IsTag(this string s, TagNames tag)
-		{
-			return (!string.IsNullOrEmpty(s) && s.StartsWith("<" + tag.ToString()));
-		}
-
-		/// <summary>
 		/// Gets the tag of a certain line
 		/// </summary>
 		/// <param name="s">extension string</param>
 		/// <returns>The tag of the string, null if unavailable</returns>
-		public static string GetTag(this string s)
+		public static bool TryGetTagNameValue(this string s, out string tagName, out string tagValue)
 		{
 			var trimmed = s.Trim();
-			if (trimmed.First() != '<' || trimmed.Last() != '>')
+			bool foundStart = false;
+			bool nameOver = false;
+			StringBuilder nameBuilder = new StringBuilder();
+			StringBuilder valueBuilder = new StringBuilder();
+			for (int i = 0; i < trimmed.Count(); i++)
 			{
-				return null;
+				var curChar = trimmed[i];
+
+				// If current char is a starter
+				if (curChar == '<')
+				{
+					// Duplicate, flush and restart name
+					if (foundStart)
+					{
+						foundStart = true;
+						nameBuilder = new StringBuilder();
+						valueBuilder = new StringBuilder();
+					}
+					// First starter character found, ready to read tag
+					else
+					{
+						foundStart = true;
+						continue;
+					}
+				}
+				// Current char is not a starter, and we have yet to find one. Ignore
+				else if (!foundStart)
+				{
+					continue;
+				}
+
+				// Found ending tag
+				if (curChar == '>')
+				{
+					// If we already found a starter, then complete
+					if (foundStart)
+					{
+						tagName = nameBuilder.ToString();
+						tagValue = valueBuilder.ToString();
+						return true;
+					}
+				}
+				// No starting tag, > is just part of dialog. Check for space
+				else if (curChar == ' ')
+				{
+					// If name is not over, it is now
+					if (!nameOver)
+					{
+						nameOver = true;
+					}
+					// Part of condition, append
+					else
+					{
+						valueBuilder.Append(curChar);
+					}
+				}
+				// Random character, append to name/value based on bool
+				else
+				{
+					if (!nameOver)
+					{
+						nameBuilder.Append(curChar);
+					}
+					else
+					{
+						valueBuilder.Append(curChar);
+					}
+				}
 			}
 
-			var split = trimmed.Split(new char[] { ' ', '<', '>' }, StringSplitOptions.RemoveEmptyEntries);
-			return split.Count() > 0 ? split[0] : null;
-		}
-
-
-		/// <summary>
-		/// Try to get the expression of a tag, null if unavailable
-		/// Example: "Morale > 5" from <If Morale > 5 >
-		///			 "4" from <JUMP 4>
-		/// </summary>
-		/// <param name="s">extension string</param>
-		/// <returns>thie result string, null if unsuccessful</returns>
-		public static string GetExpression(this string s)
-		{
-			if (!s.IsTag(TagNames.IF))
-			{
-				return null;
-			}
-
-			var trimmed = s.Trim();
-			var split = trimmed.Split(' ');
-			var withEnd = trimmed.Substring(split[0].Length + 1);
-			if (withEnd.Length == 1)
-			{
-				return null;
-			}
-
-			return withEnd.TrimEnd('>');
+			// Searched through whole string and cannot find matching pair, fail
+			tagName = null;
+			tagValue = null;
+			return false;
 		}
     }
 }

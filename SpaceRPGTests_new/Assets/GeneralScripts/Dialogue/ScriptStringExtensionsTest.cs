@@ -8,53 +8,36 @@ namespace SpaceRPGTests_new.Assets.GeneralScripts.Dialogue
 	public class ScriptStringExtensionsTest
 	{
 		[TestMethod]
-		public void ScriptStringExtension_IsTag_True()
+		public void ScriptStringExtension_TryGetTag_Head()
 		{
-			var s = "<IF>";
-			Assert.AreEqual(s.IsTag(TagNames.IF), true);
+			var s = "<RETURN 10>";
+			string name;
+			string value;
+			Assert.AreEqual(s.TryGetTagNameValue(out name, out value), true);
+			Assert.AreEqual(name, "RETURN");
+			Assert.AreEqual(value, "10");
 		}
 
 		[TestMethod]
-		public void ScriptStringExtension_IsTag_False()
+		public void ScriptStringExtension_TryGetTag_Tail()
 		{
-			var s = "<IF>";
-			Assert.AreEqual(s.IsTag(TagNames.ENDIF), false);
+			var s = "    I will never do this! <JUMP 4>";
+			string name;
+			string value;
+			Assert.AreEqual(s.TryGetTagNameValue(out name, out value), true);
+			Assert.AreEqual(name, "JUMP");
+			Assert.AreEqual(value, "4");
 		}
 
 		[TestMethod]
-		public void ScriptStringExtension_GetTag_Valid()
+		public void ScriptStringExtension_TryGetTag_Invalid()
 		{
-			var s = "<IF>";
-			Assert.AreEqual(s.GetTag(), "IF");
-		}
-
-		[TestMethod]
-		public void ScriptStringExtension_GetTag_Valid_WithExpression()
-		{
-			var s = "<IF A > 5>";
-			Assert.AreEqual(s.GetTag(), "IF");
-		}
-
-		[TestMethod]
-		public void ScriptStringExtension_GetTag_Invalid()
-		{
-			var s = "abcde";
-			Assert.AreEqual(s.GetTag(), null);
-		}
-
-
-		[TestMethod]
-		public void ScriptStringExtension_Expression_IF()
-		{
-			var s = "<IF A > 5>";
-			Assert.AreEqual(s.GetExpression(), "A > 5");
-		}
-
-		[TestMethod]
-		public void ScriptStringExtension_Expression_NONE()
-		{
-			var s = "<BAH>";
-			Assert.AreEqual(s.GetExpression(), null);
+			var s = "    I will never do this!";
+			string name;
+			string value;
+			Assert.AreEqual(s.TryGetTagNameValue(out name, out value), false);
+			Assert.AreEqual(name, null);
+			Assert.AreEqual(value, null);
 		}
 	}
 }

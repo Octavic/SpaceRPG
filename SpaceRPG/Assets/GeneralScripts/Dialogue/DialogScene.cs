@@ -87,17 +87,18 @@ namespace Assets.GeneralScripts.Dialogue
 			// Loop through. If the top line isn't <RETURN>, then pass it off and create a new IDialogItem, alternating between NPC and Player
 			while (data.Count > 0)
             {
-				if (DialogTag.TryParse(data.Peek(), out tagName, out tagValue))
+				string nextTagName;
+				string nextTagValue;
+				if (data.Peek().TryGetTagNameValue(out nextTagName, out nextTagValue))
 				{
-					if (tagName == TagNames.RETURN.ToString())
+					if (nextTagName == TagNames.RETURN.ToString())
 					{
-						this.ReturnValue = int.Parse(tagValue);
+						this.ReturnValue = int.Parse(nextTagValue);
 						return true;
 					}
-
-					if (tagName == TagNames.JUMP.ToString())
+					if (nextTagName == TagNames.JUMP.ToString())
 					{
-						this.JumpSceneId = int.Parse(tagValue);
+						this.JumpSceneId = int.Parse(nextTagValue);
 						return true;
 					}
 				}

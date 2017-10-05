@@ -32,7 +32,8 @@ namespace Assets.GeneralScripts.Dialogue
 		/// </summary>
 		protected void Start()
 		{
-			this._conversationData = new Conversation(new Queue<string>());
+			var lines = Script.text.Split(new char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+			this._conversationData = new Conversation(lines);
 		}
 	}
 }
