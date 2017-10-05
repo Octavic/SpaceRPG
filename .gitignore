@@ -5,6 +5,8 @@
 /[Ll]ibrary/
 /Assets/AssetStoreTools*
 /SpaceRPG/Library/
+/SpaceRPG/Temp/
+/SpaceRPGTests_new/obj/
 
 # Visual Studio 2015 cache directory
 /.vs/
