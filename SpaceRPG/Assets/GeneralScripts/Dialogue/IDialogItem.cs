@@ -17,5 +17,12 @@ namespace Assets.GeneralScripts.Dialogue
         /// <param name="data">Target data</param>
         /// <returns>True if successful</returns>
         bool TryConsume(Queue<string> data);
+
+		/// <summary>
+		/// Get the string at index
+		/// </summary>
+		/// <param name="index">Target index</param>
+		/// <returns>Result string, null if out of range</returns>
+		string GetContent(int index = 0);
     }
 }

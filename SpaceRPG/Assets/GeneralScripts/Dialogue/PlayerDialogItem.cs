@@ -68,9 +68,14 @@ namespace Assets.GeneralScripts.Dialogue
 				string tagName;
 				string tagValue;
 				string content = curLine;
+
+				// Check if the current line contains a <JUMMP #> tag
 				if (curLine.TryGetTagNameValue(out tagName, out tagValue))
 				{
-					content = curLine.Substring(0, curLine.Length - tagName.Length - tagValue.Length - 3);
+					if (tagName == TagNames.JUMP.ToString())
+					{
+						content = curLine.Substring(0, curLine.Length - tagName.Length - tagValue.Length - 3);
+					}
 				}
 
 				this.Options.Add(new PlayerDialogOption(content.Trim(), string.IsNullOrEmpty(tagValue)?-1: int.Parse(tagValue)));
@@ -80,5 +85,20 @@ namespace Assets.GeneralScripts.Dialogue
 			// Unexpected end of data reached, false
             return false;
         }
-    }
+
+		/// <summary>
+		/// Get the string at index
+		/// </summary>
+		/// <param name="index">Target index</param>
+		/// <returns>Result string, null if out of range</returns>
+		public string GetContent(int index = 0)
+		{
+			if (index < 0 || index > this.Options.Count)
+			{
+				return null;
+			}
+
+			return this.Options[index].Option;
+		}
+	}
 }
