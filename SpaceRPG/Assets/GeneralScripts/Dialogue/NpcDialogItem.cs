@@ -46,5 +46,20 @@ namespace Assets.GeneralScripts.Dialogue
 			// Unexpected end of data
             return false;
         }
-    }
+
+		/// <summary>
+		/// Get the string at index
+		/// </summary>
+		/// <param name="index">Target index</param>
+		/// <returns>Result string, null if out of range</returns>
+		public string GetContent(int index = 0)
+		{
+			if (index < 0 || index >= this.Pages.Count)
+			{
+				return null;
+			}
+
+			return this.Pages[index];
+		}
+	}
 }
