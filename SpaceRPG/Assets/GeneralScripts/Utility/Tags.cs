@@ -22,7 +22,6 @@ namespace Assets.GeneralScripts.Utility
 		Minimap,
 		GameController,
 		ShipListUI,
-		GalaxyMap,
-		DialogBox
+		GalaxyMap
 	}
 }
