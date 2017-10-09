@@ -24,10 +24,20 @@ namespace Assets.GeneralScripts.Dialogue
 		/// </summary>
 		public Text OnScreenText;
 
+        /// <summary>
+        /// The transform parent for the player options
+        /// </summary>
+        public Transform PlayerOptions;
+
 		/// <summary>
 		/// Prefab for the player's option
 		/// </summary>
-		public Text PlayerOptionPrefab;
+		public GameObject PlayerOptionPrefab;
+
+        /// <summary>
+        /// The initial Y value for the player option
+        /// </summary>
+        public float PlayerOptionInitialY;
 
 		/// <summary>
 		/// The Y difference in the player's options
@@ -59,12 +69,6 @@ namespace Assets.GeneralScripts.Dialogue
 		/// The item to be rendered
 		/// </summary>
 		private IDialogItem _item;
-
-		/// <summary>
-		/// Items to stored the changed item
-		/// </summary>
-		private NpcDialogItem _npcItem;
-		private PlayerDialogItem _playerItem;
 
 		/// <summary>
 		/// How fast the text scrolls
@@ -112,19 +116,22 @@ namespace Assets.GeneralScripts.Dialogue
 		private ConversationBehaviour _conversation;
 
 		/// <summary>
-		/// Called when the player clicks on the dialog box
+		/// Called when the player hits space
 		/// </summary>
-		public void OnPlayerClick()
+		public void OnSkippingDialog()
 		{
-			if (!this._doneScrolling)
-			{
-				this._scrolled = this._curString.Length;
-			}
-			else
-			{
-				this._curIndex++;
-				this.RenderLine();
-			}
+            if (this._isNPC)
+            {
+                if (!this._doneScrolling)
+                {
+                    this._scrolled = this._curString.Length;
+                }
+                else
+                {
+                    this._curIndex++;
+                    this.RenderLine();
+                }
+            }
 		}
 
 		/// <summary>
@@ -134,16 +141,15 @@ namespace Assets.GeneralScripts.Dialogue
 		/// <param name="scrollSpeed">how fast to scroll in characters per second</param>
 		public void RenderDialog(IDialogItem item, ConversationBehaviour conversation = null, float scrollSpeed = 30)
 		{
-			// Get rid of all old player dialog options
-			this.gameObject.DestroyAllChildren();
+			// Get rid of all old player dialog options (if there are any)
+			this.PlayerOptions.gameObject.DestroyAllChildren();
 
 			//  Assign and initialize values
 			this._item = item;
 			this._scrollSpeed = scrollSpeed;
-			this._doneScrolling = false;
 			this._scrolled = 0;
 			this._curIndex = 0;
-			this._curOptionY = 0;
+			this._curOptionY = this.PlayerOptionInitialY;
 			this._curString = item.GetContent(0);
 
 			if (conversation != null)
@@ -151,22 +157,40 @@ namespace Assets.GeneralScripts.Dialogue
 				this._conversation = conversation;
 			}
 
+            // If this is NPC item, set up the scroll
 			if (item is NpcDialogItem)
 			{
 				this._isNPC = true;
 				this._renderTarget = this.OnScreenText;
-			}
-			else
+                this._doneScrolling = false;
+            }
+            // Player item, draw all options
+            else
 			{
+                this._renderTarget.text = "";
 				this._isNPC = false;
-				this._curIndex = -1;
-				this.RenderLine();
-			}
-		}
+                var playerDialog = item as PlayerDialogItem;
+                foreach (var option in playerDialog.Options)
+                {
+                    var newOption = Instantiate(this.PlayerOptionPrefab.gameObject, this.PlayerOptions);
+                    newOption.transform.localPosition = new Vector3(0, this._curOptionY);
+                    this._curOptionY += this.PlayerOptionYDiff;
+                    newOption.GetComponentInChildren<Text>().text = option.Option;
+                    var optionComponent = newOption.GetComponent<PlayerOptioBehaviour>();
+                    optionComponent.ChangeSceneId = option.ChangeSceneId;
+                    optionComponent.DialogBox = this;
+                }
+
+                this._doneScrolling = true;
+            }
+        }
 
 		public void OnPlayerSelectOption(int index)
 		{
-			
+            if (index == -1)
+            {
+                this._conversation.ProgressDialog();
+            }
 		}
 
 		/// <summary>
@@ -184,15 +208,6 @@ namespace Assets.GeneralScripts.Dialogue
 
 			this._doneScrolling = false;
 			this._scrolled = 0;
-
-			// If this is a player dialog item, create new option
-			if (!this._isNPC)
-			{
-				this._curOptionY += this.PlayerOptionYDiff;
-				var newOption = Instantiate(this.PlayerOptionPrefab.gameObject, this.transform);
-				newOption.transform.localPosition = new Vector3(0, this._curOptionY);
-				this._renderTarget = newOption.GetComponent<Text>();
-			}
 		}
 
 		/// <summary>
@@ -211,20 +226,25 @@ namespace Assets.GeneralScripts.Dialogue
 		/// </summary>
 		protected void Update()
 		{
-			if (!this._doneScrolling)
-			{
-				this._scrolled += this._scrollSpeed * Time.deltaTime;
-				this._renderTarget.text = this._curString.Substring(0, (int)this._scrolled);
+            if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
+            {
+                this.OnSkippingDialog();
+            }
 
-				if (this._scrolled > this._curString.Length)
-				{
-					this._doneScrolling = true;
-					if (!this._isNPC)
-					{
-						this._curIndex++;
-						this.RenderLine();
-					}
-				}
+            if (!this._doneScrolling)
+			{
+                this._scrolled += this._scrollSpeed * Time.deltaTime;
+                this._renderTarget.text = this._curString.Substring(0, (int)this._scrolled);
+
+                if (this._scrolled > this._curString.Length)
+                {
+                    this._doneScrolling = true;
+                    if (!this._isNPC)
+                    {
+                        this._curIndex++;
+                        this.RenderLine();
+                    }
+                }
 			}
 		}
 	}

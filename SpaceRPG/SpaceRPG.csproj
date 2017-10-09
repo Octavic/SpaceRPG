@@ -143,6 +143,7 @@
     <Compile Include="Assets\GeneralScripts\Dialogue\IDialogItem.cs" />
     <Compile Include="Assets\GeneralScripts\Dialogue\NpcDialogItem.cs" />
     <Compile Include="Assets\GeneralScripts\Dialogue\PlayerDialogItem.cs" />
+    <Compile Include="Assets\GeneralScripts\Dialogue\PlayerOptioBehaviour.cs" />
     <Compile Include="Assets\GeneralScripts\Dialogue\TagNames.cs" />
     <Compile Include="Assets\GeneralScripts\Dialogue\ScriptStringExtensions.cs" />
     <Compile Include="Assets\GeneralScripts\UI\GalaxyMap\GalaxyMapBehavior.cs" />
