@@ -63,6 +63,8 @@ namespace Assets.GeneralScripts.Dialogue
         {
             this.Dialogues = new List<IDialogItem>();
 			this._isNextItemNpc = true;
+            this.JumpSceneId = -1;
+            this.ReturnValue = -1;
         }
 
         /// <summary>
@@ -79,32 +81,32 @@ namespace Assets.GeneralScripts.Dialogue
 			}
 
 			// Check if the first line is a valid scene starter
-			string tagName;
-			string tagValue;
-			if (!data.Peek().TryGetTagNameValue(out tagName, out tagValue) || tagName != _sceneTag)
+			string firstTagName;
+			string firstTagValue;
+			if (!data.Peek().TryGetTagNameValue(out firstTagName, out firstTagValue) || firstTagName != _sceneTag)
 			{
 				return false;
 			}
 
-			this.SceneId = int.Parse(tagValue);
+			this.SceneId = int.Parse(firstTagValue);
 			data.Dequeue();
 
 			// Loop through. If the top line isn't <RETURN>, then pass it off and create a new IDialogItem, alternating between NPC and Player
 			while (data.Count > 0)
             {
-				string nextTagName;
-				string nextTagValue;
-				if (!data.Peek().IsPlayerLine() &&  data.Peek().TryGetTagNameValue(out nextTagName, out nextTagValue))
+				string curTagName;
+				string curTagValue;
+				if (!data.Peek().IsPlayerLine() &&  data.Peek().TryGetTagNameValue(out curTagName, out curTagValue))
 				{
-					if (nextTagName == TagNames.RETURN.ToString())
+					if (curTagName == TagNames.RETURN.ToString())
 					{
-						this.ReturnValue = int.Parse(nextTagValue);
+						this.ReturnValue = int.Parse(curTagValue);
 						data.Dequeue();
 						return true;
 					}
-					if (nextTagName == TagNames.JUMP.ToString())
+					if (curTagName == TagNames.JUMP.ToString())
 					{
-						this.JumpSceneId = int.Parse(nextTagValue);
+						this.JumpSceneId = int.Parse(curTagValue);
 						data.Dequeue();
 						return true;
 					}

@@ -39,46 +39,39 @@ namespace Assets.GeneralScripts.Dialogue
 				// Try to see if the line contains a tag
 				string tagName;
 				string tagValue;
+                line.TryGetTagNameValue(out tagName, out tagValue);
+                bool isDeleteMode = deleteModeStack.Count == 0 || !deleteModeStack.Peek();
 
-				// If there's no tag
-				if (!line.TryGetTagNameValue(out tagName, out tagValue))
-				{
-					// No tag and current mode is deletion, ignore current line
-					if (deleteModeStack.Count >0 && deleteModeStack.Peek())
-					{
-						continue;
-					}
-				}
+                // If the current tag is an <IF> statement, push it onto the stack
+                if (tagName == TagNames.IF.ToString())
+                {
+                    deleteModeStack.Push(isDeleteMode || !this.EvaluateExpression(tagValue));
+                    continue;
+                }
+                // If the current tag is an <END IF> statement, pop the stack
+                else if (tagName == TagNames.ENDIF.ToString())
+                {
+                    deleteModeStack.Pop();
+                    continue;
+                }
+                // Random tag, not important here. treat it as a normal item
 
-				// Line does contain a tag, check 
-				if (tagName == TagNames.IF.ToString())
-				{
-					// Current mode is deletion, <IF> cannot overwrite
-					if (deleteModeStack.Count > 0 && deleteModeStack.Peek())
-					{
-						deleteModeStack.Push(true);
-						continue;
-					}
+                // If the current mode is not delete mode, just append
+                if (isDeleteMode)
+                {
+                    // Convert accidental tabs to four spaces for player dialog
+                    if (line.StartsWith("\t"))
+                    {
+                        line = line.Replace("\t", "    ");
+                    }
 
-					// Check the condition
-					deleteModeStack.Push(this.EvaluateExpression(tagValue));
-					continue;
-				}
-				// If the tag is an <ENDIF> tag
-				else if (tagName == TagNames.ENDIF.ToString())
-				{
-					deleteModeStack.Pop();
-					continue;
-				}
+                    // All looks good, add line
+                    parsed.Enqueue(line);
+                    continue;
+                }
 
-				// Convert accidental tabs to four spaces for player dialogue
-				if (line.StartsWith("\t"))
-				{
-					line = line.Replace("\t", "    ");
-				}
-
-				// All looks good, add line
-				parsed.Enqueue(line);
+                // Delete mode, check if
+				
 			}
 
 			this.Scenes = new List<DialogScene>();

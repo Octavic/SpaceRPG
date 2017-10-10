@@ -185,18 +185,36 @@ namespace Assets.GeneralScripts.Dialogue
             }
         }
 
-		public void OnPlayerSelectOption(int index)
+        /// <summary>
+        /// Called when the player clicks on an option
+        /// </summary>
+        /// <param name="jumpIndex">The return index  of the option</param>
+		public void OnPlayerSelectOption(int jumpIndex)
 		{
-            if (index == -1)
+            // Nowhere to jump to, simple progress
+            if (jumpIndex == -1)
             {
                 this._conversation.ProgressDialog();
             }
+            else
+            {
+                this._conversation.OnPlayerSelectOption(jumpIndex);
+            }
 		}
 
-		/// <summary>
-		/// When the scrolling is finished
-		/// </summary>
-		public void RenderLine()
+        /// <summary>
+        /// Hides the box and all box related items
+        /// </summary>
+        public void Hide()
+        {
+			this.PlayerOptions.gameObject.DestroyAllChildren();
+            this.gameObject.SetActive(false);
+        }
+
+        /// <summary>
+        /// When the scrolling is finished
+        /// </summary>
+        public void RenderLine()
 		{
 			// Reset progress
 			this._curString = this._item.GetContent(this._curIndex);

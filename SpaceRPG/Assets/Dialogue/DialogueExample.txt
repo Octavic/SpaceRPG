@@ -21,16 +21,15 @@ His name is Stan
     I am Stan. <JUMP 3>
     That's just a fairy tale <JUMP 4>
 # You may also default to nothing so the conversation continues
-    No, can you tell me more?
+    Can you tell me more?
 He was the kind of pirate that everyone loved.
 He robbed only the rich and corrupted, and never hurt an innocent fly.
 
 # Here let's introduce conditions. Certain things are only available if the conditions are met, and you do  it like this
 <IF Morale MORETHAN 5>
     Well, he sounds  like quite a man
-    Doesn't matter, criminals need to be brought down, no matter how justified they may seem <JUMP 4>
+    Doesn't matter, criminals need to be brought down<JUMP 4>
 <ENDIF>
-
     That's something.
 
 # Essentially, there will be a bunch of 'flags' that contains either a value, or just 'true/false'.
@@ -77,9 +76,9 @@ Keep that attitude up, and you are gonna get killed some day,  kiddo.
 <SCENE 5>
 If that's the case, wanna help out with some local bandits?
 They've been terrorizing the neighborhood. Should be an easy challenge.
-    All right. <SCENE 6>
+    All right. <JUMP 6>
     I don't have the time
-that's  a shame.
+that's a shame.
 <RETURN 0>
 
 # Player accept quest
