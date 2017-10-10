@@ -146,6 +146,10 @@
     <Compile Include="Assets\GeneralScripts\Dialogue\PlayerOptioBehaviour.cs" />
     <Compile Include="Assets\GeneralScripts\Dialogue\TagNames.cs" />
     <Compile Include="Assets\GeneralScripts\Dialogue\ScriptStringExtensions.cs" />
+    <Compile Include="Assets\GeneralScripts\Quest\IQuestStep.cs" />
+    <Compile Include="Assets\GeneralScripts\Quest\QuestAvailability.cs" />
+    <Compile Include="Assets\GeneralScripts\Quest\QuestNPCBehavior.cs" />
+    <Compile Include="Assets\GeneralScripts\Quest\ReputationQuestAvailability.cs" />
     <Compile Include="Assets\GeneralScripts\UI\GalaxyMap\GalaxyMapBehavior.cs" />
     <Compile Include="Assets\GeneralScripts\UI\GalaxyMap\GalaxyMapCamera.cs" />
     <Compile Include="Assets\GeneralScripts\UI\GalaxyMap\GalaxyMapData.cs" />
@@ -163,6 +167,7 @@
     <Compile Include="Assets\GeneralScripts\Utility\GameObjectFinder.cs" />
     <Compile Include="Assets\GeneralScripts\Utility\GlobalRandom.cs" />
     <Compile Include="Assets\GeneralScripts\Utility\Tags.cs" />
+    <Compile Include="Assets\GeneralScripts\Utility\ValuePair.cs" />
     <Compile Include="Assets\GeneralScripts\Utility\WeightedRandomList.cs" />
   </ItemGroup>
   <ItemGroup>
