@@ -92,6 +92,7 @@
     <Compile Include="Assets\CombatScripts\Settings\ShipMovementSettings.cs" />
     <Compile Include="Assets\CombatScripts\Settings\UIButtonColor.cs" />
     <Compile Include="Assets\CombatScripts\Ships\AIController.cs" />
+    <Compile Include="Assets\CombatScripts\Ships\EnemyAITypes.cs" />
     <Compile Include="Assets\CombatScripts\Ships\EngineFlame.cs" />
     <Compile Include="Assets\CombatScripts\Ships\EngineFlameLengthEnum.cs" />
     <Compile Include="Assets\CombatScripts\Ships\EngineFlameManager.cs" />
@@ -135,6 +136,7 @@
     <Compile Include="Assets\CombatScripts\Utility\InputHelper.cs" />
     <Compile Include="Assets\CombatScripts\Utility\ScaleBar.cs" />
     <Compile Include="Assets\CombatScripts\Utility\Vector2Extension.cs" />
+    <Compile Include="Assets\GeneralScripts\Config.cs" />
     <Compile Include="Assets\GeneralScripts\Dialogue\Conversation.cs" />
     <Compile Include="Assets\GeneralScripts\Dialogue\ConversationBehaviour.cs" />
     <Compile Include="Assets\GeneralScripts\Dialogue\DialogBoxBehaviour.cs" />
@@ -150,6 +152,8 @@
     <Compile Include="Assets\GeneralScripts\Quest\QuestAvailability.cs" />
     <Compile Include="Assets\GeneralScripts\Quest\QuestNPCBehavior.cs" />
     <Compile Include="Assets\GeneralScripts\Quest\ReputationQuestAvailability.cs" />
+    <Compile Include="Assets\GeneralScripts\SaveData.cs" />
+    <Compile Include="Assets\GeneralScripts\SaveManager.cs" />
     <Compile Include="Assets\GeneralScripts\UI\GalaxyMap\GalaxyMapBehavior.cs" />
     <Compile Include="Assets\GeneralScripts\UI\GalaxyMap\GalaxyMapCamera.cs" />
     <Compile Include="Assets\GeneralScripts\UI\GalaxyMap\GalaxyMapData.cs" />
@@ -174,6 +178,7 @@
     <None Include="Assets\Dialogue\DialogueExample.txt" />
     <None Include="Assets\Dialogue\TestScript.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
 </Project>
