@@ -110,15 +110,6 @@ namespace Assets.CombatScripts.Ships
         }
 
         /// <summary>
-        /// Calculates the ship's throttle based on the given position difference
-        /// </summary>
-        /// <param name="diff">Position difference</param>
-        private void AdjustThrottleBasedOnTurn(Vector2 diff)
-        {
-            this.AdjustThrottleBasedOnTurn(Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg);
-        }
-
-        /// <summary>
         /// Adjusts the ship's throttle based on the amount that the ship wants to eventually turn
         /// </summary>
         /// <param name="turnAngle">How much to turn in degrees</param>
@@ -150,10 +141,11 @@ namespace Assets.CombatScripts.Ships
                 this.transform.position,
                 this._playerShip.transform.position,
                 this.transform.eulerAngles.z,
-                this.ShipComponent.RotationSpeed * Time.deltaTime);
+                180);
 
-            this.AdjustThrottleBasedOnTurn(this._playerShip.transform.position-this.transform.position);
-            this.ShipComponent.TryTurn(amountToTurn);
+            this.AdjustThrottleBasedOnTurn(amountToTurn);
+            var maxRotation = this.ShipComponent.RotationSpeed * Time.deltaTime;
+            this.ShipComponent.TryTurn(amountToTurn.LimitTo(-maxRotation, maxRotation));
         }
 
         private void RunAwayFromPlayer()
@@ -164,8 +156,9 @@ namespace Assets.CombatScripts.Ships
                  this.transform.eulerAngles.z,
                  this.ShipComponent.RotationSpeed * Time.deltaTime);
 
-            this.AdjustThrottleBasedOnTurn(this.transform.position - this._playerShip.transform.position);
-            this.ShipComponent.TryTurn(amountToTurn);
+            this.AdjustThrottleBasedOnTurn(amountToTurn);
+            var maxRotation = this.ShipComponent.RotationSpeed * Time.deltaTime;
+            this.ShipComponent.TryTurn(amountToTurn.LimitTo(-maxRotation, maxRotation));
         }
     }
 }
