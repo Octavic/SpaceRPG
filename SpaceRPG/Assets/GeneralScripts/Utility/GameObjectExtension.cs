@@ -17,6 +17,10 @@ namespace Assets.GeneralScripts.Utility
 	/// </summary>
 	public static class GameObjectExtension
 	{
+        /// <summary>
+        /// Destroy all of the children of the gameobject
+        /// </summary>
+        /// <param name="obj">extention object</param>
 		public static void DestroyAllChildren(this GameObject obj)
 		{
 			for (int i = obj.transform.childCount - 1; i >= 0; i--)
@@ -25,5 +29,13 @@ namespace Assets.GeneralScripts.Utility
 			}
 		}
 
+        /// <summary>
+        /// Toggles the active state of the gameobject
+        /// </summary>
+        /// <param name="obj">extension object</param>
+        public static void ToggleSelfActive(this GameObject obj)
+        {
+            obj.SetActive(!obj.activeSelf);
+        }
 	}
 }
