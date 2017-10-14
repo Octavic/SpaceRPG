@@ -38,10 +38,5 @@ namespace Assets.GeneralScripts.Item
         /// Gets the rarity of an item
         /// </summary>
         ItemRarityEnum Rarity { get; }
-        
-        /// <summary>
-        /// Gets the item's sprite
-        /// </summary>
-        Sprite ItemSprite { get; }
     }
 }

@@ -34,6 +34,23 @@ namespace Assets.GeneralScripts.Item
         public Dictionary<IItem, Vector2> Contents;
 
         /// <summary>
+        /// Try to remove an item
+        /// </summary>
+        /// <param name="clickedSpot">the slot that was clicked on</param>
+        /// <returns>the item that was removed, null if not applicable</returns>
+        public IItem TryRemoveItem(Vector2 clickedSpot)
+        {
+            IItem result = null;
+            if (!this.Occupied.TryGetValue(clickedSpot, out result))
+            {
+                return null;
+            }
+
+            this.Contents.Remove(result);
+            return result;
+        }
+
+        /// <summary>
         /// Try to add a new item to the inventory
         /// </summary>
         /// <param name="newItem">new item to be added</param>

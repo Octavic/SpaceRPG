@@ -150,6 +150,8 @@
     <Compile Include="Assets\GeneralScripts\Dialogue\ScriptStringExtensions.cs" />
     <Compile Include="Assets\GeneralScripts\Item\IItem.cs" />
     <Compile Include="Assets\GeneralScripts\Item\Inventory.cs" />
+    <Compile Include="Assets\GeneralScripts\Item\InventoryBehavior.cs" />
+    <Compile Include="Assets\GeneralScripts\Item\ItemBehavior.cs" />
     <Compile Include="Assets\GeneralScripts\Item\ItemRarityEnum.cs" />
     <Compile Include="Assets\GeneralScripts\Quest\IQuestStep.cs" />
     <Compile Include="Assets\GeneralScripts\Quest\QuestAvailability.cs" />
