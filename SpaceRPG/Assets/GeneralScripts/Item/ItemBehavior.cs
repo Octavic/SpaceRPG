@@ -1,4 +1,9 @@
-﻿
+﻿//  --------------------------------------------------------------------------------------------------------------------
+//  <copyright file="ItemBehavior.cs">
+//    Copyright (c) Yifei Xu .  All rights reserved.
+//  </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
+
 namespace Assets.GeneralScripts.Item
 {
     using System;
@@ -6,6 +11,7 @@ namespace Assets.GeneralScripts.Item
     using System.Linq;
     using System.Text;
     using UnityEngine;
+    using UnityEngine.UI;
 
     /// <summary>
     /// The behavior script for an item
@@ -17,9 +23,13 @@ namespace Assets.GeneralScripts.Item
         /// </summary>
         public IItem ItemData;
 
-        public void MoveIndexSquareToLocalCoordinate(Vector2 target)
+        /// <summary>
+        /// Sets the sprite of the item
+        /// </summary>
+        /// <param name="sprite">The sprite</param>
+        public void SetSprite(Sprite sprite)
         {
-            this.transform.localPosition = target + ItemData.Dimensions / 2;
+            this.GetComponent<Image>().sprite = sprite;
         }
     }
 }

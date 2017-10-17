@@ -23,6 +23,7 @@ namespace Assets.GeneralScripts.Utility
 		GameController,
 		ShipListUI,
 		GalaxyMap,
-		DialogBox
+		DialogBox,
+        SpriteManager
 	}
 }

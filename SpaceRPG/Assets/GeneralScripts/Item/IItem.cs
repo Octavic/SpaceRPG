@@ -32,8 +32,8 @@ namespace Assets.GeneralScripts.Item
         /// <summary>
         /// Base value for the item
         /// </summary>
-        float BaseValue { get; }
-
+        float BaseSellValue { get; }
+        
         /// <summary>
         /// Gets the rarity of an item
         /// </summary>

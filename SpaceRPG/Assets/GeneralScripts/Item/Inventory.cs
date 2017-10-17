@@ -20,8 +20,8 @@ namespace Assets.GeneralScripts.Item
         /// <summary>
         /// Dimensions of the inventory
         /// </summary>
-        public int DimentionX;
-        public int DimentionY;
+        public int DimentionX { get; private set; }
+        public int DimentionY { get; private set; }
 
         /// <summary>
         /// A collection of coordinate => contents
@@ -32,6 +32,19 @@ namespace Assets.GeneralScripts.Item
         /// A collection of contents => base coordinate
         /// </summary>
         public Dictionary<IItem, Vector2> Contents;
+
+        /// <summary>
+        /// Creates a new instance of the <see cref="Inventory"/> class
+        /// </summary>
+        /// <param name="dimentionX">The width</param>
+        /// <param name="dimentionY">The height</param>
+        public Inventory(int dimentionX, int dimentionY)
+        {
+            this.DimentionX = dimentionX;
+            this.DimentionY = dimentionY;
+            this.Occupied = new Dictionary<Vector2, IItem>();
+            this.Contents = new Dictionary<IItem, Vector2>();
+        }
 
         /// <summary>
         /// Try to remove an item
@@ -62,16 +75,20 @@ namespace Assets.GeneralScripts.Item
             {
                 for (int y = 0; y < newItem.Dimensions.y; y++)
                 {
-                    newItemOccupied.Add(newItemCoordinate + new Vector2(x, y));
-                }
-            }
+                    var curCheckCoor = newItemCoordinate + new Vector2(x, y);
 
-            // If there's collision, can't place
-            foreach (var occupied in newItemOccupied)
-            {
-                if (this.Occupied.ContainsKey(occupied))
-                {
-                    return false;
+                    // If coordinate is out of bounds, cannot fit
+                    if (curCheckCoor.x >= this.DimentionX || curCheckCoor.y >= this.DimentionY)
+                    {
+                        return false;
+                    }
+                    // If there's collision, can't fit
+                    else if (this.Occupied.ContainsKey(curCheckCoor))
+                    {
+                        return false;
+                    }
+
+                    newItemOccupied.Add(curCheckCoor);
                 }
             }
 
