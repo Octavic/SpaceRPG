@@ -67,21 +67,16 @@ namespace Assets.GeneralScripts.Item
         /// <summary>
         /// Renders the given inventory
         /// </summary>
-        /// <param name="inventory"></param>
         public void RenderInventory()
         {
             for (int xPos = 0; xPos < this.InventoryData.DimentionX; xPos++)
             {
                 for (int yPos = 0; yPos < this.InventoryData.DimentionY; yPos++)
                 {
-                    IItem result;
                     var pos = new Vector2(xPos, yPos);
-                    if (!this.InventoryData.Occupied.TryGetValue(pos, out result))
-                    {
-                        var newGrid = Instantiate(this.GridCellPrefab, this._gridTransform);
-                        newGrid.transform.localPosition = pos * this.ItemGridSize;
-                        newGrid.GetComponent<Image>().color = this.RarityColors[0];
-                    }
+                    var newGrid = Instantiate(this.GridCellPrefab, this._gridTransform);
+                    newGrid.transform.localPosition = pos * this.ItemGridSize;
+                    newGrid.GetComponent<Image>().color = this.RarityColors[0];
                 }
             }
         }
@@ -140,7 +135,7 @@ namespace Assets.GeneralScripts.Item
             this.TryAddItem(newItem, new Vector2(0,0));
 
             var yarn = new NormalItem(1, "Yarn", new Vector2(2, 2), 20, ItemRarityEnum.Uncommon);
-            this.TryAddItem(yarn, new Vector2(0, 2));
+            this.TryAddItem(yarn, new Vector2(1, 1));
 
             this.RenderInventory();
         }
