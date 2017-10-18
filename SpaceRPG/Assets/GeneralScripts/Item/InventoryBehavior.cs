@@ -97,7 +97,7 @@ namespace Assets.GeneralScripts.Item
             if (this.InventoryData.TryAddItem(newItem, indexCoordinate))
             {
                 var newItemObject = this.CreateNewItem(newItem);
-                newItemObject.transform.localPosition = this.ItemGridSize * (indexCoordinate+newItem.Dimensions) / 2 + this._itemOffset;
+                newItemObject.transform.localPosition = this.ItemGridSize * (indexCoordinate+newItem.Dimensions / 2 + this._itemOffset);
                 return true;
             }
 
@@ -140,7 +140,7 @@ namespace Assets.GeneralScripts.Item
             this.TryAddItem(newItem, new Vector2(0,0));
 
             var yarn = new NormalItem(1, "Yarn", new Vector2(2, 2), 20, ItemRarityEnum.Uncommon);
-            this.TryAddItem(yarn, new Vector2(1, 1));
+            this.TryAddItem(yarn, new Vector2(0, 2));
 
             this.RenderInventory();
         }
