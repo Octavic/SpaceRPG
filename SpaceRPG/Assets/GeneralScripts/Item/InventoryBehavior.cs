@@ -65,6 +65,29 @@ namespace Assets.GeneralScripts.Item
         private Vector2 _itemOffset = new Vector2(-0.5f, -0.5f);
 
         /// <summary>
+        /// Gets the index of the square that the  mouse is hovering over
+        /// </summary>
+        /// <param name="mousePosition">Mouse position</param>
+        /// <returns>The index of the square that the mouse is hovering over, null if the mousee is not inside this inventory</returns>
+        public Vector2? MouseHoverCell(Vector2 mousePosition)
+        {
+            var relativePosition = mousePosition - new Vector2
+                (
+                    this.transform.position.x - this.ItemGridSize / 2,
+                    this.transform.position.y - this.ItemGridSize / 2
+                );
+            var xCoor = relativePosition.x / this.ItemGridSize;
+            var yCoor = relativePosition.y / this.ItemGridSize;
+            if (xCoor < 0 || yCoor < 0 || xCoor >= this.InventoryData.DimentionX || yCoor >= this.InventoryData.DimentionY)
+            {
+                return null;
+            }
+
+            var result = new Vector2((int)xCoor, (int)yCoor);
+            return result;
+        }
+
+        /// <summary>
         /// Renders the given inventory
         /// </summary>
         public void RenderInventory()
@@ -137,6 +160,7 @@ namespace Assets.GeneralScripts.Item
             var yarn = new NormalItem(1, "Yarn", new Vector2(2, 2), 20, ItemRarityEnum.Uncommon);
             this.TryAddItem(yarn, new Vector2(1, 1));
 
+            InventoryManager.CurrentInstance.OpenInventory(this);
             this.RenderInventory();
         }
     }

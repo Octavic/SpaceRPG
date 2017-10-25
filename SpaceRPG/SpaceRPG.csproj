@@ -151,6 +151,7 @@
     <Compile Include="Assets\GeneralScripts\Item\IItem.cs" />
     <Compile Include="Assets\GeneralScripts\Item\Inventory.cs" />
     <Compile Include="Assets\GeneralScripts\Item\InventoryBehavior.cs" />
+    <Compile Include="Assets\GeneralScripts\Item\InventoryManager.cs" />
     <Compile Include="Assets\GeneralScripts\Item\ItemBehavior.cs" />
     <Compile Include="Assets\GeneralScripts\Item\ItemRarityEnum.cs" />
     <Compile Include="Assets\GeneralScripts\Item\NormalItem.cs" />
@@ -176,6 +177,8 @@
     <Compile Include="Assets\GeneralScripts\Utility\GameObjectExtension.cs" />
     <Compile Include="Assets\GeneralScripts\Utility\GameObjectFinder.cs" />
     <Compile Include="Assets\GeneralScripts\Utility\GlobalRandom.cs" />
+    <Compile Include="Assets\GeneralScripts\Utility\IReadOnlyList.cs" />
+    <Compile Include="Assets\GeneralScripts\Utility\ReadOnlyList.cs" />
     <Compile Include="Assets\GeneralScripts\Utility\SpriteManager.cs" />
     <Compile Include="Assets\GeneralScripts\Utility\Tags.cs" />
     <Compile Include="Assets\GeneralScripts\Utility\ValuePair.cs" />
