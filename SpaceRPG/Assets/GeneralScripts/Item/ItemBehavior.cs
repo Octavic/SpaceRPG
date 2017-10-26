@@ -12,6 +12,7 @@ namespace Assets.GeneralScripts.Item
     using System.Text;
     using UnityEngine;
     using UnityEngine.UI;
+    using Settings;
 
     /// <summary>
     /// The behavior script for an item
@@ -24,12 +25,51 @@ namespace Assets.GeneralScripts.Item
         public IItem ItemData;
 
         /// <summary>
+        /// If this behavior is an actual item in inventory or if it's a phantom
+        /// </summary>
+        public ItemBehavior RealCopy;
+
+        /// <summary>
         /// Sets the sprite of the item
         /// </summary>
         /// <param name="sprite">The sprite</param>
         public void SetSprite(Sprite sprite)
         {
             this.GetComponent<Image>().sprite = sprite;
+        }
+
+        /// <summary>
+        /// Gets the coordinate of the index square based on the item's current location
+        /// </summary>
+        /// <returns>Global position of the index square</returns>
+        public Vector2 GetIndexCellCoordinate()
+        {
+            var halfGrid = GeneralSettings.ItemGridSize / 2;
+            return (Vector2)this.transform.position - this.ItemData.Dimensions *halfGrid + new Vector2(halfGrid, halfGrid) ;
+        }
+
+        /// <summary>
+        /// Generates the phantom when dragging
+        /// </summary>
+        /// <returns>The generated phantom</returns>
+        public ItemBehavior GeneratePhantom()
+        {
+            var newItem = Instantiate(this.gameObject).GetComponent<ItemBehavior>();
+            newItem.RealCopy = this;
+            this.GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
+            newItem.GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
+            return newItem;
+        }
+
+        /// <summary>
+        /// Called when the item is destroyed
+        /// </summary>
+        protected void OnDestroy()
+        {
+            if (this.RealCopy != null)
+            {
+                this.RealCopy.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+            }
         }
     }
 }

@@ -161,6 +161,7 @@
     <Compile Include="Assets\GeneralScripts\Quest\ReputationQuestAvailability.cs" />
     <Compile Include="Assets\GeneralScripts\SaveData.cs" />
     <Compile Include="Assets\GeneralScripts\SaveManager.cs" />
+    <Compile Include="Assets\GeneralScripts\Settings\GeneralSettings.cs" />
     <Compile Include="Assets\GeneralScripts\UI\GalaxyMap\GalaxyMapBehavior.cs" />
     <Compile Include="Assets\GeneralScripts\UI\GalaxyMap\GalaxyMapCamera.cs" />
     <Compile Include="Assets\GeneralScripts\UI\GalaxyMap\GalaxyMapData.cs" />

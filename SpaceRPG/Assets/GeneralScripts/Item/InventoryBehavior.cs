@@ -12,6 +12,7 @@ namespace Assets.GeneralScripts.Item
     using System.Text;
     using UnityEngine;
     using GeneralScripts.Utility;
+    using Settings;
     using UnityEngine.UI;
 
     /// <summary>
@@ -30,11 +31,6 @@ namespace Assets.GeneralScripts.Item
         public GameObject GridCellPrefab;
 
         /// <summary>
-        /// Size of the item's grid
-        /// </summary>
-        public float ItemGridSize;
-
-        /// <summary>
         /// A collection of rarity colors from empty, to least rare to most rare
         /// </summary>
         public List<Color> RarityColors;
@@ -47,7 +43,7 @@ namespace Assets.GeneralScripts.Item
         /// <summary>
         /// A collection of Item => Item behaviors
         /// </summary>
-        private Dictionary<IItem, ItemBehavior> _behaviors;
+        public Dictionary<IItem, ItemBehavior> Occupied { get; private set; }
 
         /// <summary>
         /// Transform for the grid
@@ -68,16 +64,16 @@ namespace Assets.GeneralScripts.Item
         /// Gets the index of the square that the  mouse is hovering over
         /// </summary>
         /// <param name="mousePosition">Mouse position</param>
-        /// <returns>The index of the square that the mouse is hovering over, null if the mousee is not inside this inventory</returns>
+        /// <returns>The index of the square that the mouse is hovering over, null if the mouse is not inside this inventory</returns>
         public Vector2? MouseHoverCell(Vector2 mousePosition)
         {
             var relativePosition = mousePosition - new Vector2
                 (
-                    this.transform.position.x - this.ItemGridSize / 2,
-                    this.transform.position.y - this.ItemGridSize / 2
+                    this.transform.position.x - GeneralSettings.ItemGridSize / 2,
+                    this.transform.position.y - GeneralSettings.ItemGridSize / 2
                 );
-            var xCoor = relativePosition.x / this.ItemGridSize;
-            var yCoor = relativePosition.y / this.ItemGridSize;
+            var xCoor = relativePosition.x / GeneralSettings.ItemGridSize;
+            var yCoor = relativePosition.y / GeneralSettings.ItemGridSize;
             if (xCoor < 0 || yCoor < 0 || xCoor >= this.InventoryData.DimentionX || yCoor >= this.InventoryData.DimentionY)
             {
                 return null;
@@ -98,7 +94,7 @@ namespace Assets.GeneralScripts.Item
                 {
                     var pos = new Vector2(xPos, yPos);
                     var newGrid = Instantiate(this.GridCellPrefab, this._gridTransform);
-                    newGrid.transform.localPosition = pos * this.ItemGridSize;
+                    newGrid.transform.localPosition = pos * GeneralSettings.ItemGridSize;
                     newGrid.GetComponent<Image>().color = this.RarityColors[0];
                 }
             }
@@ -115,7 +111,8 @@ namespace Assets.GeneralScripts.Item
             if (this.InventoryData.TryAddItem(newItem, indexCoordinate))
             {
                 var newItemObject = this.CreateNewItem(newItem);
-                newItemObject.transform.localPosition = this.ItemGridSize * (indexCoordinate+newItem.Dimensions / 2 + this._itemOffset);
+                newItemObject.transform.localPosition = GeneralSettings.ItemGridSize * (indexCoordinate+newItem.Dimensions / 2 + this._itemOffset);
+                this.Occupied[newItem] = newItemObject.GetComponent<ItemBehavior>();
                 return true;
             }
 

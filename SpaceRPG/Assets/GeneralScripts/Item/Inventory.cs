@@ -49,18 +49,23 @@ namespace Assets.GeneralScripts.Item
         /// <summary>
         /// Try to remove an item
         /// </summary>
-        /// <param name="clickedSpot">the slot that was clicked on</param>
-        /// <returns>the item that was removed, null if not applicable</returns>
-        public IItem TryRemoveItem(Vector2 clickedSpot)
+        /// <param name="item">the item to be removed</param>
+        /// <returns>True if successful</returns>
+        public bool TryRemoveItem(IItem item)
         {
-            IItem result = null;
-            if (!this.Occupied.TryGetValue(clickedSpot, out result))
+            Vector2 indexCell;
+            if (!this.Contents.TryGetValue(item, out indexCell))
             {
-                return null;
+                return false;
+            }
+            var occupied = this.GetItemOccupied(item, indexCell);
+            foreach (var cell in occupied)
+            {
+                this.Occupied.Remove(cell);
             }
 
-            this.Contents.Remove(result);
-            return result;
+            this.Contents.Remove(item);
+            return true;
         }
 
         /// <summary>
@@ -76,19 +81,31 @@ namespace Assets.GeneralScripts.Item
                 for (int y = 0; y < newItem.Dimensions.y; y++)
                 {
                     var curCheckCoor = newItemCoordinate + new Vector2(x, y);
+                    IItem collided;
 
                     // If coordinate is out of bounds, cannot fit
                     if (curCheckCoor.x >= this.DimentionX || curCheckCoor.y >= this.DimentionY)
                     {
                         return false;
                     }
-                    // If there's collision, can't fit
-                    else if (this.Occupied.ContainsKey(curCheckCoor))
+                    // If there's collision, check collision
+                    else if (this.Occupied.TryGetValue(curCheckCoor, out collided))
                     {
-                        return false;
+                        // If it's the same item, it's just being moved
+                        if (collided == newItem)
+                        {
+                            newItemOccupied.Add(curCheckCoor);
+                        }
+                        else
+                        {
+                            return false;
+                        }
                     }
-
-                    newItemOccupied.Add(curCheckCoor);
+                    // No collision, add
+                    else
+                    {
+                        newItemOccupied.Add(curCheckCoor);
+                    }
                 }
             }
 
@@ -100,6 +117,27 @@ namespace Assets.GeneralScripts.Item
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Calculates all of the occupied cells
+        /// </summary>
+        /// <param name="item">Item data</param>
+        /// <param name="indexCoordinate">The index coordinate</param>
+        /// <returns>A list of all cells occupied by the item</returns>
+        private IList<Vector2> GetItemOccupied(IItem item, Vector2 indexCoordinate)
+        {
+            var result = new List<Vector2>();
+
+            for (int x = 0; x < item.Dimensions.x; x++)
+            {
+                for (int y = 0; y < item.Dimensions.y; y++)
+                {
+                    result.Add(new Vector2(indexCoordinate.x + x, indexCoordinate.y + y));
+                }
+            }
+
+            return result;
         }
     }
 }
