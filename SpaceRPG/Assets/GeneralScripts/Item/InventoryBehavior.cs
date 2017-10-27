@@ -65,7 +65,7 @@ namespace Assets.GeneralScripts.Item
         /// </summary>
         /// <param name="mousePosition">Mouse position</param>
         /// <returns>The index of the square that the mouse is hovering over, null if the mouse is not inside this inventory</returns>
-        public Vector2? MouseHoverCell(Vector2 mousePosition)
+        public Vector2? HoverCellCoordidnate(Vector2 mousePosition)
         {
             var relativePosition = mousePosition - new Vector2
                 (
@@ -88,6 +88,12 @@ namespace Assets.GeneralScripts.Item
         /// </summary>
         public void RenderInventory()
         {
+            // Remove old
+            this._itemsTransform.gameObject.DestroyAllChildren();
+            this._gridTransform.gameObject.DestroyAllChildren();
+            this.Occupied = new Dictionary<IItem, ItemBehavior>();
+
+            // Draw the grid
             for (int xPos = 0; xPos < this.InventoryData.DimentionX; xPos++)
             {
                 for (int yPos = 0; yPos < this.InventoryData.DimentionY; yPos++)
@@ -98,25 +104,44 @@ namespace Assets.GeneralScripts.Item
                     newGrid.GetComponent<Image>().color = this.RarityColors[0];
                 }
             }
+
+            // Draw the items and set them in the occupied dictionary
+            foreach (var item in this.InventoryData.Contents)
+            {
+                var newItemObject = this.CreateNewItem(item.Key);
+                this.Occupied[item.Key] = newItemObject.GetComponent<ItemBehavior>();
+                newItemObject.transform.localPosition = GeneralSettings.ItemGridSize * (item.Value + item.Key.Dimensions / 2 + this._itemOffset);
+            }
         }
 
         /// <summary>
-        /// Try  to add an item
+        /// Try to add an item
         /// </summary>
         /// <param name="newItem">new item to be added</param>
         /// <param name="indexCoordinate">The coordinate for the item to be added</param>
         /// <returns>True if the operation succeed</returns>
         public bool TryAddItem(IItem newItem, Vector2 indexCoordinate)
         {
-            if (this.InventoryData.TryAddItem(newItem, indexCoordinate))
+            var result = this.InventoryData.TryAddItem(newItem, indexCoordinate);
+            this.RenderInventory();
+
+            return result;
+        }
+
+        /// <summary>
+        /// Try  to remove an item from inventory
+        /// </summary>
+        /// <param name="targetItem">Item targeted for removal</param>
+        /// <returns>True if successful</returns>
+        public bool TryRemoveItem(IItem targetItem)
+        {
+            if (!this.InventoryData.TryRemoveItem(targetItem))
             {
-                var newItemObject = this.CreateNewItem(newItem);
-                newItemObject.transform.localPosition = GeneralSettings.ItemGridSize * (indexCoordinate+newItem.Dimensions / 2 + this._itemOffset);
-                this.Occupied[newItem] = newItemObject.GetComponent<ItemBehavior>();
-                return true;
+                return false;
             }
 
-            return false;
+            this.RenderInventory();
+            return true;
         }
 
         /// <summary>
@@ -138,7 +163,7 @@ namespace Assets.GeneralScripts.Item
         /// </summary>
         protected void Start()
         {
-            this._behaviors = new Dictionary<IItem, ItemBehavior>();
+            this.Occupied = new Dictionary<IItem, ItemBehavior>();
             var grid = new GameObject("Grid");
             grid.gameObject.transform.parent = this.transform;
             grid.gameObject.transform.localPosition = Vector3.zero;

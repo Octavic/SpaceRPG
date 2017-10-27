@@ -54,8 +54,9 @@ namespace Assets.GeneralScripts.Item
         /// <returns>The generated phantom</returns>
         public ItemBehavior GeneratePhantom()
         {
-            var newItem = Instantiate(this.gameObject).GetComponent<ItemBehavior>();
+            var newItem = Instantiate(this.gameObject, this.transform.parent).GetComponent<ItemBehavior>();
             newItem.RealCopy = this;
+            newItem.ItemData = this.ItemData;
             this.GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
             newItem.GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
             return newItem;

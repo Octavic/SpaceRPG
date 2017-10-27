@@ -65,6 +65,11 @@ namespace Assets.GeneralScripts.Item
         /// <param name="newInventory">new inventory to be opened</param>
         public void OpenInventory(InventoryBehavior newInventory)
         {
+            if (this._openedInventories == null)
+            {
+                this._openedInventories = new List<InventoryBehavior>();
+            }
+
             this._openedInventories.Add(newInventory);
         }
 
@@ -82,7 +87,10 @@ namespace Assets.GeneralScripts.Item
         /// </summary>
         protected void Start()
         {
-            this._openedInventories = new List<InventoryBehavior>();
+            if (this._openedInventories == null)
+            {
+                this._openedInventories = new List<InventoryBehavior>();
+              }
         }
 
         /// <summary>
@@ -104,10 +112,10 @@ namespace Assets.GeneralScripts.Item
 
                     for (int i = 0; i < this._openedInventories.Count; i++)
                     {
-                        var curResult = this._openedInventories[i].MouseHoverCell(mousePos);
-                        if (curResult != null)
+                        var curHover = this._openedInventories[i].HoverCellCoordidnate(mousePos);
+                        if (curHover != null)
                         {
-                            hoverIndex = curResult;
+                            hoverIndex = curHover;
                             hoverInventory = this._openedInventories[i];
                             break;
                         }
@@ -116,16 +124,22 @@ namespace Assets.GeneralScripts.Item
                     // Not releasing it over any opened inventory, destroy
                     if (hoverIndex == null)
                     {
-                        this._draggedItemSource.InventoryData.TryRemoveItem(this._draggedItem.ItemData);
+                        this._draggedItemSource.TryRemoveItem(this._draggedItem.ItemData);
+                        Destroy(this._draggedItem.gameObject);
+                        this._draggedItem = null;
                     }
                     // Releasing over an opened inventory, try move the item
                     else
                     {
-                        // If item does not fit, remove dragged item
-                        if (!hoverInventory.TryAddItem(this._draggedItem.ItemData, hoverIndex.Value))
+                        // If the dragged item does fit
+                        if (hoverInventory.TryAddItem(this._draggedItem.ItemData, hoverIndex.Value))
                         {
-                            Destroy(this._draggedItem.gameObject);
+                            // Remove item
+                            this._draggedItemSource.TryRemoveItem(this._draggedItem.ItemData);
                         }
+
+                        Destroy(this._draggedItem.gameObject);
+                        this._draggedItem = null;
                     }
                 }
             }
@@ -139,7 +153,7 @@ namespace Assets.GeneralScripts.Item
 
                     for (int i = 0; i < this._openedInventories.Count; i++)
                     {
-                        var curResult = this._openedInventories[i].MouseHoverCell(mousePos);
+                        var curResult = this._openedInventories[i].HoverCellCoordidnate(mousePos);
                         if (curResult != null)
                         {
                             hoverIndex = curResult;
@@ -151,7 +165,9 @@ namespace Assets.GeneralScripts.Item
                     //  Mouse is hovering over something
                     if (hoverIndex != null)
                     {
-
+                        this._draggedItemSource = hoverInventory;
+                        this._draggedItem = hoverInventory.Occupied[hoverInventory.InventoryData.Occupied[hoverIndex.Value]].GeneratePhantom();
+                        this._draggedItemOffset = this._draggedItem.GetIndexCellCoordinate() - mousePos;
                     }
                 }
             }
@@ -165,18 +181,6 @@ namespace Assets.GeneralScripts.Item
         {
             this._openedInventories.Remove(inv);
             this._openedInventories.Insert(0, inv);
-        }
-
-        /// <summary>
-        /// Finds the first inventory that the mouse/item is hovering over
-        /// </summary>
-        /// <param name="mousePos">Mouse/item position</param>
-        /// <returns>Possible hovering index, null if not found</returns>
-        private Vector2? FindFirstHitInventory(Vector2 mousePos)
-        {
-            
-
-            return null;
         }
     }
 }
