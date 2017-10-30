@@ -13,7 +13,8 @@ namespace SpaceRPGTests_new.Assets.GeneralScripts.Items
         {
             var i = new Inventory(3,3);
             var smallItem = new NormalItem(0, "Gold nugget", new UnityEngine.Vector2(1, 1), 10, ItemRarityEnum.Normal);
-            Assert.AreEqual(i.TryAddItem(smallItem, new UnityEngine.Vector2(0, 0)), true);
+            Assert.AreEqual(i.CanAddItem(smallItem, new UnityEngine.Vector2(0, 0)), true);
+            i.AddItem(smallItem, new UnityEngine.Vector2(0, 0));
             Assert.AreEqual(i.Occupied.Count, 1);
             Assert.AreEqual(i.Occupied[new Vector2(0, 0)], smallItem);
             Assert.AreEqual(i.Contents.Count, 1);
@@ -25,7 +26,8 @@ namespace SpaceRPGTests_new.Assets.GeneralScripts.Items
         {
             var i = new Inventory(3, 3);
             var smallItem = new NormalItem(0, "Gold nugget", new UnityEngine.Vector2(2, 2), 10, ItemRarityEnum.Normal);
-            Assert.AreEqual(i.TryAddItem(smallItem, new Vector2(1, 1)), true);
+            Assert.AreEqual(i.CanAddItem(smallItem, new Vector2(1, 1)), true);
+            i.AddItem(smallItem, new Vector2(1, 1));
             Assert.AreEqual(i.Occupied.Count, 4);
             Assert.AreEqual(i.Occupied[new Vector2(1, 1)], smallItem);
             Assert.AreEqual(i.Occupied[new Vector2(1, 2)], smallItem);
@@ -40,7 +42,7 @@ namespace SpaceRPGTests_new.Assets.GeneralScripts.Items
         {
             var i = new Inventory(3, 3);
             var smallItem = new NormalItem(0, "Gold nugget", new UnityEngine.Vector2(4, 4), 10, ItemRarityEnum.Normal);
-            Assert.AreEqual(i.TryAddItem(smallItem, new Vector2(1, 1)), false);
+            Assert.AreEqual(i.CanAddItem(smallItem, new Vector2(1, 1)), false);
             Assert.AreEqual(i.Occupied.Count, 0);
             Assert.AreEqual(i.Contents.Count, 0);
         }
@@ -52,8 +54,9 @@ namespace SpaceRPGTests_new.Assets.GeneralScripts.Items
             var item1 = new NormalItem(0, "Gold nugget", new UnityEngine.Vector2(2, 2), 10, ItemRarityEnum.Normal);
             var item2 = new NormalItem(0, "Gold nugget", new UnityEngine.Vector2(2, 2), 10, ItemRarityEnum.Normal);
 
-            Assert.AreEqual(i.TryAddItem(item1, new Vector2(1, 1)), true);
-            Assert.AreEqual(i.TryAddItem(item2, new Vector2(0, 0)), false);
+            Assert.AreEqual(i.CanAddItem(item1, new Vector2(1, 1)), true);
+            i.AddItem(item1, new Vector2(1, 1));
+            Assert.AreEqual(i.CanAddItem(item2, new Vector2(0, 0)), false);
             Assert.AreEqual(i.Occupied.Count, 4);
             Assert.AreEqual(i.Contents.Count, 1);
         }

@@ -73,9 +73,8 @@ namespace Assets.GeneralScripts.Item
         /// </summary>
         /// <param name="newItem">new item to be added</param>
         /// <returns>True if the new item can be added</returns>
-        public bool TryAddItem(IItem newItem, Vector2 newItemCoordinate)
+        public bool CanAddItem(IItem newItem, Vector2 newItemCoordinate)
         {
-            var newItemOccupied = new List<Vector2>();
             for (int x = 0; x < newItem.Dimensions.x; x++)
             {
                 for (int y = 0; y < newItem.Dimensions.y; y++)
@@ -92,31 +91,33 @@ namespace Assets.GeneralScripts.Item
                     else if (this.Occupied.TryGetValue(curCheckCoor, out collided))
                     {
                         // If it's the same item, it's just being moved
-                        if (collided == newItem)
-                        {
-                            newItemOccupied.Add(curCheckCoor);
-                        }
-                        else
+                        if (collided != newItem)
                         {
                             return false;
                         }
                     }
-                    // No collision, add
-                    else
-                    {
-                        newItemOccupied.Add(curCheckCoor);
-                    }
                 }
             }
 
-            // No collision, apply
-            this.Contents[newItem] = newItemCoordinate;
-            foreach (var occupied in newItemOccupied)
-            {
-                this.Occupied[occupied] = newItem;
-            }
-
+            // Loop finished with no collision, add
             return true;
+        }
+
+        /// <summary>
+        /// Adds a new item to the inventory, assuming that collision has been resolved with CanAddItem(..., ...)
+        /// </summary>
+        /// <param name="newItem">The new item to be added</param>
+        /// <param name="indexCoordinaate">The index coordinate for the new item</param>
+        public void AddItem(IItem newItem, Vector2 indexCoordinaate)
+        {
+            this.Contents[newItem] = indexCoordinaate;
+            for (int x = 0; x < newItem.Dimensions.x; x++)
+            {
+                for (int y = 0; y < newItem.Dimensions.y; y++)
+                {
+                    this.Occupied[indexCoordinaate + new Vector2(x, y)] = newItem;
+                }
+            }
         }
 
         /// <summary>

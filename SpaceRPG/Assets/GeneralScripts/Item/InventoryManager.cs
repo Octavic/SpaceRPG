@@ -106,7 +106,7 @@ namespace Assets.GeneralScripts.Item
                 if (Input.GetMouseButtonUp(0))
                 {
                     // Use has released the item, check each opened inventories from top to bottom
-                    var heldItemIndexPos = this._draggedItem.GetIndexCellCoordinate();
+                    var heldItemIndexPos = this._draggedItem.GetIndexCellWorldPosition();
                     Vector2? hoverIndex = null;
                     InventoryBehavior hoverInventory = null;
 
@@ -132,12 +132,16 @@ namespace Assets.GeneralScripts.Item
                     else
                     {
                         // If the dragged item does fit
-                        if (hoverInventory.TryAddItem(this._draggedItem.ItemData, hoverIndex.Value))
+                        if (hoverInventory.CanAddItem(this._draggedItem.ItemData, hoverIndex.Value))
                         {
                             // Remove item
                             this._draggedItemSource.TryRemoveItem(this._draggedItem.ItemData);
+
+                            // Add new item
+                            hoverInventory.AddItem(this._draggedItem.ItemData, hoverIndex.Value);
                         }
 
+                        // Regardless of fit or not, release held item
                         Destroy(this._draggedItem.gameObject);
                         this._draggedItem = null;
                     }
@@ -167,7 +171,7 @@ namespace Assets.GeneralScripts.Item
                     {
                         this._draggedItemSource = hoverInventory;
                         this._draggedItem = hoverInventory.Occupied[hoverInventory.InventoryData.Occupied[hoverIndex.Value]].GeneratePhantom();
-                        this._draggedItemOffset = this._draggedItem.GetIndexCellCoordinate() - mousePos;
+                        this._draggedItemOffset = (Vector2)this._draggedItem.transform.position - mousePos;
                     }
                 }
             }

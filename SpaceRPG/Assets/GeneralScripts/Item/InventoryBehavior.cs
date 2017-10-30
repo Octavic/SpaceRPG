@@ -120,12 +120,20 @@ namespace Assets.GeneralScripts.Item
         /// <param name="newItem">new item to be added</param>
         /// <param name="indexCoordinate">The coordinate for the item to be added</param>
         /// <returns>True if the operation succeed</returns>
-        public bool TryAddItem(IItem newItem, Vector2 indexCoordinate)
+        public bool CanAddItem(IItem newItem, Vector2 indexCoordinate)
         {
-            var result = this.InventoryData.TryAddItem(newItem, indexCoordinate);
-            this.RenderInventory();
+            return this.InventoryData.CanAddItem(newItem, indexCoordinate);
+        }
 
-            return result;
+        /// <summary>
+        /// Adds a new item to the inventory
+        /// </summary>
+        /// <param name="newItem">New item  to be added</param>
+        /// <param name="indexCoordinate">The index coordinate for the new item</param>
+        public void AddItem(IItem newItem, Vector2 indexCoordinate)
+        {
+            this.InventoryData.AddItem(newItem, indexCoordinate);
+            this.RenderInventory();
         }
 
         /// <summary>
@@ -177,10 +185,10 @@ namespace Assets.GeneralScripts.Item
             this.InventoryData = new Inventory(3,3);
 
             var newItem = new NormalItem(0, "Gold Nugget", new Vector2(1, 1), 10, ItemRarityEnum.Normal);
-            this.TryAddItem(newItem, new Vector2(0,0));
+            this.AddItem(newItem, new Vector2(0,0));
 
             var yarn = new NormalItem(1, "Yarn", new Vector2(2, 2), 20, ItemRarityEnum.Uncommon);
-            this.TryAddItem(yarn, new Vector2(1, 1));
+            this.AddItem(yarn, new Vector2(1, 1));
 
             InventoryManager.CurrentInstance.OpenInventory(this);
             this.RenderInventory();

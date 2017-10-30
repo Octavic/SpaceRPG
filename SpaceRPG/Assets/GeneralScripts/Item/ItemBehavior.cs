@@ -42,10 +42,13 @@ namespace Assets.GeneralScripts.Item
         /// Gets the coordinate of the index square based on the item's current location
         /// </summary>
         /// <returns>Global position of the index square</returns>
-        public Vector2 GetIndexCellCoordinate()
+        public Vector2 GetIndexCellWorldPosition()
         {
             var halfGrid = GeneralSettings.ItemGridSize / 2;
-            return (Vector2)this.transform.position - this.ItemData.Dimensions *halfGrid + new Vector2(halfGrid, halfGrid) ;
+            var result = (Vector2)this.transform.position - this.ItemData.Dimensions* halfGrid + new Vector2(halfGrid, halfGrid);
+            Debug.Log(this.transform.position);
+            Debug.Log(result);
+            return result;
         }
 
         /// <summary>
