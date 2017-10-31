@@ -60,5 +60,22 @@ namespace SpaceRPGTests_new.Assets.GeneralScripts.Items
             Assert.AreEqual(i.Occupied.Count, 4);
             Assert.AreEqual(i.Contents.Count, 1);
         }
+
+        [TestMethod]
+        public void Inventry_MoveItem_SelfConflict()
+        {
+            var i = new Inventory(4, 4);
+            var item1 = new NormalItem(0, "Gold nugget", new UnityEngine.Vector2(3, 3), 10, ItemRarityEnum.Normal);
+
+            Assert.AreEqual(i.CanAddItem(item1, new Vector2(1, 1)), true);
+            i.AddItem(item1, new Vector2(1, 1));
+            Assert.AreEqual(i.Occupied.Count, 9);
+            Assert.AreEqual(i.Contents.Count, 1);
+            Assert.AreEqual(i.CanAddItem(item1, new Vector2(0, 0)), true);
+            i.TryRemoveItem(item1);
+            i.AddItem(item1, new Vector2(0, 0));
+            Assert.AreEqual(i.Occupied.Count, 9);
+            Assert.AreEqual(i.Contents.Count, 1);
+        }
     }
 }

@@ -75,6 +75,19 @@ namespace Assets.GeneralScripts.Item
         /// <returns>True if the new item can be added</returns>
         public bool CanAddItem(IItem newItem, Vector2 newItemCoordinate)
         {
+            // If the new item coordinate is out of bounds
+            if (newItemCoordinate.x < 0 || newItemCoordinate.y < 0)
+            {
+                return false;
+            }
+
+            var cornerCoordiante = newItemCoordinate + newItem.Dimensions;
+            if (cornerCoordiante.x > this.DimentionX || cornerCoordiante.y > this.DimentionY)
+            {
+                return false;
+            }
+
+            // Iterate through new item's cells for conflicts
             for (int x = 0; x < newItem.Dimensions.x; x++)
             {
                 for (int y = 0; y < newItem.Dimensions.y; y++)
@@ -82,15 +95,10 @@ namespace Assets.GeneralScripts.Item
                     var curCheckCoor = newItemCoordinate + new Vector2(x, y);
                     IItem collided;
 
-                    // If coordinate is out of bounds, cannot fit
-                    if (curCheckCoor.x >= this.DimentionX || curCheckCoor.y >= this.DimentionY)
-                    {
-                        return false;
-                    }
                     // If there's collision, check collision
-                    else if (this.Occupied.TryGetValue(curCheckCoor, out collided))
+                    if (this.Occupied.TryGetValue(curCheckCoor, out collided))
                     {
-                        // If it's the same item, it's just being moved
+                        // If it's the same item just being moved, it won't collide with itself
                         if (collided != newItem)
                         {
                             return false;

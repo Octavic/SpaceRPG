@@ -140,7 +140,7 @@ namespace Assets.GeneralScripts.Item
                             // Add new item
                             hoverInventory.AddItem(this._draggedItem.ItemData, hoverIndex.Value);
                         }
-
+                        
                         // Regardless of fit or not, release held item
                         Destroy(this._draggedItem.gameObject);
                         this._draggedItem = null;

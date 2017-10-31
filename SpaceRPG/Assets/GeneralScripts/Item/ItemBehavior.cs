@@ -46,8 +46,6 @@ namespace Assets.GeneralScripts.Item
         {
             var halfGrid = GeneralSettings.ItemGridSize / 2;
             var result = (Vector2)this.transform.position - this.ItemData.Dimensions* halfGrid + new Vector2(halfGrid, halfGrid);
-            Debug.Log(this.transform.position);
-            Debug.Log(result);
             return result;
         }
 

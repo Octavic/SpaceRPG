@@ -182,7 +182,7 @@ namespace Assets.GeneralScripts.Item
             items.gameObject.transform.localPosition = Vector3.zero;
             this._itemsTransform = items.transform;
 
-            this.InventoryData = new Inventory(3,3);
+            this.InventoryData = new Inventory(4,4);
 
             var newItem = new NormalItem(0, "Gold Nugget", new Vector2(1, 1), 10, ItemRarityEnum.Normal);
             this.AddItem(newItem, new Vector2(0,0));

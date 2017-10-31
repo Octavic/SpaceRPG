@@ -148,6 +148,7 @@
     <Compile Include="Assets\GeneralScripts\Dialogue\PlayerOptioBehaviour.cs" />
     <Compile Include="Assets\GeneralScripts\Dialogue\TagNames.cs" />
     <Compile Include="Assets\GeneralScripts\Dialogue\ScriptStringExtensions.cs" />
+    <Compile Include="Assets\GeneralScripts\Item\ConfirmDeleteItemUI.cs" />
     <Compile Include="Assets\GeneralScripts\Item\IItem.cs" />
     <Compile Include="Assets\GeneralScripts\Item\Inventory.cs" />
     <Compile Include="Assets\GeneralScripts\Item\InventoryBehavior.cs" />
