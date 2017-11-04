@@ -140,7 +140,7 @@ namespace Assets.GeneralScripts.Item
                             // Add new item
                             hoverInventory.AddItem(this._draggedItem.ItemData, hoverIndex.Value);
                         }
-                        
+
                         // Regardless of fit or not, release held item
                         Destroy(this._draggedItem.gameObject);
                         this._draggedItem = null;
@@ -152,6 +152,7 @@ namespace Assets.GeneralScripts.Item
             {
                 if (Input.GetMouseButtonDown(0))
                 {
+
                     Vector2? hoverIndex = null;
                     InventoryBehavior hoverInventory = null;
 
@@ -169,10 +170,32 @@ namespace Assets.GeneralScripts.Item
                     //  Mouse is hovering over something
                     if (hoverIndex != null)
                     {
-                        this._draggedItemSource = hoverInventory;
-                        this._draggedItem = hoverInventory.Occupied[hoverInventory.InventoryData.Occupied[hoverIndex.Value]].GeneratePhantom();
-                        this._draggedItemOffset = (Vector2)this._draggedItem.transform.position - mousePos;
+                        // If left shift key is not held, then normal drag and drop
+                        if (!Input.GetKey(KeyCode.LeftShift))
+                        {
+                            this._draggedItemSource = hoverInventory;
+                            this._draggedItem = hoverInventory.Occupied[hoverInventory.InventoryData.Occupied[hoverIndex.Value]].GeneratePhantom();
+                            this._draggedItemOffset = (Vector2)this._draggedItem.transform.position - mousePos;
+                        }
+                        // Left shift key is held, do quick add
+                        else
+                        {
+                            // Inventory transfer is only possible with more than 2 opened inventories. 
+                            // TODO: Use this as quick delete
+                            if (this._openedInventories.Count >= 2)
+                            {
+                                var clickedItem = hoverInventory.Occupied[hoverInventory.InventoryData.Occupied[hoverIndex.Value]];
+                                var destination = this._openedInventories[0] != hoverInventory ? this._openedInventories[0] : this._openedInventories[1];
+                                var result = destination.InventoryData.CanQuickAddItem(clickedItem.ItemData);
+                                if (result.HasValue)
+                                {
+                                    hoverInventory.TryRemoveItem(clickedItem.ItemData);
+                                    destination.AddItem(clickedItem.ItemData, result.Value);
+                                }
+                            }
+                        }
                     }
+
                 }
             }
         }
