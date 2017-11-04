@@ -11,7 +11,7 @@ namespace Assets.GeneralScripts.Utility
 		/// The item definition
 		/// </summary>
 		/// <typeparam name="T">Return type</typeparam>
-		public class WeightedItem<T>
+		public class WeightedItem
 		{
 			/// <summary>
 			/// Gets or sets the item
@@ -38,7 +38,7 @@ namespace Assets.GeneralScripts.Utility
 		/// <summary>
 		/// A list of weighted items
 		/// </summary>
-		public IList<WeightedItem<T>> Items { get; private set; }
+		public IList<WeightedItem> Items { get; private set; }
 
 		/// <summary>
 		/// The current sum of all  weights in the list
@@ -50,7 +50,7 @@ namespace Assets.GeneralScripts.Utility
 		/// </summary>
 		public WeightedRandomList()
 		{
-			this.Items = new List<WeightedItem<T>>();
+			this.Items = new List<WeightedItem>();
 			this._total = 0;
 		}
 
@@ -61,7 +61,7 @@ namespace Assets.GeneralScripts.Utility
 		/// <param name="weight">Weight of this item</param>
 		public void AddNewItem(T item, int weight)
 		{
-			this.Items.Add(new WeightedItem<T>(item, weight));
+			this.Items.Add(new WeightedItem(item, weight));
 			this._total += weight;
 		}
 

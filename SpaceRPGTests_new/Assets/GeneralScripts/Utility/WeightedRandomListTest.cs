@@ -13,7 +13,7 @@ namespace SpaceRPGTests_new.Assets.GeneralScripts.Utility
 		[TestMethod]
 		public void WeightedItemConstructor()
 		{
-			var item = new WeightedItem<string>("data1", 10);
+			var item = new WeightedItem("data1", 10);
 			Assert.AreEqual(item.Item, "data1");
 			Assert.AreEqual(item.Weight, 10);
 		}

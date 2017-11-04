@@ -69,6 +69,30 @@ namespace Assets.GeneralScripts.Item
         }
 
         /// <summary>
+        /// Try to quick add an item
+        /// </summary>
+        /// <param name="newitem">The new item to be added</param>
+        /// <returns>The index coordinate if successful, null if the new item cannot fits</returns>
+        public Vector2? CanQuickAddItem(IItem newitem)
+        {
+            // Search from left to right, then top to down
+            for (int y = this.DimentionY - (int)newitem.Dimensions.y; y >= 0; y--)
+            {
+                for (int x = 0; x <= this.DimentionX - newitem.Dimensions.x; x++)
+                {
+                    var checkCoor = new Vector2(x, y);
+                    if (this.CanAddItem(newitem, checkCoor))
+                    {
+                        return checkCoor;
+                    }
+                }
+            }
+
+            // Can't fit anywhere
+            return null;
+        }
+
+        /// <summary>
         /// Try to add a new item to the inventory
         /// </summary>
         /// <param name="newItem">new item to be added</param>
