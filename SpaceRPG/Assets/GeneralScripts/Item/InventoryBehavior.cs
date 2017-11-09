@@ -12,7 +12,6 @@ namespace Assets.GeneralScripts.Item
     using System.Text;
     using UnityEngine;
     using GeneralScripts.Utility;
-    using Settings;
     using UnityEngine.UI;
 
     /// <summary>
@@ -69,11 +68,11 @@ namespace Assets.GeneralScripts.Item
         {
             var relativePosition = mousePosition - new Vector2
                 (
-                    this.transform.position.x - GeneralSettings.ItemGridSize / 2,
-                    this.transform.position.y - GeneralSettings.ItemGridSize / 2
+                    this.transform.position.x - Config.ItemGridSize / 2,
+                    this.transform.position.y - Config.ItemGridSize / 2
                 );
-            var xCoor = relativePosition.x / GeneralSettings.ItemGridSize;
-            var yCoor = relativePosition.y / GeneralSettings.ItemGridSize;
+            var xCoor = relativePosition.x / Config.ItemGridSize;
+            var yCoor = relativePosition.y / Config.ItemGridSize;
             if (xCoor < 0 || yCoor < 0 || xCoor >= this.InventoryData.DimentionX || yCoor >= this.InventoryData.DimentionY)
             {
                 return null;
@@ -100,7 +99,7 @@ namespace Assets.GeneralScripts.Item
                 {
                     var pos = new Vector2(xPos, yPos);
                     var newGrid = Instantiate(this.GridCellPrefab, this._gridTransform);
-                    newGrid.transform.localPosition = pos * GeneralSettings.ItemGridSize;
+                    newGrid.transform.localPosition = pos * Config.ItemGridSize;
                     newGrid.GetComponent<Image>().color = this.RarityColors[0];
                 }
             }
@@ -110,7 +109,7 @@ namespace Assets.GeneralScripts.Item
             {
                 var newItemObject = this.CreateNewItem(item.Key);
                 this.Occupied[item.Key] = newItemObject.GetComponent<ItemBehavior>();
-                newItemObject.transform.localPosition = GeneralSettings.ItemGridSize * (item.Value + item.Key.Dimensions / 2 + this._itemOffset);
+                newItemObject.transform.localPosition = Config.ItemGridSize * (item.Value + item.Key.Dimensions / 2 + this._itemOffset);
             }
         }
 
@@ -181,17 +180,6 @@ namespace Assets.GeneralScripts.Item
             items.gameObject.transform.parent = this.transform;
             items.gameObject.transform.localPosition = Vector3.zero;
             this._itemsTransform = items.transform;
-
-            this.InventoryData = new Inventory(4,4);
-
-            var newItem = new NormalItem(0, "Gold Nugget", new Vector2(1, 1), 10, ItemRarityEnum.Normal);
-            this.AddItem(newItem, new Vector2(0,0));
-
-            var yarn = new NormalItem(1, "Yarn", new Vector2(2, 2), 20, ItemRarityEnum.Uncommon);
-            this.AddItem(yarn, new Vector2(1, 1));
-
-            InventoryManager.CurrentInstance.OpenInventory(this);
-            this.RenderInventory();
         }
     }
 }

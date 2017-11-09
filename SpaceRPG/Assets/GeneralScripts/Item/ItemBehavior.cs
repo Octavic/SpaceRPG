@@ -12,7 +12,6 @@ namespace Assets.GeneralScripts.Item
     using System.Text;
     using UnityEngine;
     using UnityEngine.UI;
-    using Settings;
 
     /// <summary>
     /// The behavior script for an item
@@ -44,7 +43,7 @@ namespace Assets.GeneralScripts.Item
         /// <returns>Global position of the index square</returns>
         public Vector2 GetIndexCellWorldPosition()
         {
-            var halfGrid = GeneralSettings.ItemGridSize / 2;
+            var halfGrid = Config.ItemGridSize / 2;
             var result = (Vector2)this.transform.position - this.ItemData.Dimensions* halfGrid + new Vector2(halfGrid, halfGrid);
             return result;
         }

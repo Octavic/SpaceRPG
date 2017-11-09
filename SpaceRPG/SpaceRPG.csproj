@@ -92,6 +92,7 @@
     <Compile Include="Assets\CombatScripts\Settings\ShipMovementSettings.cs" />
     <Compile Include="Assets\CombatScripts\Settings\UIButtonColor.cs" />
     <Compile Include="Assets\CombatScripts\Ships\AIController.cs" />
+    <Compile Include="Assets\CombatScripts\Ships\DropsLoot.cs" />
     <Compile Include="Assets\CombatScripts\Ships\EnemyAITypes.cs" />
     <Compile Include="Assets\CombatScripts\Ships\EngineFlame.cs" />
     <Compile Include="Assets\CombatScripts\Ships\EngineFlameLengthEnum.cs" />
@@ -146,8 +147,10 @@
     <Compile Include="Assets\GeneralScripts\Dialogue\NpcDialogItem.cs" />
     <Compile Include="Assets\GeneralScripts\Dialogue\PlayerDialogItem.cs" />
     <Compile Include="Assets\GeneralScripts\Dialogue\PlayerOptioBehaviour.cs" />
-    <Compile Include="Assets\GeneralScripts\Dialogue\TagNames.cs" />
     <Compile Include="Assets\GeneralScripts\Dialogue\ScriptStringExtensions.cs" />
+    <Compile Include="Assets\GeneralScripts\Dialogue\TagNames.cs" />
+    <Compile Include="Assets\GeneralScripts\Item\ContainerBehavior.cs" />
+    <Compile Include="Assets\GeneralScripts\Item\ItemCatagory.cs" />
     <Compile Include="Assets\GeneralScripts\Item\ConfirmDeleteItemUI.cs" />
     <Compile Include="Assets\GeneralScripts\Item\IItem.cs" />
     <Compile Include="Assets\GeneralScripts\Item\Inventory.cs" />
@@ -162,7 +165,6 @@
     <Compile Include="Assets\GeneralScripts\Quest\ReputationQuestAvailability.cs" />
     <Compile Include="Assets\GeneralScripts\SaveData.cs" />
     <Compile Include="Assets\GeneralScripts\SaveManager.cs" />
-    <Compile Include="Assets\GeneralScripts\Settings\GeneralSettings.cs" />
     <Compile Include="Assets\GeneralScripts\UI\GalaxyMap\GalaxyMapBehavior.cs" />
     <Compile Include="Assets\GeneralScripts\UI\GalaxyMap\GalaxyMapCamera.cs" />
     <Compile Include="Assets\GeneralScripts\UI\GalaxyMap\GalaxyMapData.cs" />
@@ -190,7 +192,6 @@
     <None Include="Assets\Dialogue\DialogueExample.txt" />
     <None Include="Assets\Dialogue\TestScript.txt" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
 </Project>

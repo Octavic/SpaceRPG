@@ -130,7 +130,11 @@ namespace Assets.CombatScripts.Ships.Weapons
 				// Calculate how much to turn
 				var oldRotation = this.transform.eulerAngles.z;
 				var maxTurningThisFrame = this.RotationSpeed * Time.deltaTime;
-				var angleToTurn = CalcTurnAngle.InDegree(this.transform.position, Target.transform.position, this.transform.eulerAngles.z, maxTurningThisFrame);
+				var angleToTurn = CalcTurnAngle.InDegree(
+                    this.transform.position, 
+                    Target.transform.position, 
+                    this.transform.eulerAngles.z, 
+                    maxTurningThisFrame);
 				this.IsLinedUp = Mathf.Abs(angleToTurn) < maxTurningThisFrame;
 
 				this.transform.eulerAngles = new Vector3(0, 0, oldRotation + angleToTurn);
@@ -138,11 +142,11 @@ namespace Assets.CombatScripts.Ships.Weapons
 				// Check if the weapon is outside allowed max angle
 				if (this.RotationType == ShipWeaponRotateEnum.Limited)
 				{
-					var diffToCenter = CalcAngleDiff.InDegrees(this._originalRotation, this.transform.localEulerAngles.z);
+					var diffToCenter = CalcAngleDiff.InDegrees(0, this.transform.localEulerAngles.z);
 					if (Math.Abs(diffToCenter) > this.MaxAngle)
 					{
 						this.IsLinedUp = false;
-						this.transform.localEulerAngles = new Vector3(0, 0, this._originalRotation + Math.Sign(diffToCenter) * this.MaxAngle);
+						this.transform.localEulerAngles = new Vector3(0, 0, Math.Sign(diffToCenter) * this.MaxAngle);
 					}
 				}
 			}

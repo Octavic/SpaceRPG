@@ -38,5 +38,11 @@ namespace Assets.GeneralScripts.Item
         /// Gets the rarity of an item
         /// </summary>
         ItemRarityEnum Rarity { get; }
+
+        /// <summary>
+        /// Clones the item and return an exact copy
+        /// </summary>
+        /// <returns>The cloned item</returns>
+        IItem Clone();
     }
 }

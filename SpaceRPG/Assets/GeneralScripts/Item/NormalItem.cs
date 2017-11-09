@@ -35,5 +35,10 @@ namespace Assets.GeneralScripts.Item
             this.BaseSellValue = baseSellValue;
             this.Rarity = rarity;
         }
+
+        public virtual IItem Clone()
+        {
+            return new NormalItem(this.ItemId, this.ItemName, this.Dimensions, this.BaseSellValue, this.Rarity);
+        }
     }
 }
