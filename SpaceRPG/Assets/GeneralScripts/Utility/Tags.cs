@@ -25,6 +25,8 @@ namespace Assets.GeneralScripts.Utility
 		GalaxyMap,
 		DialogBox,
         SpriteManager,
-        InventoryManager
+        InventoryManager,
+        Canvas,
+        Inventories
 	}
 }

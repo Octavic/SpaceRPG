@@ -33,9 +33,14 @@ namespace Assets.GeneralScripts
         public const float ItemGridSize = 50;
 
         /// <summary>
+        /// The range player has to be in to open containers
+        /// </summary>
+        public const float OpenContainerRange = 10;
+
+        /// <summary>
         /// Gets the default position for a container UI
         /// </summary>
-        public static Vector2 DefaultContainerUIPositioin
+        public static Vector2 DefaultContainerUIPosition
         {
             get
             {

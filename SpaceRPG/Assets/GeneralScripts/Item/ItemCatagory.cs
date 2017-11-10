@@ -18,21 +18,44 @@ namespace Assets.GeneralScripts.Item
     public static class ItemCatagory
     {
         /// <summary>
-        /// Gets the item data with the given item id
+        /// Creates the only isntance of the <see cref="ItemCatagory"/> class
+        /// </summary>
+        static ItemCatagory()
+        {
+            _itemData.Add(new NormalItem(0, "Gold Nugget", new Vector2(1, 1), 100, ItemRarityEnum.Normal));
+            _itemData.Add(new NormalItem(1, "Yarn", new Vector2(2, 2), 200, ItemRarityEnum.Normal));
+
+            foreach (var item in _itemData)
+            {
+                _items[item.ItemId] = item;
+            }
+        }
+
+        /// <summary>
+        /// Gets the item data with the given item id, null if invalid
         /// </summary>
         /// <param name="itemId">Item id</param>
         /// <returns>result item data</returns>
         public static IItem GetItem(int itemId)
         {
-            return ItemCatagory._items[itemId].Clone();
+            IItem result;
+            if (!_items.TryGetValue(itemId, out result))
+            {
+                return null;
+            }
+
+            return result.Clone();
         }
 
         /// <summary>
         /// The list of items
         /// </summary>
-        private static List<IItem> _items = new List<IItem>() {
-            new NormalItem(0, "Gold Nugget", new Vector2(1,1), 100, ItemRarityEnum.Normal),
-            new NormalItem(1, "Yarn", new Vector2(2,2), 200, ItemRarityEnum.Uncommon)
-        };
+        private static Dictionary<int, IItem> _items = new Dictionary<int, IItem>() ;
+
+        /// <summary>
+        /// The collection of items
+        /// TODO: Move this to a centralized file
+        /// </summary>
+        private static IList<IItem> _itemData = new List<IItem>();
     }
 }

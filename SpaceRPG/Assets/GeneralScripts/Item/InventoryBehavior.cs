@@ -114,6 +114,15 @@ namespace Assets.GeneralScripts.Item
         }
 
         /// <summary>
+        /// Assigns an inventory for this behavior to represent
+        /// </summary>
+        /// <param name="inventoryData">inventory data</param>
+        public void AssignInventory(Inventory inventoryData)
+        {
+            this.InventoryData = inventoryData;
+        }
+
+        /// <summary>
         /// Try to add an item
         /// </summary>
         /// <param name="newItem">new item to be added</param>
@@ -152,6 +161,24 @@ namespace Assets.GeneralScripts.Item
         }
 
         /// <summary>
+        /// Opens the inventory
+        /// </summary>
+        public void Open()
+        {
+            InventoryManager.CurrentInstance.OpenInventory(this);
+            this.gameObject.SetActive(true);
+        }
+
+        /// <summary>
+        /// Closes the inventory
+        /// </summary>
+        public void Close()
+        {
+            InventoryManager.CurrentInstance.CloseInventory(this);
+            this.gameObject.SetActive(false);
+        }
+
+        /// <summary>
         /// Creates a new item prefab
         /// </summary>
         /// <param name="item">new item</param>
@@ -180,6 +207,11 @@ namespace Assets.GeneralScripts.Item
             items.gameObject.transform.parent = this.transform;
             items.gameObject.transform.localPosition = Vector3.zero;
             this._itemsTransform = items.transform;
+
+            if (this.InventoryData != null)
+            {
+                this.RenderInventory();
+            }
         }
     }
 }

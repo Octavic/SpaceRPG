@@ -17,6 +17,11 @@ namespace Assets.GeneralScripts.Utility
 	/// </summary>
 	public static class GameObjectFinder
 	{
+        /// <summary>
+        /// A hash of found items
+        /// </summary>
+        private static IDictionary<Tags, GameObject>_foundItemHash = new Dictionary<Tags, GameObject>();
+
 		/// <summary>
 		/// Finds a gameobject with the given tag enum
 		/// </summary>
@@ -24,7 +29,17 @@ namespace Assets.GeneralScripts.Utility
 		/// <returns>The found game object with the given tag</returns>
 		public static GameObject FindGameObjectWithTag(Tags tag)
 		{
-			return GameObject.FindGameObjectWithTag(tag.ToString());
+            GameObject result;
+            
+            // See if the object is found in the hash. If so and it's not null, use it
+            if (!_foundItemHash.TryGetValue(tag, out result) || result == null)
+            {
+                // Hash not found, find it and add it to hash
+                result = GameObject.FindGameObjectWithTag(tag.ToString());
+                _foundItemHash[tag] = result;
+            }
+
+            return result;
 		}
 	}
 }

@@ -357,6 +357,12 @@ namespace Assets.CombatScripts.Ships
 		protected void OnShipDestroy()
 		{
 			GameController.CurrentInstance.DestroyShip(this);
+            var dropLoot = this.GetComponent<DropsLoot>();
+            if (dropLoot != null)
+            {
+                dropLoot.GenerateContainer();
+            }
+
 			Destroy(this.gameObject);
 		}
 	}

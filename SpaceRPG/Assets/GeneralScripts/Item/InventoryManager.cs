@@ -70,7 +70,10 @@ namespace Assets.GeneralScripts.Item
                 this._openedInventories = new List<InventoryBehavior>();
             }
 
-            this._openedInventories.Add(newInventory);
+            if (!this._openedInventories.Contains(newInventory))
+            {
+                this._openedInventories.Add(newInventory);
+            }
         }
 
         /// <summary>

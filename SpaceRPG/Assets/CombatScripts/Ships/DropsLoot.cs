@@ -75,6 +75,12 @@ namespace Assets.CombatScripts.Ships
             while (failedCount < 5 && GenerateCount>0 && succeedCount < GenerateCount)
             {
                 var newItem = ItemCatagory.GetItem(weightedList.GetRandomItem());
+                if (newItem == null)
+                {
+                    succeedCount ++;
+                    failedCount++;
+                }
+
                 var indexCoor = newInventory.CanQuickAddItem(newItem);
                 if (!indexCoor.HasValue)
                 {
@@ -88,6 +94,7 @@ namespace Assets.CombatScripts.Ships
                 }
             }
             var newContainer = Instantiate(this.ContainerPrefab).GetComponent<ContainerBehavior>();
+            newContainer.transform.position = this.transform.position;
             newContainer.AssignInventory(newInventory);
         }
     }

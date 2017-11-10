@@ -6,6 +6,7 @@ namespace Assets.GeneralScripts.Item
     using System.Linq;
     using System.Text;
     using UnityEngine;
+    using Utility;
 
     /// <summary>
     /// Describes the behavior of a container
@@ -23,16 +24,49 @@ namespace Assets.GeneralScripts.Item
         public GameObject InventoryUIPrefab;
 
         /// <summary>
+        /// The player
+        /// </summary>
+        private GameObject _player;
+
+        /// <summary>
         /// Assigns the new inventory
         /// </summary>
         /// <param name="inventory">The new inventory</param>
         public void AssignInventory(Inventory inventory)
         {
-            var newUI = Instantiate(this.InventoryUIPrefab).GetComponent<InventoryBehavior>();
-            newUI.transform.position = Config.DefaultContainerUIPositioin;
-            newUI.InventoryData = inventory;
-            newUI.RenderInventory();
+            var newUI = Instantiate(
+                this.InventoryUIPrefab,
+                GameObjectFinder.FindGameObjectWithTag(Tags.Inventories).transform
+            ).GetComponent<InventoryBehavior>();
+
+            newUI.transform.localPosition = Config.DefaultContainerUIPosition;
+            newUI.AssignInventory(inventory);
+            newUI.Close();
             this.InventoryUI = newUI;
+        }
+
+        // Called once in the beginning for initialization
+        protected void Start()
+        {
+            this._player = GameObjectFinder.FindGameObjectWithTag(Tags.Player);
+        }
+
+        /// <summary>
+        /// Called once per frame
+        /// </summary>
+        protected void Update()
+        {
+            // Opens if the player is close enough, closes if not
+            var isOpened = this.InventoryUI.gameObject.activeSelf;
+            var isInRange = (this._player.transform.position - this.transform.position).magnitude <= Config.OpenContainerRange;
+            if (isInRange && !isOpened)
+            {
+                this.InventoryUI.Open();
+            }
+            else if(!isInRange && isOpened)
+            {
+                this.InventoryUI.Close();
+            }
         }
     }
 }
