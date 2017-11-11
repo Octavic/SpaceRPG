@@ -1,4 +1,9 @@
-﻿
+﻿//  --------------------------------------------------------------------------------------------------------------------
+//  <copyright file="ContainerBehavior.cs">
+//    Copyright (c) Yifei Xu .  All rights reserved.
+//  </copyright>
+//  --------------------------------------------------------------------------------------------------------------------
+
 namespace Assets.GeneralScripts.Item
 {
     using System;
@@ -34,14 +39,8 @@ namespace Assets.GeneralScripts.Item
         /// <param name="inventory">The new inventory</param>
         public void AssignInventory(Inventory inventory)
         {
-            var newUI = Instantiate(
-                this.InventoryUIPrefab,
-                GameObjectFinder.FindGameObjectWithTag(Tags.Inventories).transform
-            ).GetComponent<InventoryBehavior>();
-
+            var newUI = InventoryManager.CurrentInstance.CreateNewUI(inventory);
             newUI.transform.localPosition = Config.DefaultContainerUIPosition;
-            newUI.AssignInventory(inventory);
-            newUI.Close();
             this.InventoryUI = newUI;
         }
 

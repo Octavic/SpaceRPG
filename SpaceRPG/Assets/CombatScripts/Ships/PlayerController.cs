@@ -13,14 +13,15 @@ namespace Assets.CombatScripts.Ships
     using UnityEngine;
     using Utility;
     using Settings;
-	using Weapons;
-	using UI;
-	using Assets.GeneralScripts.Utility;
+    using Weapons;
+    using UI;
+    using Assets.GeneralScripts.Utility;
+    using GeneralScripts.Item;
 
-	/// <summary>
-	/// A ship that's controlled by a player
-	/// </summary>
-	public class PlayerController : ShipController
+    /// <summary>
+    /// A ship that's controlled by a player
+    /// </summary>
+    public class PlayerController : ShipController
 	{
 		/// <summary>
 		/// How fast the throttle adjusts
@@ -43,7 +44,7 @@ namespace Assets.CombatScripts.Ships
 				{
 					PlayerController._currentInstance = GameObjectFinder.FindGameObjectWithTag(Tags.Player).GetComponent<PlayerController>();
 				}
-
+                
 				return PlayerController._currentInstance;
 			}
 		}
@@ -72,6 +73,16 @@ namespace Assets.CombatScripts.Ships
 		/// The button used to select weapons
 		/// </summary>
 		private IList<ButtonNames> _selectWeaponButtons;
+
+        /// <summary>
+        /// If all inventories are visible
+        /// </summary>
+        private bool _isInventoryOpened;
+
+        /// <summary>
+        /// The parent for all opened inventories
+        /// </summary>
+        private GameObject _inventoriesParent;
 
 		/// <summary>
 		/// Gets the current instance
@@ -140,6 +151,16 @@ namespace Assets.CombatScripts.Ships
 				ButtonNames.Weapon3,
 				ButtonNames.Weapon4
 			};
+
+            // Create a new inventory just for the ship
+            // TODO: Keep player's inventory persistent through scenes
+            // TODO: Player's inventory size will depend on the ship
+            var playerInventory = new Inventory(5, 5);
+            var playerInventoryUI = InventoryManager.CurrentInstance.CreateNewUI(playerInventory);
+            playerInventoryUI.Open();
+            this._inventoriesParent = GameObjectFinder.FindGameObjectWithTag(Tags.Inventories);
+            this._isInventoryOpened = false;
+            this._inventoriesParent.SetActive(false);
 		}
 
 		/// <summary>
@@ -147,6 +168,12 @@ namespace Assets.CombatScripts.Ships
 		/// </summary>
 		protected void FixedUpdate()
         {
+            // Open or close the inventory
+            if (Input.GetKeyDown(KeyCode.I))
+            {
+                this._isInventoryOpened = !this._isInventoryOpened;
+                this._inventoriesParent.SetActive(this._isInventoryOpened);
+            }
             // Turn the ship
             var rotateDirection = InputHelper.GetAxis(ButtonNames.Turn);
             this._shipComponent.TryTurn(rotateDirection * this._shipComponent.RotationSpeed * Time.deltaTime);

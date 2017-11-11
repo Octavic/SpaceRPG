@@ -20,6 +20,11 @@ namespace Assets.GeneralScripts.Item
     public class InventoryManager : MonoBehaviour
     {
         /// <summary>
+        /// Prefab for the inventory UI game object
+        /// </summary>
+        public GameObject InventoryUIPrefab;
+
+        /// <summary>
         /// Gets the current singleton instance of the <see cref="InventoryManager"/> class 
         /// </summary>
         public static InventoryManager CurrentInstance {
@@ -58,6 +63,21 @@ namespace Assets.GeneralScripts.Item
         /// The offset of the dragged item's coordinate to mouse offset
         /// </summary>
         private Vector2 _draggedItemOffset;
+
+        /// <summary>
+        /// Creates a new UI for the given inventory
+        /// </summary>
+        /// <param name="inventory">Target inventory</param>
+        /// <returns>Resulting UI item</returns>
+        public InventoryBehavior CreateNewUI(Inventory inventory)
+        {
+           var newUI = Instantiate(
+                this.InventoryUIPrefab,
+                GameObjectFinder.FindGameObjectWithTag(Tags.Inventories).transform
+            ).GetComponent<InventoryBehavior>();
+            newUI.AssignInventory(inventory);
+            return newUI;
+        }
 
         /// <summary>
         /// Opens up a new inventory
