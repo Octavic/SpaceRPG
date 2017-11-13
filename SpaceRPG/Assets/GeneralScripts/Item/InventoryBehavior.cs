@@ -30,6 +30,21 @@ namespace Assets.GeneralScripts.Item
         public GameObject GridCellPrefab;
 
         /// <summary>
+        /// Outline for the background
+        /// </summary>
+        public GameObject BackgroundOutline;
+
+        /// <summary>
+        /// The background of the UI
+        /// </summary>
+        public GameObject BackgroundObject;
+
+        /// <summary>
+        /// The button for closing this inventory
+        /// </summary>
+        public GameObject CloseButton;
+
+        /// <summary>
         /// A collection of rarity colors from empty, to least rare to most rare
         /// </summary>
         public List<Color> RarityColors;
@@ -87,6 +102,23 @@ namespace Assets.GeneralScripts.Item
         /// </summary>
         public void RenderInventory()
         {
+            // Set the background and boarder for the background
+            var width = this.InventoryData.DimentionX * Config.ItemGridSize + Config.InventoryBoarder * 2;
+            var height = this.InventoryData.DimentionY * Config.ItemGridSize + Config.InventoryBoarder * 2 + Config.InventoryHeaderHeight;
+            var posX = (this.InventoryData.DimentionX - 1) * Config.ItemGridSize / 2;
+            var posY = (this.InventoryData.DimentionY - 1) * Config.ItemGridSize / 2 + Config.InventoryHeaderHeight /2  ;
+            var backgroundRect = this.BackgroundObject.GetComponent<RectTransform>() ;
+            backgroundRect.sizeDelta = new Vector2(width, height);
+            backgroundRect.transform.localPosition = new Vector2(posX, posY);
+            var outlineRect = this.BackgroundOutline.GetComponent<RectTransform>();
+            outlineRect.sizeDelta = new Vector2(width + Config.InventoryBoarderOutline * 2, height + Config.InventoryBoarderOutline * 2);
+            outlineRect.transform.localPosition = new Vector3(posX, posY);
+
+            // Sets the position of the close button to top right
+            var buttonPosX = this.InventoryData.DimentionX * Config.ItemGridSize - Config.ItemGridSize / 2 - Config.CloseInventoryButtonSize / 2 ;
+            var buttonPosY = this.InventoryData.DimentionY * Config.ItemGridSize - Config.ItemGridSize / 2 - Config.CloseInventoryButtonSize / 2 + Config.InventoryHeaderHeight;
+            this.CloseButton.transform.localPosition = new Vector2(buttonPosX, buttonPosY);
+            
             // Remove old
             this._itemsTransform.gameObject.DestroyAllChildren();
             this._gridTransform.gameObject.DestroyAllChildren();

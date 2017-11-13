@@ -33,6 +33,26 @@ namespace Assets.GeneralScripts
         public const float ItemGridSize = 50;
 
         /// <summary>
+        /// The boarder size for inventories
+        /// </summary>
+        public const float InventoryBoarder = 10;
+
+        /// <summary>
+        /// the size of the black outline around the inventory background
+        /// </summary>
+        public const float InventoryBoarderOutline = 5;
+
+        /// <summary>
+        /// The size  of the header for the inventory containing the close button
+        /// </summary>
+        public const float InventoryHeaderHeight = 25;
+
+        /// <summary>
+        /// Size of the close inventory button
+        /// </summary>
+        public const float CloseInventoryButtonSize = 25;
+
+        /// <summary>
         /// The range player has to be in to open containers
         /// </summary>
         public const float OpenContainerRange = 10;
