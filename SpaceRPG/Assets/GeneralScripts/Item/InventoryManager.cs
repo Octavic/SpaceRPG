@@ -76,10 +76,10 @@ namespace Assets.GeneralScripts.Item
         /// <returns>Resulting UI item</returns>
         public InventoryBehavior CreateNewUI(Inventory inventory, bool autoSetPosition = true)
         {
-           var newUI = Instantiate(
-                this.InventoryUIPrefab,
-                GameObjectFinder.FindGameObjectWithTag(Tags.Inventories).transform
-            ).GetComponent<InventoryBehavior>();
+            var newUI = Instantiate(
+                 this.InventoryUIPrefab,
+                 GameObjectFinder.FindGameObjectWithTag(Tags.Inventories).transform
+             ).GetComponent<InventoryBehavior>();
             newUI.AssignInventory(inventory);
             if (autoSetPosition)
             {
@@ -144,8 +144,8 @@ namespace Assets.GeneralScripts.Item
 
                     for (int i = 0; i < this._openedInventories.Count; i++)
                     {
-                        var curHover = this._openedInventories[i].HoverCellCoordidnate(mousePos);
-                        if (curHover != null)
+                        Vector2? curHover;
+                        if (this._openedInventories[i].IsHoveringOver(mousePos, out curHover) && curHover.HasValue)
                         {
                             hoverIndex = curHover;
                             hoverInventory = this._openedInventories[i];
@@ -184,18 +184,25 @@ namespace Assets.GeneralScripts.Item
             {
                 if (Input.GetMouseButtonDown(0))
                 {
-
                     Vector2? hoverIndex = null;
                     InventoryBehavior hoverInventory = null;
 
                     for (int i = this._openedInventories.Count - 1; i >= 0; i--)
                     {
-                        var curResult = this._openedInventories[i].HoverCellCoordidnate(mousePos);
-                        if (curResult != null)
+                        Vector2? curResult;
+                        if (this._openedInventories[i].IsHoveringOver(mousePos, out curResult))
                         {
-                            hoverIndex = curResult;
-                            hoverInventory = this._openedInventories[i];
-                            break;
+                            // moves the clicked inventory to front
+                            var clickedInventory = this._openedInventories[i];
+                            clickedInventory.transform.SetSiblingIndex(GameObjectFinder.FindGameObjectWithTag(Tags.Inventories).transform.childCount-1);
+                            this._openedInventories.RemoveAt(i);
+                            this._openedInventories.Add(clickedInventory);
+                            if (curResult.HasValue)
+                            {
+                                hoverIndex = curResult;
+                                hoverInventory = this._openedInventories[i];
+                                break;
+                            }
                         }
                     }
 

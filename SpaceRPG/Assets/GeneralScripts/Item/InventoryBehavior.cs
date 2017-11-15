@@ -79,7 +79,7 @@ namespace Assets.GeneralScripts.Item
         /// </summary>
         /// <param name="mousePosition">Mouse position</param>
         /// <returns>The index of the square that the mouse is hovering over, null if the mouse is not inside this inventory</returns>
-        public Vector2? HoverCellCoordidnate(Vector2 mousePosition)
+        public bool IsHoveringOver(Vector2 mousePosition, out Vector2? hoverCoordiante)
         {
             var relativePosition = mousePosition - new Vector2
                 (
@@ -88,13 +88,29 @@ namespace Assets.GeneralScripts.Item
                 );
             var xCoor = relativePosition.x / Config.ItemGridSize;
             var yCoor = relativePosition.y / Config.ItemGridSize;
+            
+            // Check if the mouse is hovering over an inventory cell
             if (xCoor < 0 || yCoor < 0 || xCoor >= this.InventoryData.DimentionX || yCoor >= this.InventoryData.DimentionY)
             {
-                return null;
+                hoverCoordiante = null;
+
+                // Check if the mouse is hovering over the boarder or the header of the inventory
+                var boarderSize = Config.InventoryBoarder + Config.InventoryBoarderOutline;
+                var xMax = this.InventoryData.DimentionX * Config.ItemGridSize - Config.ItemGridSize / 2 +boarderSize;
+                var yMax = this.InventoryData.DimentionY * Config.ItemGridSize - Config.ItemGridSize / 2 +boarderSize + Config.InventoryHeaderHeight;
+                if (relativePosition.x < -boarderSize || relativePosition.y < -boarderSize || relativePosition.x > xMax || relativePosition.y > yMax
+                )
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
             }
 
-            var result = new Vector2((int)xCoor, (int)yCoor);
-            return result;
+            hoverCoordiante= new Vector2((int)xCoor, (int)yCoor);
+            return true;
         }
 
         /// <summary>
