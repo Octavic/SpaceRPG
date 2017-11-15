@@ -93,9 +93,13 @@ namespace Assets.CombatScripts.Ships
                     newInventory.AddItem(newItem, indexCoor.Value);
                 }
             }
-            var newContainer = Instantiate(this.ContainerPrefab).GetComponent<ContainerBehavior>();
-            newContainer.transform.position = this.transform.position;
-            newContainer.AssignInventory(newInventory);
+
+            for (int i = 0; i < 10; i++)
+            {
+                var newContainer = Instantiate(this.ContainerPrefab).GetComponent<ContainerBehavior>();
+                newContainer.transform.position = this.transform.position;
+                newContainer.AssignInventory(newInventory);
+            }
         }
     }
 }

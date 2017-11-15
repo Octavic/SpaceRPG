@@ -33,6 +33,9 @@ namespace Assets.GeneralScripts.Item
         /// </summary>
         private GameObject _player;
 
+        // If the inventory has been triggered
+        private bool _triggered = false;
+
         /// <summary>
         /// Assigns the new inventory
         /// </summary>
@@ -40,7 +43,7 @@ namespace Assets.GeneralScripts.Item
         public void AssignInventory(Inventory inventory)
         {
             var newUI = InventoryManager.CurrentInstance.CreateNewUI(inventory);
-            newUI.transform.localPosition = Config.DefaultContainerUIPosition;
+            newUI.gameObject.SetActive(false);
             this.InventoryUI = newUI;
         }
 
@@ -58,12 +61,14 @@ namespace Assets.GeneralScripts.Item
             // Opens if the player is close enough, closes if not
             var isOpened = this.InventoryUI.gameObject.activeSelf;
             var isInRange = (this._player.transform.position - this.transform.position).magnitude <= Config.OpenContainerRange;
-            if (isInRange && !isOpened)
+            if (!this._triggered && isInRange && !isOpened)
             {
+                this._triggered = true;
                 this.InventoryUI.Open();
             }
             else if(!isInRange && isOpened)
             {
+                this._triggered = false;
                 this.InventoryUI.Close();
             }
         }

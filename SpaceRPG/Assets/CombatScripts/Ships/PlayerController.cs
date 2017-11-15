@@ -156,7 +156,7 @@ namespace Assets.CombatScripts.Ships
             // TODO: Keep player's inventory persistent through scenes
             // TODO: Player's inventory size will depend on the ship
             var playerInventory = new Inventory(5, 5);
-            var playerInventoryUI = InventoryManager.CurrentInstance.CreateNewUI(playerInventory);
+            var playerInventoryUI = InventoryManager.CurrentInstance.CreateNewUI(playerInventory, false);
             playerInventoryUI.Open();
             this._inventoriesParent = GameObjectFinder.FindGameObjectWithTag(Tags.Inventories);
             this._isInventoryOpened = false;

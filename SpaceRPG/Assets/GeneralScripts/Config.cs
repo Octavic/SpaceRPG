@@ -60,12 +60,44 @@ namespace Assets.GeneralScripts
         /// <summary>
         /// Gets the default position for a container UI
         /// </summary>
-        public static Vector2 DefaultContainerUIPosition
+        public static Vector2 DefaultInventoryUIPosition
         {
             get
             {
                 return new Vector2(-200, 30);
             }
         }
+
+        /// <summary>
+        /// Gets the inventory UI offset for each newly opened inventory
+        /// </summary>
+        public static Vector2 InventoryUIOffset
+        {
+            get
+            {
+                return new Vector2(50, -50);
+            }
+        }
+
+        /// <summary>
+        /// Gets the offset in each row of inventory UI
+        /// </summary>
+        public static Vector2 InventoryUIRowOffset
+        {
+            get
+            {
+                return new Vector2(-50, 30);
+            }
+        }
+
+        /// <summary>
+        /// How many inventory UI can be in a row
+        /// </summary>
+        public const int InventoryRowCount = 5;
+
+        /// <summary>
+        /// How many inventory UI can be opened before the position loops back
+        /// </summary>
+        public const int InventoryLoopSize = 25;
     }
 }

@@ -65,17 +65,26 @@ namespace Assets.GeneralScripts.Item
         private Vector2 _draggedItemOffset;
 
         /// <summary>
+        /// Used to give the inventories an offset
+        /// </summary>
+        private int _spawnedInventoryCount = 0;
+
+        /// <summary>
         /// Creates a new UI for the given inventory
         /// </summary>
         /// <param name="inventory">Target inventory</param>
         /// <returns>Resulting UI item</returns>
-        public InventoryBehavior CreateNewUI(Inventory inventory)
+        public InventoryBehavior CreateNewUI(Inventory inventory, bool autoSetPosition = true)
         {
            var newUI = Instantiate(
                 this.InventoryUIPrefab,
                 GameObjectFinder.FindGameObjectWithTag(Tags.Inventories).transform
             ).GetComponent<InventoryBehavior>();
             newUI.AssignInventory(inventory);
+            if (autoSetPosition)
+            {
+                newUI.transform.localPosition = this.GetNewInventoryPosition();
+            }
             return newUI;
         }
 
@@ -113,7 +122,7 @@ namespace Assets.GeneralScripts.Item
             if (this._openedInventories == null)
             {
                 this._openedInventories = new List<InventoryBehavior>();
-              }
+            }
         }
 
         /// <summary>
@@ -179,7 +188,7 @@ namespace Assets.GeneralScripts.Item
                     Vector2? hoverIndex = null;
                     InventoryBehavior hoverInventory = null;
 
-                    for (int i = 0; i < this._openedInventories.Count; i++)
+                    for (int i = this._openedInventories.Count - 1; i >= 0; i--)
                     {
                         var curResult = this._openedInventories[i].HoverCellCoordidnate(mousePos);
                         if (curResult != null)
@@ -221,6 +230,19 @@ namespace Assets.GeneralScripts.Item
 
                 }
             }
+        }
+
+        /// <summary>
+        /// Gets the position of a new inventory with the spawned amount
+        /// </summary>
+        /// <returns>Position of a new inventory UI</returns>
+        private Vector2 GetNewInventoryPosition()
+        {
+            var rowCount = this._spawnedInventoryCount / Config.InventoryRowCount;
+            var rowPos = this._spawnedInventoryCount % Config.InventoryRowCount;
+            this._spawnedInventoryCount++;
+            this._spawnedInventoryCount %= Config.InventoryLoopSize;
+            return Config.DefaultInventoryUIPosition + rowCount * Config.InventoryUIRowOffset + rowPos * Config.InventoryUIOffset;
         }
 
         /// <summary>
